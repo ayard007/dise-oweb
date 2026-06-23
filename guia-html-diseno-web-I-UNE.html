@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia de Aprendizaje | HTML Fundamentos | Diseno Web I</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@600;700&display=swap');
+
+  :root {
+    --azul-une: #1e2c6e;
+    --rojo-une: #d62b2b;
+    --azul-medio: #2a3a8c;
+    --azul-claro: #e8eaf6;
+    --gris-suave: #f5f6fa;
+    --gris-linea: #e0e3ec;
+    --texto-principal: #1a1a2e;
+    --texto-secundario: #4a4f6a;
+    --codigo-fondo: #1a1d2e;
+    --codigo-texto: #a8d8a8;
+    --acento-verde: #2d9c5e;
+    --acento-amarillo: #e8a020;
+    --blanco: #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gris-suave);
+    color: var(--texto-principal);
+    line-height: 1.7;
+    font-size: 16px;
+  }
+
+  /* BARRA DE PROGRESO */
+  #progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 4px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--rojo-une), var(--azul-une));
+    z-index: 9999;
+    transition: width 0.2s ease;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--azul-une);
+    color: var(--blanco);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(30,44,110,0.18);
+  }
+
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 32px;
+    gap: 20px;
+  }
+
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .header-logo img {
+    height: 48px;
+    background: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
+
+  .header-text h1 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+  }
+
+  .header-text p {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.7);
+    font-weight: 300;
+    margin-top: 2px;
+  }
+
+  .header-badge {
+    background: var(--rojo-une);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--azul-medio);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  nav::-webkit-scrollbar { display: none; }
+
+  .nav-inner {
+    display: flex;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  nav a {
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 12px 16px;
+    white-space: nowrap;
+    display: block;
+    transition: all 0.2s;
+    border-bottom: 3px solid transparent;
+    letter-spacing: 0.02em;
+  }
+
+  nav a:hover {
+    color: white;
+    border-bottom-color: var(--rojo-une);
+    background: rgba(255,255,255,0.07);
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--azul-une) 0%, #111836 60%, #1a0a2e 100%);
+    color: white;
+    padding: 72px 32px 56px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '</>';
+    position: absolute;
+    font-family: 'DM Mono', monospace;
+    font-size: 18rem;
+    color: rgba(255,255,255,0.03);
+    top: -40px;
+    right: -40px;
+    font-weight: 500;
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    display: inline-block;
+    background: rgba(214,43,43,0.25);
+    border: 1px solid rgba(214,43,43,0.5);
+    color: #ff9494;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 30px;
+    margin-bottom: 20px;
+  }
+
+  .hero h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero p {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.72);
+    max-width: 620px;
+    margin: 0 auto 28px;
+    font-weight: 300;
+  }
+
+  .hero-chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .chip {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.85);
+    font-size: 0.75rem;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-weight: 400;
+  }
+
+  /* MAIN LAYOUT */
+  .main-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* SECCIONES */
+  .section {
+    background: white;
+    border-radius: 14px;
+    margin-bottom: 32px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(30,44,110,0.07);
+    border: 1px solid var(--gris-linea);
+  }
+
+  .section-header {
+    padding: 28px 36px 20px;
+    border-bottom: 1px solid var(--gris-linea);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: linear-gradient(90deg, var(--azul-claro) 0%, white 100%);
+  }
+
+  .section-num {
+    background: var(--azul-une);
+    color: white;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .section-title-wrap h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    color: var(--azul-une);
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .section-title-wrap p {
+    font-size: 0.82rem;
+    color: var(--texto-secundario);
+    margin-top: 3px;
+    font-weight: 400;
+  }
+
+  .section-body {
+    padding: 28px 36px;
+  }
+
+  /* TEXTO */
+  .section-body h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--azul-une);
+    margin: 22px 0 8px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--azul-claro);
+  }
+
+  .section-body h3:first-child { margin-top: 0; }
+
+  .section-body p {
+    color: var(--texto-secundario);
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+  }
+
+  /* CALLOUT */
+  .callout {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 18px 0;
+    font-size: 0.9rem;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .callout-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .callout.info {
+    background: #e8eaf6;
+    border-left: 4px solid var(--azul-une);
+    color: var(--azul-une);
+  }
+
+  .callout.tip {
+    background: #e8f5e9;
+    border-left: 4px solid var(--acento-verde);
+    color: #1b5e20;
+  }
+
+  .callout.warn {
+    background: #fff8e1;
+    border-left: 4px solid var(--acento-amarillo);
+    color: #5d3e00;
+  }
+
+  .callout.abp {
+    background: #fce4ec;
+    border-left: 4px solid var(--rojo-une);
+    color: #880e1f;
+  }
+
+  /* CÓDIGO */
+  .code-block {
+    background: var(--codigo-fondo);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 16px 0;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  }
+
+  .code-header {
+    background: #252842;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .code-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .code-dots span {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+  }
+
+  .dot-r { background: #ff5f57; }
+  .dot-y { background: #febc2e; }
+  .dot-g { background: #28c840; }
+
+  .code-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.05em;
+  }
+
+  .copy-btn {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: rgba(255,255,255,0.6);
+    font-size: 0.68rem;
+    padding: 3px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.03em;
+  }
+
+  .copy-btn:hover { background: rgba(255,255,255,0.2); color: white; }
+
+  pre {
+    padding: 20px;
+    overflow-x: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: #cdd6f4;
+    white-space: pre;
+  }
+
+  .kw { color: #89b4fa; }
+  .attr { color: #a6e3a1; }
+  .val { color: #f9e2af; }
+  .com { color: #6c7086; font-style: italic; }
+  .tag { color: #f38ba8; }
+  .str { color: #fab387; }
+
+  /* TABLA COMPARATIVA */
+  .tabla-html {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    margin: 16px 0;
+  }
+
+  .tabla-html th {
+    background: var(--azul-une);
+    color: white;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.03em;
+  }
+
+  .tabla-html th:first-child { border-radius: 8px 0 0 0; }
+  .tabla-html th:last-child { border-radius: 0 8px 0 0; }
+
+  .tabla-html td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--gris-linea);
+    color: var(--texto-secundario);
+    vertical-align: top;
+  }
+
+  .tabla-html tr:nth-child(even) td { background: var(--gris-suave); }
+  .tabla-html tr:last-child td { border-bottom: none; }
+
+  .tabla-html code {
+    font-family: 'DM Mono', monospace;
+    background: var(--azul-claro);
+    color: var(--azul-une);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+  }
+
+  /* PASOS */
+  .steps {
+    counter-reset: step;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 16px 0;
+  }
+
+  .step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 16px 18px;
+    background: var(--gris-suave);
+    border-radius: 10px;
+    border: 1px solid var(--gris-linea);
+  }
+
+  .step-num {
+    background: var(--rojo-une);
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .step-content h4 {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--texto-principal);
+    margin-bottom: 4px;
+  }
+
+  .step-content p {
+    font-size: 0.85rem;
+    color: var(--texto-secundario);
+    margin: 0;
+  }
+
+  .step-content code {
+    font-family: 'DM Mono', monospace;
+    background: white;
+    border: 1px solid var(--gris-linea);
+    color: var(--azul-une);
+    padding: 1px 7px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+  }
+
+  /* GRIDS */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+
+  .card {
+    background: var(--gris-suave);
+    border: 1px solid var(--gris-linea);
+    border-radius: 10px;
+    padding: 18px;
+  }
+
+  .card h4 {
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--azul-une);
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--azul-claro);
+  }
+
+  .card p, .card li {
+    font-size: 0.83rem;
+    color: var(--texto-secundario);
+    line-height: 1.6;
+  }
+
+  .card ul { padding-left: 16px; }
+  .card li { margin-bottom: 4px; }
+
+  /* ETIQUETA HIGHLIGHT */
+  .tag-pill {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    background: #1a1d2e;
+    color: #f38ba8;
+    font-size: 0.78rem;
+    padding: 3px 10px;
+    border-radius: 5px;
+    margin: 2px 3px;
+  }
+
+  /* ACTIVIDAD */
+  .actividad-wrap {
+    background: linear-gradient(135deg, #1a1d2e 0%, #0f1a3d 100%);
+    border-radius: 14px;
+    padding: 36px;
+    color: white;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .actividad-wrap::after {
+    content: 'ABP';
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    font-size: 8rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.03);
+    pointer-events: none;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .actividad-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(214,43,43,0.25);
+    border: 1px solid rgba(214,43,43,0.5);
+    color: #ff9090;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+  }
+
+  .actividad-wrap h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .actividad-wrap > p {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.92rem;
+    margin-bottom: 28px;
+    max-width: 700px;
+  }
+
+  .act-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .meta-pill {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.8);
+    font-size: 0.75rem;
+    padding: 5px 14px;
+    border-radius: 20px;
+  }
+
+  .act-fase {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 14px;
+  }
+
+  .act-fase-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .fase-num {
+    background: var(--rojo-une);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .fase-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.92);
+  }
+
+  .fase-time {
+    margin-left: auto;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.45);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .act-fase p, .act-fase li {
+    font-size: 0.84rem;
+    color: rgba(255,255,255,0.68);
+    line-height: 1.65;
+  }
+
+  .act-fase ul { padding-left: 18px; margin-top: 6px; }
+  .act-fase li { margin-bottom: 5px; }
+
+  .act-fase code {
+    font-family: 'DM Mono', monospace;
+    background: rgba(255,255,255,0.1);
+    color: #a8d8a8;
+    padding: 1px 7px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+  }
+
+  /* RUBRICA */
+  .rubrica-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.12);
+    margin-top: 20px;
+  }
+
+  .rub-header {
+    background: rgba(255,255,255,0.1);
+    padding: 10px 14px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.8);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-right: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .rub-cell {
+    padding: 10px 14px;
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.62);
+    border-right: 1px solid rgba(255,255,255,0.07);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    line-height: 1.5;
+  }
+
+  .rub-cell:last-child { border-right: none; }
+
+  /* DIAGRAMA */
+  .diagrama {
+    background: var(--codigo-fondo);
+    border-radius: 10px;
+    padding: 24px;
+    margin: 16px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .diag-box {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 10px 24px;
+    color: #cdd6f4;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    text-align: center;
+    min-width: 220px;
+  }
+
+  .diag-box.highlight {
+    border-color: #89b4fa;
+    background: rgba(137,180,250,0.1);
+    color: #89b4fa;
+  }
+
+  .diag-box.red {
+    border-color: #f38ba8;
+    background: rgba(243,139,168,0.1);
+    color: #f38ba8;
+  }
+
+  .diag-arrow {
+    color: rgba(255,255,255,0.25);
+    font-size: 1.1rem;
+    padding: 4px 0;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .diag-row {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  /* QUIZ */
+  .quiz-area {
+    background: var(--azul-claro);
+    border-radius: 10px;
+    padding: 22px;
+    margin: 16px 0;
+  }
+
+  .quiz-question {
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--azul-une);
+    margin-bottom: 12px;
+  }
+
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .quiz-opt {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    border: 2px solid var(--gris-linea);
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.87rem;
+    color: var(--texto-secundario);
+    text-align: left;
+    width: 100%;
+  }
+
+  .quiz-opt:hover {
+    border-color: var(--azul-une);
+    color: var(--azul-une);
+    background: var(--azul-claro);
+  }
+
+  .quiz-opt.correct {
+    border-color: var(--acento-verde);
+    background: #e8f5e9;
+    color: #1b5e20;
+  }
+
+  .quiz-opt.wrong {
+    border-color: var(--rojo-une);
+    background: #fce8e8;
+    color: #8b0000;
+  }
+
+  .quiz-feedback {
+    margin-top: 10px;
+    font-size: 0.84rem;
+    font-weight: 500;
+    display: none;
+  }
+
+  /* REFLEXION */
+  .reflexion-area {
+    background: var(--gris-suave);
+    border-radius: 10px;
+    padding: 24px;
+    border: 1px dashed var(--gris-linea);
+  }
+
+  .reflexion-area h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--azul-une);
+    margin-bottom: 14px;
+    border: none !important;
+    padding: 0 !important;
+  }
+
+  .pregunta-reflex {
+    background: white;
+    border: 1px solid var(--gris-linea);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    font-size: 0.87rem;
+    color: var(--texto-secundario);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .pregunta-reflex span {
+    background: var(--azul-une);
+    color: white;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.68rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--azul-une);
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+    padding: 32px 24px;
+    font-size: 0.8rem;
+    margin-top: 24px;
+  }
+
+  footer strong { color: white; }
+
+  /* RESPONSIVE */
+  @media (max-width: 700px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .rubrica-grid { grid-template-columns: 1fr 1fr; }
+    .section-body { padding: 20px; }
+    .actividad-wrap { padding: 22px; }
+    .header-inner { padding: 12px 16px; }
+    .hero { padding: 48px 20px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="header-logo">
+      <img src="data:image/png;base64,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flrOlIvlVxIvfT/Q8L9DbpR4efnHco7Ep/GPlUNkb4lXDDaQZl8+J4T0O67/Z2eLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAABacu8//T+wJF0i54bpgwAAAABJRU5ErkJggg==" alt="Logo UNE">
+      <div class="header-text">
+        <h1>Universidad de Especialidades</h1>
+        <p>Licenciatura en Diseno Grafico &nbsp;|&nbsp; Diseno Web I</p>
+      </div>
+    </div>
+    <span class="header-badge">Unidad 1</span>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#s1">1.1 Funcionamiento HTML</a>
+    <a href="#s2">2.2 Parrafos</a>
+    <a href="#s3">2.3 Imagenes</a>
+    <a href="#s4">2.4 Tablas</a>
+    <a href="#s5">2.5 Navegacion y Fondo</a>
+    <a href="#s6">Etiquetas Basicas</a>
+    <a href="#s7">Video e Imagen</a>
+    <a href="#act">Actividad Integradora</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Guia de Aprendizaje</div>
+  <h2>UNIDAD 1<br>Introduccion al Lenguaje HTML</h2>
+  <p>Construye tu primer sitio web aplicando los fundamentos del lenguaje de marcado de hipertexto mediante aprendizaje activo y resolucion de problemas reales.</p>
+  <div class="hero-chips">
+    <span class="chip">Pedagogia Activa</span>
+    <span class="chip">Metodologia Constructivista</span>
+    <span class="chip">ABP</span>
+    <span class="chip">Bloc de Notas</span>
+    <span class="chip">HTML5</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+<!-- ===================== SECCION 0: CONOCIMIENTOS PREVIOS ===================== -->
+<section class="section">
+  <div class="section-header">
+    <div class="section-num">00</div>
+    <div class="section-title-wrap">
+      <h2>Activacion de Conocimientos Previos</h2>
+      <p>Reflexion inicial — Metodologia constructivista</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="callout info">
+      <span class="callout-icon">&#9432;</span>
+      <div>Antes de revisar el contenido de la unidad, responde con sinceridad las siguientes preguntas en tu cuaderno o bitacora de curso. No existe respuesta incorrecta: el objetivo es identificar lo que ya sabes para construir sobre ello.</div>
+    </div>
+    <div class="reflexion-area">
+      <h3>Preguntas detonadoras</h3>
+      <div class="pregunta-reflex"><span>1</span>Cuando ingresas a un sitio web en tu navegador, que crees que ocurre desde que escribes la direccion hasta que ves la pagina en pantalla?</div>
+      <div class="pregunta-reflex"><span>2</span>Has escrito codigo o texto con etiquetas alguna vez? En que contexto fue?</div>
+      <div class="pregunta-reflex"><span>3</span>Como crees que se construye visualmente un sitio web? A que herramientas imaginas que se recurre?</div>
+      <div class="pregunta-reflex"><span>4</span>Como estudiante de Diseno Grafico, de que manera imaginas que el HTML puede complementar tu formacion profesional?</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECCION 1.1 ===================== -->
+<section id="s1" class="section">
+  <div class="section-header">
+    <div class="section-num">1.1</div>
+    <div class="section-title-wrap">
+      <h2>Como funciona el Lenguaje HTML</h2>
+      <p>Fundamentos teoricos y estructura del sistema de marcado</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <h3>Que es HTML</h3>
+    <p>HTML (HyperText Markup Language) es el lenguaje estandar utilizado para crear y estructurar el contenido de las paginas web. No es un lenguaje de programacion: es un lenguaje de marcado que describe la estructura semantica del contenido mediante etiquetas.</p>
+    <p>Cada navegador web (Chrome, Firefox, Edge) posee un motor de renderizado que interpreta los documentos HTML y los traduce en representaciones visuales que el usuario puede leer e interactuar.</p>
+
+    <h3>Flujo de funcionamiento</h3>
+    <div class="diagrama">
+      <div class="diag-box highlight">Usuario escribe una URL en el navegador</div>
+      <div class="diag-arrow">&#8595;</div>
+      <div class="diag-box">El navegador realiza una peticion HTTP al servidor</div>
+      <div class="diag-arrow">&#8595;</div>
+      <div class="diag-box">El servidor devuelve un archivo .html</div>
+      <div class="diag-arrow">&#8595;</div>
+      <div class="diag-box">El motor de renderizado interpreta las etiquetas HTML</div>
+      <div class="diag-arrow">&#8595;</div>
+      <div class="diag-box red">El navegador muestra la pagina estructurada al usuario</div>
+    </div>
+
+    <h3>Anatomia de una etiqueta HTML</h3>
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <span class="code-label">anatomia-etiqueta.html</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+      </div>
+      <pre><span class="com">&lt;!-- Etiqueta de apertura   Contenido   Etiqueta de cierre --&gt;</span>
+<span class="tag">&lt;p&gt;</span>Este es un parrafo de texto.<span class="tag">&lt;/p&gt;</span>
+
+<span class="com">&lt;!-- Etiqueta con ATRIBUTO y VALOR --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"https://www.une.edu.mx"</span><span class="tag">&gt;</span>Visitar UNE<span class="tag">&lt;/a&gt;</span>
+
+<span class="com">&lt;!-- Etiqueta vacia (sin cierre) --&gt;</span>
+<span class="tag">&lt;br&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="val">"imagen.jpg"</span> <span class="attr">alt</span>=<span class="val">"Descripcion"</span><span class="tag">&gt;</span></pre>
+    </div>
+
+    <h3>Estructura basica de un documento HTML5</h3>
+    <p>Todo documento HTML valido debe contener la siguiente estructura minima. Escribe exactamente este codigo en el Bloc de Notas y guardalo con la extension <code>.html</code>.</p>
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <span class="code-label">mi-primer-sitio.html</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+      </div>
+      <pre><span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="val">"es"</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;head&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="val">"UTF-8"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="val">"viewport"</span> <span class="attr">content</span>=<span class="val">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;title&gt;</span>Mi Primer Sitio Web<span class="tag">&lt;/title&gt;</span>
+  <span class="tag">&lt;/head&gt;</span>
+
+  <span class="tag">&lt;body&gt;</span>
+    <span class="com">&lt;!-- Todo el contenido visible va aqui --&gt;</span>
+    <span class="tag">&lt;h1&gt;</span>Bienvenido a mi sitio web<span class="tag">&lt;/h1&gt;</span>
+    <span class="tag">&lt;p&gt;</span>Este es mi primer documento HTML5.<span class="tag">&lt;/p&gt;</span>
+  <span class="tag">&lt;/body&gt;</span>
+
+<span class="tag">&lt;/html&gt;</span></pre>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Abrir el Bloc de Notas</h4>
+          <p>En Windows: presiona <code>Windows + R</code>, escribe <code>notepad</code> y pulsa Enter. En Mac: usa TextEdit en modo texto plano.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Escribir el codigo</h4>
+          <p>Copia o escribe manualmente la estructura basica mostrada arriba. Escribirlo manualmente favorece la memorizacion y la comprension.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Guardar como HTML</h4>
+          <p>Ve a <code>Archivo &gt; Guardar como</code>. En el nombre escribe <code>index.html</code> y en "Tipo" selecciona "Todos los archivos". Haz clic en Guardar.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>Abrir en el navegador</h4>
+          <p>Localiza el archivo en tu carpeta, haz clic derecho sobre el y selecciona "Abrir con" tu navegador preferido. Veras el resultado de tu codigo.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <span class="callout-icon">&#10003;</span>
+      <div><strong>Practica inmediata:</strong> Modifica el texto dentro de <code>&lt;h1&gt;</code> y <code>&lt;p&gt;</code> con tu nombre y carrera. Guarda el archivo y actualiza el navegador con <code>F5</code> para ver los cambios.</div>
+    </div>
+
+    <!-- MINI QUIZ -->
+    <div class="quiz-area">
+      <div class="quiz-question">Verifica tu comprension: Cual es el proposito de la etiqueta <code>&lt;head&gt;</code> en un documento HTML?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="evalQuiz(this, false)">Contiene el contenido visible de la pagina</button>
+        <button class="quiz-opt" onclick="evalQuiz(this, true)">Contiene metadatos, el titulo y enlaces a recursos del documento</button>
+        <button class="quiz-opt" onclick="evalQuiz(this, false)">Define el color de fondo del sitio</button>
+        <button class="quiz-opt" onclick="evalQuiz(this, false)">Es la primera etiqueta que el navegador renderiza visualmente</button>
+      </div>
+      <div class="quiz-feedback" id="qf1"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECCION 2.2 ===================== -->
+<section id="s2" class="section">
+  <div class="section-header">
+    <div class="section-num">2.2</div>
+    <div class="section-title-wrap">
+      <h2>Etiquetas de Parrafo y Encabezados</h2>
+      <p>Jerarquia tipografica y estructura de texto en HTML</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <h3>Etiquetas de encabezado</h3>
+    <p>HTML ofrece seis niveles de encabezado, de <code>&lt;h1&gt;</code> a <code>&lt;h6&gt;</code>. El <code>&lt;h1&gt;</code> representa el titulo principal de la pagina; cada nivel subsecuente indica una jerarquia menor. Desde la perspectiva del Diseno Grafico, esta jerarquia tipografica impacta directamente la legibilidad y el orden visual.</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <h4>Etiquetas de texto estructural</h4>
+        <ul>
+          <li><code>&lt;h1&gt;</code> — <code>&lt;h6&gt;</code>: Niveles de encabezado</li>
+          <li><code>&lt;p&gt;</code>: Parrafo de texto</li>
+          <li><code>&lt;br&gt;</code>: Salto de linea</li>
+          <li><code>&lt;hr&gt;</code>: Linea horizontal separadora</li>
+          <li><code>&lt;strong&gt;</code>: Texto en negritas (importancia)</li>
+          <li><code>&lt;em&gt;</code>: Texto en italicas (enfasis)</li>
+          <li><code>&lt;span&gt;</code>: Contenedor de texto en linea</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Atributos comunes de texto</h4>
+        <ul>
+          <li><code>style</code>: Estilos CSS en linea</li>
+          <li><code>class</code>: Asigna una clase CSS</li>
+          <li><code>id</code>: Identificador unico del elemento</li>
+          <li><code>title</code>: Informacion emergente al pasar el cursor</li>
+          <li><code>align</code>: Alineacion (obsoleto en HTML5, usar CSS)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <span class="code-label">parrafos-encabezados.html</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+      </div>
+      <pre><span class="tag">&lt;h1&gt;</span>Titulo Principal del Sitio<span class="tag">&lt;/h1&gt;</span>
+<span class="tag">&lt;h2&gt;</span>Subtitulo de Seccion<span class="tag">&lt;/h2&gt;</span>
+<span class="tag">&lt;h3&gt;</span>Encabezado de Tercer Nivel<span class="tag">&lt;/h3&gt;</span>
+
+<span class="tag">&lt;p&gt;</span>
+  Este parrafo describe el contenido principal de la seccion.
+  El texto fluye naturalmente dentro de la etiqueta de parrafo.
+<span class="tag">&lt;/p&gt;</span>
+
+<span class="tag">&lt;p&gt;</span>
+  Puedo incluir texto en <span class="tag">&lt;strong&gt;</span>negritas<span class="tag">&lt;/strong&gt;</span> para destacar
+  informacion importante o en <span class="tag">&lt;em&gt;</span>italicas<span class="tag">&lt;/em&gt;</span> para enfasis.
+<span class="tag">&lt;/p&gt;</span>
+
+<span class="tag">&lt;hr&gt;</span>
+<span class="tag">&lt;p</span> <span class="attr">style</span>=<span class="val">"color: #1e2c6e; font-size: 18px; text-align: center;"</span><span class="tag">&gt;</span>
+  Parrafo con estilo aplicado directamente.
+<span class="tag">&lt;/p&gt;</span></pre>
+    </div>
+
+    <div class="callout warn">
+      <span class="callout-icon">&#9888;</span>
+      <div><strong>Nota para diseñadores:</strong> Aunque el atributo <code>style</code> permite aplicar estilos directamente en el HTML, la practica profesional recomienda separar la presentacion del contenido mediante hojas de estilo CSS. Lo utilizamos aqui para comprender el principio antes de migrar a CSS.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECCION 2.3 ===================== -->
+<section id="s3" class="section">
+  <div class="section-header">
+    <div class="section-num">2.3</div>
+    <div class="section-title-wrap">
+      <h2>Etiqueta de Imagen</h2>
+      <p>Insercion, atributos y buenas practicas de accesibilidad</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <h3>La etiqueta &lt;img&gt;</h3>
+    <p>La etiqueta <code>&lt;img&gt;</code> es una etiqueta vacia (no tiene etiqueta de cierre) que permite incrustar imagenes en el documento HTML. Sus dos atributos esenciales son <code>src</code> (la ruta de la imagen) y <code>alt</code> (texto alternativo para accesibilidad).</p>
+
+    <table class="tabla-html">
+      <thead>
+        <tr><th>Atributo</th><th>Funcion</th><th>Ejemplo</th><th>Obligatorio</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>src</code></td><td>Ruta o URL de la imagen</td><td><code>src="logo.png"</code></td><td>Si</td></tr>
+        <tr><td><code>alt</code></td><td>Texto alternativo descriptivo</td><td><code>alt="Logo de la empresa"</code></td><td>Si (accesibilidad)</td></tr>
+        <tr><td><code>width</code></td><td>Ancho en pixeles o porcentaje</td><td><code>width="300"</code></td><td>No</td></tr>
+        <tr><td><code>height</code></td><td>Alto en pixeles o porcentaje</td><td><code>height="200"</code></td><td>No</td></tr>
+        <tr><td><code>title</code></td><td>Informacion al pasar el cursor</td><td><code>title="Haz clic para ampliar"</code></td><td>No</td></tr>
+      </tbody>
+    </table>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <span class="code-label">imagenes.html</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+      </div>
+      <pre><span class="com">&lt;!-- Imagen LOCAL (guardada en la misma carpeta que el HTML) --&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="val">"mi-imagen.jpg"</span>
+     <span class="attr">alt</span>=<span class="val">"Descripcion de la imagen"</span>
+     <span class="attr">width</span>=<span class="val">"400"</span><span class="tag">&gt;</span>
+
+<span class="com">&lt;!-- Imagen desde una URL externa --&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="val">"https://via.placeholder.com/400x200"</span>
+     <span class="attr">alt</span>=<span class="val">"Imagen de ejemplo desde internet"</span>
+     <span class="attr">width</span>=<span class="val">"400"</span>
+     <span class="attr">height</span>=<span class="val">"200"</span><span class="tag">&gt;</span>
+
+<span class="com">&lt;!-- Imagen con estilo CSS en linea --&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="val">"portada.jpg"</span>
+     <span class="attr">alt</span>=<span class="val">"Imagen de portada"</span>
+     <span class="attr">style</span>=<span class="val">"width: 100%; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);"</span><span class="tag">&gt;</span></pre>
+    </div>
+
+    <div class="callout info">
+      <span class="callout-icon">&#9432;</span>
+      <div><strong>Rutas relativas vs. absolutas:</strong> Cuando la imagen esta en la misma carpeta que tu archivo HTML, basta con escribir el nombre del archivo (<code>imagen.jpg</code>). Si esta en una subcarpeta, escribe la ruta relativa: <code>img/imagen.jpg</code>. Para imagenes en internet, usa la URL completa incluyendo <code>https://</code>.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECCION 2.4 ===================== -->
+<section id="s4" class="section">
+  <div class="section-header">
+    <div class="section-num">2.4</div>
+    <div class="section-title-wrap">
+      <h2>Estructura de Tablas</h2>
+      <p>Organizacion de datos tabulares en HTML</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <h3>Anatomia de una tabla HTML</h3>
+    <p>Las tablas se utilizan para presentar informacion relacional en filas y columnas. Desde la perspectiva del diseno, una tabla bien estructurada mejora la comprension de datos comparativos, horarios, o inventarios.</p>
+
+    <table class="tabla-html">
+      <thead>
+        <tr><th>Etiqueta</th><th>Nombre</th><th>Funcion</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>&lt;table&gt;</code></td><td>Tabla</td><td>Contenedor principal de la tabla</td></tr>
+        <tr><td><code>&lt;thead&gt;</code></td><td>Encabezado</td><td>Agrupa las filas de encabezado</td></tr>
+        <tr><td><code>&lt;tbody&gt;</code></td><td>Cuerpo</td><td>Agrupa las filas de datos</td></tr>
+        <tr><td><code>&lt;tfoot&gt;</code></td><td>Pie</td><td>Agrupa las filas de totales o resumen</td></tr>
+        <tr><td><code>&lt;tr&gt;</code></td><td>Fila</td><td>Define una fila dentro de la tabla</td></tr>
+        <tr><td><code>&lt;th&gt;</code></td><td>Celda de encabezado</td><td>Celda con texto en negritas, semanticamente un encabezado</td></tr>
+        <tr><td><code>&lt;td&gt;</code></td><td>Celda de dato</td><td>Celda con datos ordinarios</td></tr>
+      </tbody>
+    </table>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <span class="code-label">tabla-ejemplo.html</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+      </div>
+      <pre><span class="tag">&lt;table</span> <span class="attr">border</span>=<span class="val">"1"</span> <span class="attr">style</span>=<span class="val">"width:100%; border-collapse:collapse; font-family:sans-serif;"</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;thead&gt;</span>
+    <span class="tag">&lt;tr</span> <span class="attr">style</span>=<span class="val">"background-color:#1e2c6e; color:white;"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;th</span> <span class="attr">style</span>=<span class="val">"padding:10px;"</span><span class="tag">&gt;</span>Materia<span class="tag">&lt;/th&gt;</span>
+      <span class="tag">&lt;th</span> <span class="attr">style</span>=<span class="val">"padding:10px;"</span><span class="tag">&gt;</span>Hora<span class="tag">&lt;/th&gt;</span>
+      <span class="tag">&lt;th</span> <span class="attr">style</span>=<span class="val">"padding:10px;"</span><span class="tag">&gt;</span>Salon<span class="tag">&lt;/th&gt;</span>
+    <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;/thead&gt;</span>
+
+  <span class="tag">&lt;tbody&gt;</span>
+    <span class="tag">&lt;tr&gt;</span>
+      <span class="tag">&lt;td</span> <span class="attr">style</span>=<span class="val">"padding:10px;"</span><span class="tag">&gt;</span>Diseno Web I<span class="tag">&lt;/td&gt;</span>
+      <span class="tag">&lt;td</span> <span class="attr">style</span>=<span class="val">"padding:10px;"</span><span class="tag">&gt;</span>08:00 - 10:00<span class="tag">&lt;/td&gt;</span>
+      <span class="tag">&lt;td</span> <span class="attr">style</span>=<span class="val">"padding:10px;"</span><span class="tag">&gt;</span>Lab 3<span class="tag">&lt;/td&gt;</span>
+    <span class="tag">&lt;/tr&gt;</span>
+    <span class="tag">&lt;tr</span> <span class="attr">style</span>=<span class="val">"background-color:#f5f6fa;"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;td</span> <span class="attr">style</span>=<span class="val">"padding:10px;"</span><span class="tag">&gt;</span>Tipografia<span class="tag">&lt;/td&gt;</span>
+      <span class="tag">&lt;td</span> <span class="attr">style</span>=<span class="val">"padding:10px;"</span><span class="tag">&gt;</span>10:00 - 12:00<span class="tag">&lt;/td&gt;</span>
+      <span class="tag">&lt;td</span> <span class="attr">style</span>=<span class="val">"padding:10px;"</span><span class="tag">&gt;</span>Aula 5<span class="tag">&lt;/td&gt;</span>
+    <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;/tbody&gt;</span>
+
+<span class="tag">&lt;/table&gt;</span></pre>
+    </div>
+
+    <div class="callout tip">
+      <span class="callout-icon">&#10003;</span>
+      <div><strong>Aplicacion directa:</strong> Construye una tabla en HTML con tu horario universitario actual. Utiliza <code>&lt;thead&gt;</code> para los dias de la semana y <code>&lt;tbody&gt;</code> para las materias con sus respectivos horarios y salones.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECCION 2.5 ===================== -->
+<section id="s5" class="section">
+  <div class="section-header">
+    <div class="section-num">2.5</div>
+    <div class="section-title-wrap">
+      <h2>Barra de Navegacion y Color de Fondo</h2>
+      <p>Estructura de navegacion, fondos de color e imagen</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <h3>Barra de navegacion con listas</h3>
+    <p>La barra de navegacion es uno de los elementos de interfaz mas importantes en cualquier sitio web. En HTML se construye tipicamente con una lista no ordenada (<code>&lt;ul&gt;</code>) dentro de la etiqueta semantica <code>&lt;nav&gt;</code>.</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <span class="code-label">navegacion.html</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+      </div>
+      <pre><span class="tag">&lt;nav</span> <span class="attr">style</span>=<span class="val">"background-color:#1e2c6e; padding:12px 24px;"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;ul</span> <span class="attr">style</span>=<span class="val">"list-style:none; display:flex; gap:24px; margin:0; padding:0;"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;li&gt;</span><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"#inicio"</span>
+          <span class="attr">style</span>=<span class="val">"color:white; text-decoration:none; font-family:sans-serif;"</span><span class="tag">&gt;</span>Inicio<span class="tag">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="tag">&lt;li&gt;</span><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"#portafolio"</span>
+          <span class="attr">style</span>=<span class="val">"color:white; text-decoration:none; font-family:sans-serif;"</span><span class="tag">&gt;</span>Portafolio<span class="tag">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="tag">&lt;li&gt;</span><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"#contacto"</span>
+          <span class="attr">style</span>=<span class="val">"color:white; text-decoration:none; font-family:sans-serif;"</span><span class="tag">&gt;</span>Contacto<span class="tag">&lt;/a&gt;&lt;/li&gt;</span>
+  <span class="tag">&lt;/ul&gt;</span>
+<span class="tag">&lt;/nav&gt;</span></pre>
+    </div>
+
+    <h3>Color de fondo con CSS en linea</h3>
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <span class="code-label">fondos.html</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+      </div>
+      <pre><span class="com">&lt;!-- Color de fondo solido en el body --&gt;</span>
+<span class="tag">&lt;body</span> <span class="attr">style</span>=<span class="val">"background-color: #f0f4ff;"</span><span class="tag">&gt;</span>
+
+<span class="com">&lt;!-- Color de fondo con codigo hexadecimal --&gt;</span>
+<span class="tag">&lt;body</span> <span class="attr">style</span>=<span class="val">"background-color: #1e2c6e; color: white;"</span><span class="tag">&gt;</span>
+
+<span class="com">&lt;!-- Imagen de fondo (la imagen debe estar en tu carpeta del proyecto) --&gt;</span>
+<span class="tag">&lt;body</span> <span class="attr">style</span>=<span class="val">"
+  background-image: url('fondo.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+"</span><span class="tag">&gt;</span>
+
+<span class="com">&lt;!-- Imagen de fondo desde una URL externa --&gt;</span>
+<span class="tag">&lt;body</span> <span class="attr">style</span>=<span class="val">"
+  background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200');
+  background-size: cover;
+"</span><span class="tag">&gt;</span></pre>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h4>Propiedades de fondo clave</h4>
+        <ul>
+          <li><code>background-color</code>: Color solido de fondo</li>
+          <li><code>background-image</code>: Imagen de fondo</li>
+          <li><code>background-size: cover</code>: Cubre todo el elemento</li>
+          <li><code>background-size: contain</code>: Ajusta sin recortar</li>
+          <li><code>background-position</code>: Posicion de la imagen</li>
+          <li><code>background-repeat</code>: Repeticion de la imagen</li>
+          <li><code>background-attachment: fixed</code>: Efecto paralaje</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Formatos de color en CSS</h4>
+        <ul>
+          <li><strong>Hexadecimal:</strong> <code>#1e2c6e</code></li>
+          <li><strong>RGB:</strong> <code>rgb(30, 44, 110)</code></li>
+          <li><strong>RGBA (con transparencia):</strong> <code>rgba(30, 44, 110, 0.8)</code></li>
+          <li><strong>Nombre:</strong> <code>navy</code>, <code>white</code>, <code>red</code></li>
+          <li><strong>HSL:</strong> <code>hsl(229, 57%, 27%)</code></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECCION: ETIQUETAS BASICAS ===================== -->
+<section id="s6" class="section">
+  <div class="section-header">
+    <div class="section-num">2.5b</div>
+    <div class="section-title-wrap">
+      <h2>Etiquetas Basicas de HTML</h2>
+      <p>Referencia estructural del lenguaje de marcado</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <h3>Mapa de etiquetas esenciales</h3>
+    <p>A continuacion se presenta un compendio de las etiquetas HTML mas utilizadas en la construccion de sitios web. Como diseñador grafico, conocer estas etiquetas te permitira comunicarte con precision con desarrolladores y traducir tus propuestas visuales a codigo funcional.</p>
+
+    <table class="tabla-html">
+      <thead>
+        <tr><th>Etiqueta</th><th>Tipo</th><th>Uso principal</th><th>Ejemplo</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>&lt;header&gt;</code></td><td>Semantica</td><td>Encabezado del sitio o seccion</td><td>Logo, nombre, nav principal</td></tr>
+        <tr><td><code>&lt;nav&gt;</code></td><td>Semantica</td><td>Bloque de navegacion</td><td>Menus, enlaces internos</td></tr>
+        <tr><td><code>&lt;main&gt;</code></td><td>Semantica</td><td>Contenido principal de la pagina</td><td>Unico por pagina</td></tr>
+        <tr><td><code>&lt;section&gt;</code></td><td>Semantica</td><td>Seccion tematica</td><td>Bloques de contenido</td></tr>
+        <tr><td><code>&lt;article&gt;</code></td><td>Semantica</td><td>Contenido autonomo</td><td>Entradas de blog, noticias</td></tr>
+        <tr><td><code>&lt;aside&gt;</code></td><td>Semantica</td><td>Contenido secundario lateral</td><td>Barras laterales, notas</td></tr>
+        <tr><td><code>&lt;footer&gt;</code></td><td>Semantica</td><td>Pie de pagina</td><td>Derechos, redes, contacto</td></tr>
+        <tr><td><code>&lt;div&gt;</code></td><td>Contenedor</td><td>Agrupacion generica de bloque</td><td>Layouts, cajas</td></tr>
+        <tr><td><code>&lt;span&gt;</code></td><td>Contenedor</td><td>Agrupacion generica en linea</td><td>Texto con estilo especifico</td></tr>
+        <tr><td><code>&lt;a&gt;</code></td><td>Enlace</td><td>Hipervinculos</td><td>Navegacion, botones</td></tr>
+        <tr><td><code>&lt;ul&gt;</code> / <code>&lt;ol&gt;</code></td><td>Lista</td><td>Lista desordenada / ordenada</td><td>Menus, listas de pasos</td></tr>
+        <tr><td><code>&lt;li&gt;</code></td><td>Lista</td><td>Elemento de lista</td><td>Siempre dentro de ul u ol</td></tr>
+        <tr><td><code>&lt;form&gt;</code></td><td>Formulario</td><td>Contenedor de formulario</td><td>Contacto, registro</td></tr>
+        <tr><td><code>&lt;input&gt;</code></td><td>Formulario</td><td>Campo de entrada de datos</td><td>Texto, email, checkbox</td></tr>
+        <tr><td><code>&lt;button&gt;</code></td><td>Formulario</td><td>Boton interactivo</td><td>Enviar, acciones</td></tr>
+      </tbody>
+    </table>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <span class="code-label">estructura-semantica.html</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+      </div>
+      <pre><span class="tag">&lt;header&gt;</span>
+  <span class="tag">&lt;h1&gt;</span>Nombre del Sitio<span class="tag">&lt;/h1&gt;</span>
+  <span class="tag">&lt;nav&gt;</span>
+    <span class="tag">&lt;ul&gt;</span>
+      <span class="tag">&lt;li&gt;&lt;a</span> <span class="attr">href</span>=<span class="val">"#"</span><span class="tag">&gt;</span>Inicio<span class="tag">&lt;/a&gt;&lt;/li&gt;</span>
+      <span class="tag">&lt;li&gt;&lt;a</span> <span class="attr">href</span>=<span class="val">"#"</span><span class="tag">&gt;</span>Acerca de<span class="tag">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="tag">&lt;/ul&gt;</span>
+  <span class="tag">&lt;/nav&gt;</span>
+<span class="tag">&lt;/header&gt;</span>
+
+<span class="tag">&lt;main&gt;</span>
+  <span class="tag">&lt;section&gt;</span>
+    <span class="tag">&lt;h2&gt;</span>Seccion Principal<span class="tag">&lt;/h2&gt;</span>
+    <span class="tag">&lt;p&gt;</span>Contenido de la seccion.<span class="tag">&lt;/p&gt;</span>
+  <span class="tag">&lt;/section&gt;</span>
+  <span class="tag">&lt;aside&gt;</span>
+    <span class="tag">&lt;p&gt;</span>Informacion complementaria.<span class="tag">&lt;/p&gt;</span>
+  <span class="tag">&lt;/aside&gt;</span>
+<span class="tag">&lt;/main&gt;</span>
+
+<span class="tag">&lt;footer&gt;</span>
+  <span class="tag">&lt;p&gt;</span>Todos los derechos reservados 2025.<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;/footer&gt;</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECCION: VIDEO E IMAGEN ===================== -->
+<section id="s7" class="section">
+  <div class="section-header">
+    <div class="section-num">2.5c</div>
+    <div class="section-title-wrap">
+      <h2>Video e Imagen: Locales y desde URL</h2>
+      <p>Multimedia en HTML: insercion y configuracion de recursos</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <h3>Insercion de video con la etiqueta &lt;video&gt;</h3>
+    <p>La etiqueta <code>&lt;video&gt;</code> permite incrustar videos alojados localmente en tu proyecto. Acepta multiples formatos para garantizar compatibilidad entre navegadores.</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <span class="code-label">video-local.html</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+      </div>
+      <pre><span class="com">&lt;!-- Video LOCAL almacenado en la carpeta del proyecto --&gt;</span>
+<span class="tag">&lt;video</span>
+  <span class="attr">width</span>=<span class="val">"640"</span>
+  <span class="attr">height</span>=<span class="val">"360"</span>
+  <span class="attr">controls</span>
+  <span class="attr">autoplay</span>
+  <span class="attr">muted</span>
+  <span class="attr">loop</span>
+  <span class="attr">poster</span>=<span class="val">"miniatura.jpg"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;source</span> <span class="attr">src</span>=<span class="val">"video/presentacion.mp4"</span> <span class="attr">type</span>=<span class="val">"video/mp4"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;source</span> <span class="attr">src</span>=<span class="val">"video/presentacion.webm"</span> <span class="attr">type</span>=<span class="val">"video/webm"</span><span class="tag">&gt;</span>
+  <span class="com">&lt;!-- Mensaje si el navegador no soporta video HTML5 --&gt;</span>
+  Tu navegador no soporta la reproduccion de video HTML5.
+<span class="tag">&lt;/video&gt;</span></pre>
+    </div>
+
+    <h3>Insercion de video desde YouTube (iframe)</h3>
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <span class="code-label">video-youtube.html</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+      </div>
+      <pre><span class="com">&lt;!-- Video de YouTube embebido mediante iframe --&gt;</span>
+<span class="com">&lt;!-- Reemplaza VIDEO_ID con el ID del video (los caracteres despues de ?v=) --&gt;</span>
+<span class="tag">&lt;iframe</span>
+  <span class="attr">width</span>=<span class="val">"640"</span>
+  <span class="attr">height</span>=<span class="val">"360"</span>
+  <span class="attr">src</span>=<span class="val">"https://www.youtube.com/embed/VIDEO_ID"</span>
+  <span class="attr">title</span>=<span class="val">"Titulo descriptivo del video"</span>
+  <span class="attr">frameborder</span>=<span class="val">"0"</span>
+  <span class="attr">allow</span>=<span class="val">"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"</span>
+  <span class="attr">allowfullscreen</span>
+  <span class="attr">style</span>=<span class="val">"border-radius: 10px;"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/iframe&gt;</span></pre>
+    </div>
+
+    <table class="tabla-html">
+      <thead>
+        <tr><th>Atributo de &lt;video&gt;</th><th>Funcion</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>controls</code></td><td>Muestra los controles de reproduccion (play, volumen, pantalla completa)</td></tr>
+        <tr><td><code>autoplay</code></td><td>Inicia la reproduccion automaticamente al cargar la pagina</td></tr>
+        <tr><td><code>muted</code></td><td>Silencia el audio (necesario para que autoplay funcione en navegadores modernos)</td></tr>
+        <tr><td><code>loop</code></td><td>Repite el video indefinidamente al terminar</td></tr>
+        <tr><td><code>poster</code></td><td>Imagen de miniatura que se muestra antes de reproducir</td></tr>
+        <tr><td><code>preload</code></td><td>Indica si el video debe precargarse: <code>auto</code>, <code>metadata</code>, <code>none</code></td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout warn">
+      <span class="callout-icon">&#9888;</span>
+      <div><strong>Consideracion tecnica:</strong> Cuando uses <code>autoplay</code>, los navegadores modernos requieren que el video este silenciado (<code>muted</code>) para reproducirse automaticamente. Esto es una medida de privacidad del usuario implementada por Chrome, Firefox y Safari.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ACTIVIDAD INTEGRADORA ===================== -->
+<section id="act" class="section">
+  <div class="section-header">
+    <div class="section-num">ACT</div>
+    <div class="section-title-wrap">
+      <h2>Actividad Integradora de Unidad</h2>
+      <p>Aprendizaje Basado en Problemas — Entregable de Unidad</p>
+    </div>
+  </div>
+  <div class="section-body" style="padding:0;">
+    <div class="actividad-wrap">
+      <div class="actividad-badge">Actividad Integradora &nbsp;|&nbsp; ABP</div>
+      <h2>Mi Primer Sitio Web Tematico</h2>
+      <p>Mediante la aplicacion de todos los elementos HTML estudiados en la Unidad 1, construiras un sitio web de una sola pagina sobre un tema relacionado con tu formacion universitaria como estudiante de Diseno Grafico. El sitio debera demostrar dominio tecnico de las etiquetas y criterio estetico propio de tu disciplina.</p>
+
+      <div class="act-meta">
+        <span class="meta-pill">Herramienta: Bloc de Notas</span>
+        <span class="meta-pill">Formato: Archivo .html</span>
+        <span class="meta-pill">Trabajo: Individual</span>
+        <span class="meta-pill">Nivel: Licenciatura</span>
+      </div>
+
+      <!-- PROBLEMA CENTRAL -->
+      <div class="act-fase">
+        <div class="act-fase-header">
+          <div class="fase-num">P</div>
+          <span class="fase-title">Planteamiento del Problema</span>
+        </div>
+        <p>Como estudiante de Diseno Grafico, necesitas crear un sitio web que funcione como presentacion digital de un tema de tu interes academico o profesional. El sitio debe comunicar informacion de manera estructurada y visualmente coherente, utilizando unicamente HTML y estilos en linea.</p>
+        <p style="margin-top:10px;"><strong style="color:rgba(255,255,255,0.85);">Temas sugeridos (el alumno elige uno):</strong></p>
+        <ul>
+          <li>Mi portafolio personal como estudiante de Diseno Grafico</li>
+          <li>Un movimiento artistico o de diseno de tu preferencia (Bauhaus, Art Deco, Minimalismo)</li>
+          <li>Un diseñador grafico o ilustrador que admiras</li>
+          <li>Principios del diseno visual aplicados a la comunicacion</li>
+          <li>Un proyecto academico que hayas realizado en tu carrera</li>
+        </ul>
+      </div>
+
+      <!-- FASE 1 -->
+      <div class="act-fase">
+        <div class="act-fase-header">
+          <div class="fase-num">1</div>
+          <span class="fase-title">Planeacion y Boceto</span>
+          <span class="fase-time">15 min</span>
+        </div>
+        <p>Antes de escribir codigo, planea tu sitio en papel o en el Bloc de Notas como documento de texto:</p>
+        <ul>
+          <li>Define el tema de tu sitio y redacta un titulo principal.</li>
+          <li>Esquematiza las secciones que tendra tu pagina (minimo 4 secciones).</li>
+          <li>Decide que imagenes incluiras (locales o desde URL) y que videos incorporaras.</li>
+          <li>Elige una paleta de colores en formato hexadecimal acorde al tema elegido.</li>
+          <li>Anota el nombre con que guardaras tu archivo: <code>sitio-[tu-apellido].html</code></li>
+        </ul>
+      </div>
+
+      <!-- FASE 2 -->
+      <div class="act-fase">
+        <div class="act-fase-header">
+          <div class="fase-num">2</div>
+          <span class="fase-title">Construccion de la Estructura Base en Bloc de Notas</span>
+          <span class="fase-time">10 min</span>
+        </div>
+        <p>Abre el Bloc de Notas y escribe manualmente (sin copiar y pegar) la estructura basica de tu documento:</p>
+        <ul>
+          <li>Escribe la declaracion <code>&lt;!DOCTYPE html&gt;</code> y las etiquetas <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code> y <code>&lt;body&gt;</code>.</li>
+          <li>Agrega en el <code>&lt;head&gt;</code>: <code>&lt;meta charset="UTF-8"&gt;</code>, <code>&lt;meta name="viewport"...&gt;</code> y el <code>&lt;title&gt;</code> con el nombre de tu sitio.</li>
+          <li>Aplica el color de fondo al <code>&lt;body&gt;</code> usando el color hexadecimal que elegiste en la fase anterior.</li>
+          <li>Guarda el archivo con extension <code>.html</code> y verifica que se abra correctamente en el navegador.</li>
+        </ul>
+      </div>
+
+      <!-- FASE 3 -->
+      <div class="act-fase">
+        <div class="act-fase-header">
+          <div class="fase-num">3</div>
+          <span class="fase-title">Implementacion del Contenido</span>
+          <span class="fase-time">40 min</span>
+        </div>
+        <p>Desarrolla el contenido completo de tu sitio. El sitio debe incluir de manera obligatoria todos los siguientes elementos:</p>
+        <ul>
+          <li><strong style="color:rgba(255,255,255,0.9);">Barra de navegacion:</strong> Con al menos 4 enlaces que apunten a secciones de la misma pagina usando anclas (<code>href="#id-seccion"</code>).</li>
+          <li><strong style="color:rgba(255,255,255,0.9);">Encabezados jerarquicos:</strong> Utiliza <code>&lt;h1&gt;</code> para el titulo principal y <code>&lt;h2&gt;</code> para los subtitulos de cada seccion.</li>
+          <li><strong style="color:rgba(255,255,255,0.9);">Parrafos:</strong> Minimo 3 parrafos con informacion sustantiva sobre el tema elegido.</li>
+          <li><strong style="color:rgba(255,255,255,0.9);">Imagen local:</strong> Al menos una imagen guardada en la misma carpeta del archivo HTML.</li>
+          <li><strong style="color:rgba(255,255,255,0.9);">Imagen desde URL:</strong> Al menos una imagen cargada desde una direccion web.</li>
+          <li><strong style="color:rgba(255,255,255,0.9);">Tabla de datos:</strong> Una tabla con encabezados (<code>&lt;thead&gt;</code>) y datos (<code>&lt;tbody&gt;</code>) relevante a tu tema.</li>
+          <li><strong style="color:rgba(255,255,255,0.9);">Video:</strong> Un video de YouTube embebido con <code>&lt;iframe&gt;</code> o un video local con <code>&lt;video&gt;</code>.</li>
+          <li><strong style="color:rgba(255,255,255,0.9);">Fondo de imagen:</strong> Al menos una seccion o el cuerpo completo con una imagen de fondo aplicada via CSS en linea.</li>
+          <li><strong style="color:rgba(255,255,255,0.9);">Pie de pagina:</strong> Con tu nombre, carrera, grupo y año.</li>
+        </ul>
+      </div>
+
+      <!-- FASE 4 -->
+      <div class="act-fase">
+        <div class="act-fase-header">
+          <div class="fase-num">4</div>
+          <span class="fase-title">Revision y Depuracion</span>
+          <span class="fase-time">10 min</span>
+        </div>
+        <p>Realiza una revision sistematica de tu sitio antes de entregar:</p>
+        <ul>
+          <li>Verifica que todas las etiquetas esten correctamente cerradas.</li>
+          <li>Comprueba que las imagenes y videos se visualicen correctamente en el navegador.</li>
+          <li>Revisa que los enlaces de la barra de navegacion funcionen y lleven a la seccion correcta.</li>
+          <li>Asegurate de que el texto sea legible sobre el color o imagen de fondo elegida.</li>
+          <li>Usa <code>Ctrl + U</code> en el navegador para ver el codigo fuente y verificar que no haya errores visibles.</li>
+        </ul>
+      </div>
+
+      <!-- FASE 5: REFLEXION -->
+      <div class="act-fase">
+        <div class="act-fase-header">
+          <div class="fase-num">5</div>
+          <span class="fase-title">Reflexion Critica Escrita</span>
+          <span class="fase-time">10 min</span>
+        </div>
+        <p>Como parte del entregable, agrega una seccion final en tu sitio HTML con la etiqueta <code>&lt;section id="reflexion"&gt;</code> que responda las siguientes preguntas en formato de parrafo:</p>
+        <ul>
+          <li>Que decisiones de diseno visual tomaste al elegir colores, imagenes y tipografia para tu sitio, y por que?</li>
+          <li>Que etiqueta HTML encontraste mas util y cual represento un mayor reto tecnico para ti?</li>
+          <li>De que manera el conocimiento de HTML puede enriquecer tu practica como diseñador grafico?</li>
+        </ul>
+      </div>
+
+      <!-- RUBRICA -->
+      <div style="margin-top:24px;">
+        <div style="font-size:0.8rem; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:12px; font-weight:600;">Criterios de evaluacion</div>
+        <div class="rubrica-grid">
+          <div class="rub-header">Criterio</div>
+          <div class="rub-header">Excelente</div>
+          <div class="rub-header">Suficiente</div>
+          <div class="rub-header">Puntaje</div>
+
+          <div class="rub-cell">Estructura HTML valida y completa</div>
+          <div class="rub-cell">Todas las etiquetas correctamente cerradas y anidadas</div>
+          <div class="rub-cell">Estructura basica presente con errores menores</div>
+          <div class="rub-cell">20 pts</div>
+
+          <div class="rub-cell">Uso correcto de etiquetas de contenido</div>
+          <div class="rub-cell">Todos los elementos requeridos presentes y funcionales</div>
+          <div class="rub-cell">La mayoria de elementos presentes</div>
+          <div class="rub-cell">25 pts</div>
+
+          <div class="rub-cell">Navegacion funcional</div>
+          <div class="rub-cell">Barra visible, enlaces activos y correctamente ancrados</div>
+          <div class="rub-cell">Barra presente, algunos enlaces no funcionan</div>
+          <div class="rub-cell">15 pts</div>
+
+          <div class="rub-cell">Coherencia visual y estetica</div>
+          <div class="rub-cell">Paleta cromatica consistente, legibilidad optima</div>
+          <div class="rub-cell">Diseno basico con inconsistencias menores</div>
+          <div class="rub-cell">20 pts</div>
+
+          <div class="rub-cell">Reflexion critica</div>
+          <div class="rub-cell">Reflexion sustantiva que articula decision tecnica y estetica</div>
+          <div class="rub-cell">Reflexion presente pero superficial</div>
+          <div class="rub-cell">20 pts</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== REFLEXION FINAL ===================== -->
+<section class="section">
+  <div class="section-header">
+    <div class="section-num">RF</div>
+    <div class="section-title-wrap">
+      <h2>Reflexion Final de Unidad</h2>
+      <p>Metacognicion y cierre del proceso de aprendizaje</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="callout abp">
+      <span class="callout-icon">&#9679;</span>
+      <div>La reflexion metacognitiva es parte fundamental del aprendizaje constructivista. Responde las siguientes preguntas en tu bitacora o cuaderno de curso, con base en tu experiencia durante esta unidad.</div>
+    </div>
+    <div class="reflexion-area">
+      <h3>Preguntas de cierre</h3>
+      <div class="pregunta-reflex"><span>1</span>Compara tu respuesta inicial a la pregunta sobre como funciona una pagina web con lo que ahora comprendes. Que cambio?</div>
+      <div class="pregunta-reflex"><span>2</span>Cual de los temas de la unidad consideras que tiene mayor aplicacion en tu practica como diseñador grafico? Fundamenta tu respuesta.</div>
+      <div class="pregunta-reflex"><span>3</span>Que pregunta nueva surgio en ti al construir tu sitio web? Investiga la respuesta y documentala.</div>
+      <div class="pregunta-reflex"><span>4</span>Si tuvieras que enseñarle a un compañero a construir un sitio web desde cero en 30 minutos, cuales serian los tres conceptos que priorizarias y por que?</div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <img src="data:image/png;base64,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flrOlIvlVxIvfT/Q8L9DbpR4efnHco7Ep/GPlUNkb4lXDDaQZl8+J4T0O67/Z2eLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAADaYosAAKAttggAANpiiwAAoC22CAAA2mKLAACgLbYIAABacu8//T+wJF0i54bpgwAAAABJRU5ErkJggg==" alt="Logo UNE" style="height:40px; background:white; padding:5px 10px; border-radius:5px; margin-bottom:14px; display:block; margin-left:auto; margin-right:auto;">
+  <p><strong>Universidad de Especialidades (UNE)</strong></p>
+  <p>Licenciatura en Diseno Grafico &nbsp;|&nbsp; Diseno Web I &nbsp;|&nbsp; Unidad 1: Introduccion al Lenguaje HTML</p>
+  <p style="margin-top:10px; font-size:0.74rem; color:rgba(255,255,255,0.4);">Guia de aprendizaje elaborada con metodologia constructivista y pedagogia activa basada en problemas.</p>
+</footer>
+
+<script>
+// BARRA DE PROGRESO
+window.addEventListener('scroll', function() {
+  var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+  var scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  var progress = (scrollTop / scrollHeight) * 100;
+  document.getElementById('progress-bar').style.width = progress + '%';
+});
+
+// QUIZ
+function evalQuiz(btn, isCorrect) {
+  var opts = btn.parentElement.querySelectorAll('.quiz-opt');
+  opts.forEach(function(o) { o.disabled = true; o.style.cursor = 'default'; });
+  var feedbackId = btn.closest('.quiz-area').querySelector('.quiz-feedback');
+  if (isCorrect) {
+    btn.classList.add('correct');
+    feedbackId.style.display = 'block';
+    feedbackId.style.color = '#1b5e20';
+    feedbackId.textContent = 'Correcto. El elemento <head> almacena metadatos, el titulo del documento (<title>), charset, viewport y enlaces a hojas de estilo o scripts. No se renderiza visualmente en la pagina.';
+  } else {
+    btn.classList.add('wrong');
+    feedbackId.style.display = 'block';
+    feedbackId.style.color = '#8b0000';
+    feedbackId.textContent = 'Respuesta incorrecta. Revisa la seccion 1.1 y la diferencia entre <head> y <body>.';
+  }
+}
+
+// COPIAR CODIGO
+function copyCode(btn) {
+  var pre = btn.closest('.code-block').querySelector('pre');
+  var text = pre.innerText || pre.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    var orig = btn.textContent;
+    btn.textContent = 'Copiado';
+    btn.style.background = 'rgba(40,200,100,0.25)';
+    btn.style.color = '#a8d8a8';
+    setTimeout(function() {
+      btn.textContent = orig;
+      btn.style.background = '';
+      btn.style.color = '';
+    }, 1800);
+  });
+}
+</script>
+</body>
+</html>
