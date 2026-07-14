@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diseño Web — WordPress Básico-Intermedio | Universidad UNE</title>
+<meta name="description" content="Guía interactiva de WordPress para la asignatura de Diseño Web, Licenciatura en Diseño Gráfico, Universidad UNE.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#16233B;
+    --ink-soft:#4A5568;
+    --paper:#EEEAE0;
+    --paper-raised:#F7F4EC;
+    --paper-line:#D8D2C2;
+    --grid-blue:#7C8CA6;
+    --grid-blue-faint: rgba(124,140,166,0.28);
+    --amber:#B9803A;
+    --amber-dim: rgba(185,128,58,0.16);
+    --teal:#285C52;
+    --teal-dim: rgba(40,92,82,0.12);
+    --alert:#9C3B3B;
+    --alert-dim: rgba(156,59,59,0.10);
+    --radius: 3px;
+    --sidebar-w: 300px;
+    --font-display: "Fraunces", serif;
+    --font-body: "IBM Plex Sans", sans-serif;
+    --font-mono: "IBM Plex Mono", monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    margin:0;
+    font-family: var(--font-body);
+    color: var(--ink);
+    background-color: var(--paper);
+    background-image:
+      linear-gradient(var(--paper-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--paper-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+    background-position: -1px -1px;
+    line-height: 1.6;
+  }
+
+  a{ color: var(--teal); }
+  a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visible, textarea:focus-visible{
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{ animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  /* ---------- Layout shell ---------- */
+  .shell{
+    display:grid;
+    grid-template-columns: var(--sidebar-w) 1fr;
+    min-height:100vh;
+  }
+  @media (max-width: 960px){
+    .shell{ grid-template-columns: 1fr; }
+  }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar{
+    position: sticky;
+    top:0;
+    align-self:start;
+    height:100vh;
+    overflow-y:auto;
+    background: var(--ink);
+    color: #E7E2D6;
+    padding: 22px 20px 30px;
+    border-right: 3px solid var(--amber);
+  }
+  @media (max-width: 960px){
+    .sidebar{ position: relative; height:auto; border-right:none; border-bottom:3px solid var(--amber); }
+  }
+  .sidebar .brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding-bottom:16px;
+    margin-bottom:16px;
+    border-bottom: 1px dashed rgba(231,226,214,0.3);
+  }
+  .sidebar .brand img{ display:block; background:#fff; border-radius:6px; padding:3px; flex:0 0 auto; }
+  .sidebar .brand .u-name{
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    color:#C9C2AC;
+    line-height:1.4;
+  }
+  .sidebar h1{
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight:600;
+    line-height:1.25;
+    margin: 0 0 4px;
+    color:#fff;
+  }
+  .sidebar .subtitle{
+    font-family: var(--font-mono);
+    font-size:11.5px;
+    color: var(--grid-blue);
+    letter-spacing:0.4px;
+    margin-bottom: 22px;
+    display:block;
+  }
+
+  .progress-block{ margin-bottom: 22px; }
+  .progress-label{
+    display:flex;
+    justify-content:space-between;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color:#C9C2AC;
+    margin-bottom:8px;
+    letter-spacing:0.4px;
+  }
+  .progress-track{
+    height:6px;
+    background: rgba(231,226,214,0.15);
+    border-radius: 3px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    width:0%;
+    background: linear-gradient(90deg, var(--amber), #D9A257);
+    transition: width 0.4s ease;
+  }
+
+  nav.toc{ display:flex; flex-direction:column; gap:2px; }
+  nav.toc a{
+    color:#DDD7C6;
+    text-decoration:none;
+    font-size: 13.5px;
+    padding: 8px 10px;
+    border-radius: var(--radius);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    border-left: 3px solid transparent;
+  }
+  nav.toc a:hover{ background: rgba(185,128,58,0.15); }
+  nav.toc a.active{
+    background: rgba(185,128,58,0.22);
+    border-left-color: var(--amber);
+    color:#fff;
+    font-weight:500;
+  }
+  nav.toc .stamp{
+    flex:0 0 auto;
+    width:20px; height:20px;
+    border-radius:50%;
+    border:1.5px solid var(--grid-blue);
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--font-mono);
+    font-size:10px;
+    color: var(--grid-blue);
+    transition: all 0.25s ease;
+  }
+  nav.toc .stamp.done{
+    background: var(--amber);
+    border-color: var(--amber);
+    color:#16233B;
+    font-weight:700;
+  }
+  nav.toc .nav-section-label{
+    font-family: var(--font-mono);
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:#8D8674;
+    margin: 16px 0 4px 10px;
+  }
+
+  /* ---------- Main content ---------- */
+  main{ padding: 0; min-width:0; }
+
+  .hero{
+    padding: 56px clamp(20px, 5vw, 72px) 44px;
+    border-bottom: 1px solid var(--paper-line);
+    background: var(--paper-raised);
+  }
+  .hero .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--teal);
+    display:block;
+    margin-bottom: 14px;
+  }
+  .hero h2{
+    font-family: var(--font-display);
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight:600;
+    line-height:1.15;
+    margin: 0 0 18px;
+    max-width: 18ch;
+  }
+  .hero p.lead{
+    font-size: 16.5px;
+    max-width: 62ch;
+    color: var(--ink-soft);
+    margin: 0 0 26px;
+  }
+  .hero .meta-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap: 10px;
+  }
+  .meta-tag{
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    border: 1px solid var(--grid-blue);
+    color: var(--ink-soft);
+    padding: 5px 10px;
+    border-radius: 999px;
+    background:#fff;
+  }
+
+  section.wrap{
+    padding: 48px clamp(20px, 5vw, 72px);
+    border-bottom: 1px solid var(--paper-line);
+  }
+  section.wrap.alt{ background: rgba(255,255,255,0.35); }
+
+  h2.section-title{
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight:600;
+    margin: 0 0 8px;
+  }
+  .section-kicker{
+    font-family: var(--font-mono);
+    font-size:11.5px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color: var(--amber);
+    display:block;
+    margin-bottom:10px;
+  }
+
+  /* Methodology diagram */
+  .method-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 30px;
+  }
+  @media (max-width: 780px){ .method-grid{ grid-template-columns: 1fr; } }
+  .method-card{
+    background:#fff;
+    border: 1px solid var(--paper-line);
+    border-top: 4px solid var(--teal);
+    padding: 22px;
+    border-radius: var(--radius);
+  }
+  .method-card h3{
+    font-family: var(--font-display);
+    font-size:18px;
+    margin: 0 0 10px;
+  }
+  .method-card p{ font-size:14.5px; color:var(--ink-soft); margin:0; }
+  .method-card .tag{
+    font-family: var(--font-mono);
+    font-size:10.5px;
+    color:var(--teal);
+    letter-spacing:0.6px;
+    text-transform:uppercase;
+  }
+
+  .blueprint-line{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    margin: 34px 0 6px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--grid-blue);
+  }
+  .blueprint-line::before, .blueprint-line::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background: repeating-linear-gradient(90deg, var(--grid-blue) 0 6px, transparent 6px 11px);
+  }
+
+  /* Bitácora explainer strip */
+  .bitacora-strip{
+    display:flex;
+    gap: 14px;
+    overflow-x:auto;
+    padding: 6px 2px 14px;
+    margin-top: 24px;
+  }
+  .bit-node{
+    flex:0 0 auto;
+    width: 150px;
+    background:#fff;
+    border:1px solid var(--paper-line);
+    border-radius: var(--radius);
+    padding: 14px 12px;
+    position:relative;
+  }
+  .bit-node .num{
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color:#fff;
+    background: var(--ink);
+    width:22px; height:22px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:8px;
+  }
+  .bit-node p{ font-size:12.5px; margin:0; color:var(--ink-soft); }
+
+  /* ---------- Module sheets ---------- */
+  .module{
+    padding: 52px clamp(20px, 5vw, 72px);
+    border-bottom: 1px solid var(--paper-line);
+    scroll-margin-top: 20px;
+  }
+  .module:nth-of-type(even){ background: rgba(255,255,255,0.4); }
+
+  .module-head{
+    display:flex;
+    gap: 20px;
+    align-items:flex-start;
+    margin-bottom: 26px;
+    flex-wrap:wrap;
+  }
+  .module-badge{
+    font-family: var(--font-mono);
+    font-size: 13px;
+    background: var(--ink);
+    color:#fff;
+    padding: 8px 12px;
+    border-radius: var(--radius);
+    flex:0 0 auto;
+  }
+  .module-head h2{
+    font-family: var(--font-display);
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight:600;
+    margin: 0;
+    flex:1;
+    min-width:220px;
+  }
+
+  .objective-box{
+    background: var(--teal-dim);
+    border-left: 3px solid var(--teal);
+    padding: 14px 18px;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    margin-bottom: 22px;
+    font-size: 14.5px;
+  }
+  .objective-box strong{ color: var(--teal); font-family: var(--font-mono); font-size:11px; letter-spacing:0.6px; text-transform:uppercase; display:block; margin-bottom:6px;}
+
+  .problem-box{
+    background: var(--amber-dim);
+    border-left: 3px solid var(--amber);
+    padding: 16px 18px;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    margin-bottom: 26px;
+  }
+  .problem-box strong{ color: var(--amber); font-family: var(--font-mono); font-size:11px; letter-spacing:0.6px; text-transform:uppercase; display:block; margin-bottom:6px;}
+  .problem-box p{ margin:0; font-size:14.5px; }
+
+  h3.sub-title{
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight:600;
+    margin: 30px 0 14px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+
+  /* Step accordion */
+  details.step{
+    background:#fff;
+    border:1px solid var(--paper-line);
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    overflow:hidden;
+  }
+  details.step summary{
+    list-style:none;
+    cursor:pointer;
+    padding: 13px 16px;
+    font-weight:500;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-size:14.5px;
+  }
+  details.step summary::-webkit-details-marker{ display:none; }
+  details.step summary .step-num{
+    font-family: var(--font-mono);
+    font-size:12px;
+    color:var(--amber);
+    border:1px solid var(--amber);
+    width:24px; height:24px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    flex:0 0 auto;
+  }
+  details.step summary::after{
+    content:"+";
+    margin-left:auto;
+    font-family: var(--font-mono);
+    color: var(--ink-soft);
+  }
+  details.step[open] summary::after{ content:"–"; }
+  details.step .step-body{
+    padding: 4px 16px 18px 52px;
+    font-size:14px;
+    color: var(--ink-soft);
+  }
+  details.step .step-body code, details.step .step-body kbd{
+    font-family: var(--font-mono);
+    background: var(--paper);
+    border:1px solid var(--paper-line);
+    padding:1px 6px;
+    border-radius:2px;
+    color: var(--ink);
+    font-size:13px;
+  }
+  details.step .step-body .example{
+    margin-top:10px;
+    background: var(--paper);
+    border-left: 2px solid var(--grid-blue);
+    padding: 10px 14px;
+    font-size:13.5px;
+  }
+  details.step .step-body .example .ex-label{
+    font-family: var(--font-mono);
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    color: var(--grid-blue);
+    display:block;
+    margin-bottom:4px;
+  }
+  details.step .step-body ul{ margin: 8px 0; padding-left: 20px; }
+  details.step .step-body li{ margin-bottom:4px; }
+
+  /* Activity block */
+  .activity-block{
+    background:#fff;
+    border: 1.5px dashed var(--amber);
+    border-radius: var(--radius);
+    padding: 22px 22px 20px;
+    margin-top: 28px;
+  }
+  .activity-block .head-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:12px;
+  }
+  .activity-block h4{
+    font-family: var(--font-mono);
+    font-size:12.5px;
+    text-transform:uppercase;
+    letter-spacing:0.8px;
+    color: var(--amber);
+    margin:0;
+  }
+  .mark-done-label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-family: var(--font-mono);
+    font-size:12px;
+    color: var(--ink-soft);
+    cursor:pointer;
+    user-select:none;
+  }
+  .mark-done-label input{ width:16px; height:16px; accent-color: var(--amber); cursor:pointer; }
+  .activity-block p, .activity-block li{ font-size:14.5px; }
+  .activity-block .piece-tag{
+    display:inline-block;
+    font-family: var(--font-mono);
+    font-size:11px;
+    background: var(--ink);
+    color:#fff;
+    padding:3px 9px;
+    border-radius:999px;
+    margin-bottom:12px;
+  }
+
+  .two-col{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    margin-top: 26px;
+  }
+  @media (max-width:780px){ .two-col{ grid-template-columns: 1fr; } }
+
+  .reflect-box, .collab-box{
+    background:#fff;
+    border:1px solid var(--paper-line);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+  }
+  .reflect-box{ border-top: 3px solid var(--alert); }
+  .collab-box{ border-top: 3px solid var(--teal); }
+  .reflect-box h4, .collab-box h4{
+    font-family: var(--font-mono);
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:0.6px;
+    margin: 0 0 10px;
+  }
+  .reflect-box h4{ color:var(--alert); }
+  .collab-box h4{ color:var(--teal); }
+  .reflect-box p, .collab-box p{ font-size:14px; margin:0 0 12px; }
+  textarea.reflect-input{
+    width:100%;
+    min-height: 90px;
+    font-family: var(--font-body);
+    font-size:13.5px;
+    padding: 10px;
+    border: 1px solid var(--paper-line);
+    border-radius: var(--radius);
+    background: var(--paper);
+    color: var(--ink);
+    resize:vertical;
+  }
+  .save-note{
+    font-family: var(--font-mono);
+    font-size:10.5px;
+    color: var(--grid-blue);
+    margin-top:6px;
+    display:block;
+    min-height:14px;
+  }
+
+  table.rubric{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:18px;
+    font-size:13.5px;
+    background:#fff;
+  }
+  table.rubric th, table.rubric td{
+    border:1px solid var(--paper-line);
+    padding: 10px 12px;
+    text-align:left;
+    vertical-align:top;
+  }
+  table.rubric th{
+    background: var(--ink);
+    color:#fff;
+    font-family: var(--font-mono);
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+  }
+  table.rubric tr:nth-child(even) td{ background: rgba(255,255,255,0.5); }
+
+  .compare-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:16px;
+    font-size:14px;
+    background:#fff;
+  }
+  .compare-table th, .compare-table td{
+    border:1px solid var(--paper-line);
+    padding:10px 14px;
+    text-align:left;
+  }
+  .compare-table th{ font-family:var(--font-mono); font-size:12px; background: var(--paper-raised); }
+
+  footer.site-footer{
+    padding: 40px clamp(20px,5vw,72px);
+    font-size: 13px;
+    color: var(--ink-soft);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  footer.site-footer .placeholder-note{
+    font-family: var(--font-mono);
+    font-size:11px;
+    color: var(--alert);
+  }
+
+  .toc-toggle{
+    display:none;
+  }
+  @media (max-width:960px){
+    .toc-toggle{
+      display:block;
+      width:100%;
+      background: var(--amber);
+      color:#16233B;
+      border:none;
+      padding:10px;
+      font-family: var(--font-mono);
+      font-size:12px;
+      font-weight:600;
+      letter-spacing:0.5px;
+      border-radius:var(--radius);
+      margin-bottom:14px;
+      cursor:pointer;
+    }
+    nav.toc.collapsed{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <img src="assets/une-logo.png" width="44" height="44" alt="Logotipo Universidad UNE">
+      <span class="u-name">UNIVERSIDAD UNE<br>UNIVERSIDAD DE ESPECIALIDADES</span>
+    </div>
+    <h1>Diseño Web</h1>
+    <span class="subtitle">WORDPRESS — NIVEL BÁSICO-INTERMEDIO</span>
+
+    <div class="progress-block">
+      <div class="progress-label"><span>BITÁCORA DE CONSTRUCCIÓN</span><span id="progress-pct">0%</span></div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+
+    <button class="toc-toggle" id="toc-toggle" aria-expanded="false">MOSTRAR / OCULTAR ÍNDICE</button>
+
+    <nav class="toc collapsed" id="toc" aria-label="Índice de la guía">
+      <a href="#metodologia"><span class="stamp">M</span>Metodología</a>
+      <span class="nav-section-label">Módulos</span>
+      <a href="#modulo-0" data-mod="0"><span class="stamp" data-stamp="0">0</span>Ecosistema WordPress</a>
+      <a href="#modulo-1" data-mod="1"><span class="stamp" data-stamp="1">1</span>Instalación y panel</a>
+      <a href="#modulo-2" data-mod="2"><span class="stamp" data-stamp="2">2</span>Temas y Customizer</a>
+      <a href="#modulo-3" data-mod="3"><span class="stamp" data-stamp="3">3</span>Editor de bloques</a>
+      <a href="#modulo-4" data-mod="4"><span class="stamp" data-stamp="4">4</span>Arquitectura y menús</a>
+      <a href="#modulo-5" data-mod="5"><span class="stamp" data-stamp="5">5</span>Multimedia accesible</a>
+      <a href="#modulo-6" data-mod="6"><span class="stamp" data-stamp="6">6</span>Plugins esenciales</a>
+      <a href="#modulo-7" data-mod="7"><span class="stamp" data-stamp="7">7</span>CSS y responsivo</a>
+      <span class="nav-section-label">Cierre</span>
+      <a href="#proyecto-final" data-mod="final"><span class="stamp" data-stamp="final">P</span>Proyecto integrador</a>
+      <a href="#evaluacion"><span class="stamp">E</span>Rúbrica de evaluación</a>
+    </nav>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main>
+
+    <section class="hero">
+      <span class="eyebrow">Licenciatura en Diseño Gráfico — Asignatura: Diseño Web</span>
+      <h2>Construir un sitio en WordPress es diseñar una decisión a la vez.</h2>
+      <p class="lead">Esta guía acompaña el desarrollo de los temas de WordPress de nivel básico a intermedio mediante situaciones problema, construcción progresiva de una bitácora personal y un proyecto integrador aplicable a la vida universitaria del estudiante.</p>
+      <div class="meta-row">
+        <span class="meta-tag">8 módulos temáticos</span>
+        <span class="meta-tag">1 actividad progresiva</span>
+        <span class="meta-tag">1 proyecto integrador</span>
+        <span class="meta-tag">Metodología: constructivismo + ABP</span>
+      </div>
+    </section>
+
+    <section class="wrap" id="metodologia">
+      <span class="section-kicker">Marco pedagógico</span>
+      <h2 class="section-title">Cómo está construida esta guía</h2>
+      <p style="max-width:70ch; color:var(--ink-soft); font-size:15px;">La guía no presenta WordPress como un listado de funciones aisladas. Cada módulo parte de una situación problema propia del ejercicio profesional del diseño gráfico, y cada actividad se apoya en lo que el estudiante ya construyó en el módulo anterior. Al finalizar, las piezas elaboradas conforman un ejercicio integral completo, antecedente directo del proyecto final.</p>
+
+      <div class="method-grid">
+        <div class="method-card">
+          <span class="tag">Pedagogía activa</span>
+          <h3>El estudiante construye, no recibe</h3>
+          <p>Cada tema se aborda mediante acción directa sobre un sitio de práctica: instalar, decidir, ajustar, documentar. La lectura pasiva se limita a lo estrictamente necesario para ejecutar la tarea.</p>
+        </div>
+        <div class="method-card">
+          <span class="tag">Constructivismo</span>
+          <h3>El conocimiento se acumula</h3>
+          <p>Ningún módulo se cierra en sí mismo. Cada bitácora se apoya en la anterior, de modo que el estudiante relaciona activamente el nuevo contenido con lo ya construido.</p>
+        </div>
+        <div class="method-card">
+          <span class="tag">Aprendizaje basado en problemas</span>
+          <h3>La necesidad antecede a la herramienta</h3>
+          <p>Cada módulo abre con una situación problema realista. La herramienta de WordPress se presenta como la vía para resolverla, no como un fin en sí misma.</p>
+        </div>
+      </div>
+
+      <div class="blueprint-line">RUTA DE LA BITÁCORA DE CONSTRUCCIÓN</div>
+      <div class="bitacora-strip">
+        <div class="bit-node"><span class="num">1</span><p>Ficha técnica del proyecto</p></div>
+        <div class="bit-node"><span class="num">2</span><p>Configuración documentada</p></div>
+        <div class="bit-node"><span class="num">3</span><p>Guía de estilo aplicada al tema</p></div>
+        <div class="bit-node"><span class="num">4</span><p>Página de inicio con bloques</p></div>
+        <div class="bit-node"><span class="num">5</span><p>Mapa del sitio y menú</p></div>
+        <div class="bit-node"><span class="num">6</span><p>Banco de imágenes accesibles</p></div>
+        <div class="bit-node"><span class="num">7</span><p>Formulario y SEO básico</p></div>
+        <div class="bit-node"><span class="num">8</span><p>Ajustes de CSS y responsivo</p></div>
+      </div>
+      <p style="font-size:13px; color:var(--ink-soft); margin-top:10px;">Las ocho piezas, reunidas, constituyen el <strong>ejercicio integral</strong> del curso y el punto de partida directo del proyecto final.</p>
+    </section>
+
+    <section class="module" id="modulo-0">
+      <div class="module-head">
+        <span class="module-badge">MÓDULO 0</span>
+        <h2>Fundamentos del ecosistema WordPress</h2>
+      </div>
+
+      <div class="objective-box">
+        <strong>Objetivo de aprendizaje</strong>
+        Distinguir los componentes técnicos que sostienen un sitio en WordPress (CMS, hosting, dominio) y justificar la arquitectura técnica más adecuada para un proyecto de diseño concreto.
+      </div>
+
+      <div class="problem-box">
+        <strong>Situación problema</strong>
+        <p>Una galería de arte independiente, cliente ficticio de esta unidad, solicita "una página en WordPress" sin más indicaciones. Antes de abrir cualquier editor visual, el equipo de diseño debe decidir y justificar la arquitectura técnica que hará posible el proyecto.</p>
+      </div>
+
+      <h3 class="sub-title">Contenido y procedimiento</h3>
+
+      <details class="step" open>
+        <summary><span class="step-num">1</span>¿Qué es un CMS y por qué cambia el proceso de diseño?</summary>
+        <div class="step-body">
+          <p>Un sistema de gestión de contenidos (CMS, por sus siglas en inglés) separa la estructura y el diseño de un sitio del contenido que un usuario sin conocimientos de programación necesita actualizar. WordPress es el CMS más utilizado a nivel mundial para sitios institucionales, editoriales y de portafolio.</p>
+          <div class="example">
+            <span class="ex-label">Ejemplo aplicado</span>
+            Un sitio codificado a mano exige editar archivos HTML cada vez que se agrega una exposición; un sitio en WordPress permite que el propio gestor de la galería publique la exposición desde un panel, sin tocar código.
+          </div>
+        </div>
+      </details>
+
+      <details class="step">
+        <summary><span class="step-num">2</span>WordPress.org frente a WordPress.com</summary>
+        <div class="step-body">
+          <table class="compare-table">
+            <tr><th>Criterio</th><th>WordPress.org (autoalojado)</th><th>WordPress.com (alojado)</th></tr>
+            <tr><td>Control del hosting</td><td>El usuario contrata su propio hosting</td><td>Provisto por la plataforma</td></tr>
+            <tr><td>Instalación de temas y plugins de terceros</td><td>Sin restricciones</td><td>Limitado según el plan</td></tr>
+            <tr><td>CSS adicional y personalización avanzada</td><td>Sin restricciones</td><td>Requiere planes de pago</td></tr>
+            <tr><td>Recomendado para</td><td>Proyectos de diseño con control total de identidad visual</td><td>Prácticas rápidas o exploración inicial</td></tr>
+          </table>
+        </div>
+      </details>
+
+      <details class="step">
+        <summary><span class="step-num">3</span>Hosting y dominio: la analogía del terreno y la dirección</summary>
+        <div class="step-body">
+          <p>El <strong>hosting</strong> es el terreno donde vive físicamente el sitio (los archivos y la base de datos); el <strong>dominio</strong> es la dirección que las personas escriben para llegar a ese terreno. Un sitio puede tener excelente diseño y fallar por decisiones deficientes en cualquiera de los dos componentes: lentitud de carga por un hosting insuficiente, o un dominio poco memorable.</p>
+        </div>
+      </details>
+
+      <details class="step">
+        <summary><span class="step-num">4</span>Preparación del entorno de práctica</summary>
+        <div class="step-body">
+          <p>Para el desarrollo de esta guía se recomienda un entorno de práctica gratuito y de bajo riesgo. Elegir una opción:</p>
+          <ul>
+            <li><strong>Opción A</strong>: Crear una cuenta en un plan gratuito de alojamiento WordPress para fines educativos.</li>
+            <li><strong>Opción B</strong>: Instalar un entorno local (por ejemplo, Local o XAMPP) siguiendo la documentación oficial de la herramienta elegida.</li>
+          </ul>
+          <p>En ambos casos, documentar en la bitácora la opción elegida y el motivo de la decisión.</p>
+        </div>
+      </details>
+
+      <div class="activity-block">
+        <div class="head-row">
+          <div><span class="piece-tag">Bitácora — Pieza 1 de 8</span><h4>Ficha técnica del proyecto</h4></div>
+          <label class="mark-done-label"><input type="checkbox" class="done-check" data-mod="0"> Marcar actividad como completada</label>
+        </div>
+        <p>Redactar, en media cuartilla, una ficha técnica del sitio de práctica que documente: CMS elegido, tipo de alojamiento, nombre de dominio propuesto (real o ficticio) y la justificación de diseño detrás de cada decisión. Esta ficha encabezará el proyecto integrador final.</p>
+      </div>
+
+      <div class="two-col">
+        <div class="reflect-box">
+          <h4>Reflexión crítica individual</h4>
+          <p>¿Qué implicaciones tiene, para un diseñador gráfico, no tener control total del código fuente al trabajar sobre un CMS?</p>
+          <textarea class="reflect-input" data-reflect="0" placeholder="Escriba aquí su respuesta. Se guarda automáticamente en este navegador."></textarea>
+          <span class="save-note" data-savenote="0"></span>
+        </div>
+        <div class="collab-box">
+          <h4>Construcción colaborativa</h4>
+          <p>Intercambiar la ficha técnica con un compañero. Evaluar la del compañero con tres criterios: claridad de la justificación, coherencia entre necesidad del cliente y arquitectura elegida, y viabilidad técnica. Devolver la retroalimentación por escrito.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="module" id="modulo-1">
+      <div class="module-head">
+        <span class="module-badge">MÓDULO 1</span>
+        <h2>Instalación y panel de administración</h2>
+      </div>
+
+      <div class="objective-box">
+        <strong>Objetivo de aprendizaje</strong>
+        Configurar un sitio recién instalado (ajustes generales, enlaces permanentes, usuarios y roles) aplicando criterios de organización de la información.
+      </div>
+
+      <div class="problem-box">
+        <strong>Situación problema</strong>
+        <p>El sitio de la galería ya existe técnicamente, pero conserva la información por defecto de WordPress: título genérico, enlaces con números sin sentido y un único usuario. El cliente no logra ubicar nada reconocible como propio.</p>
+      </div>
+
+      <h3 class="sub-title">Contenido y procedimiento</h3>
+
+      <details class="step" open>
+        <summary><span class="step-num">1</span>Recorrido por el escritorio (dashboard)</summary>
+        <div class="step-body">
+          <p>El escritorio es el panel central de administración. Desde el menú lateral izquierdo se accede a Entradas, Páginas, Comentarios, Apariencia, Plugins, Usuarios y Ajustes. Familiarizarse con esta estructura antes de intervenir cualquier configuración.</p>
+        </div>
+      </details>
+
+      <details class="step">
+        <summary><span class="step-num">2</span>Ajustes generales</summary>
+        <div class="step-body">
+          <p>En <code>Ajustes &gt; Generales</code> se define el título del sitio, el lema (subtítulo descriptivo), la zona horaria y el idioma. Estos datos aparecen en el navegador, en resultados de búsqueda y en distintas plantillas del tema.</p>
+          <div class="example">
+            <span class="ex-label">Ejemplo aplicado</span>
+            Título: "Galería Sur — Arte Contemporáneo"; Lema: "Exposiciones y artistas emergentes de la región".
+          </div>
+        </div>
+      </details>
+
+      <details class="step">
+        <summary><span class="step-num">3</span>Enlaces permanentes (permalinks)</summary>
+        <div class="step-body">
+          <p>En <code>Ajustes &gt; Enlaces permanentes</code> se define la estructura de la dirección web de cada contenido. La estructura "Nombre de la entrada" es la más recomendable para fines de navegación y posicionamiento, frente a estructuras numéricas por defecto.</p>
+        </div>
+      </details>
+
+      <details class="step">
+        <summary><span class="step-num">4</span>Usuarios y roles</summary>
+        <div class="step-body">
+          <p>En <code>Usuarios &gt; Añadir nuevo</code> se puede crear cuentas adicionales asignando un rol: Administrador, Editor, Autor, Colaborador o Suscriptor. Cada rol determina qué acciones puede ejecutar la persona dentro del sitio.</p>
+          <ul>
+            <li><strong>Administrador</strong>: control total del sitio.</li>
+            <li><strong>Editor</strong>: gestiona todo el contenido, incluido el de otros usuarios.</li>
+            <li><strong>Autor</strong>: gestiona únicamente su propio contenido.</li>
+          </ul>
+        </div>
+      </details>
+
+      <div class="activity-block">
+        <div class="head-row">
+          <div><span class="piece-tag">Bitácora — Pieza 2 de 8</span><h4>Configuración documentada del sitio</h4></div>
+          <label class="mark-done-label"><input type="checkbox" class="done-check" data-mod="1"> Marcar actividad como completada</label>
+        </div>
+        <p>Configurar el sitio de práctica con título, lema, zona horaria y estructura de enlaces permanentes basada en el nombre de la entrada. Crear un segundo usuario con rol de Editor. Documentar en la bitácora cada decisión tomada y su justificación.</p>
+      </div>
+
+      <div class="two-col">
+        <div class="reflect-box">
+          <h4>Reflexión crítica individual</h4>
+          <p>¿Por qué la estructura de los enlaces permanentes afecta directamente la experiencia de navegación y la percepción de profesionalismo de un sitio?</p>
+          <textarea class="reflect-input" data-reflect="1" placeholder="Escriba aquí su respuesta. Se guarda automáticamente en este navegador."></textarea>
+          <span class="save-note" data-savenote="1"></span>
+        </div>
+        <div class="collab-box">
+          <h4>Construcción colaborativa</h4>
+          <p>En parejas: un estudiante configura su sitio mientras el otro audita, con una lista de verificación de cuatro puntos (título, lema, permalinks, rol de usuario), y luego intercambian roles.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="module" id="modulo-2">
+      <div class="module-head">
+        <span class="module-badge">MÓDULO 2</span>
+        <h2>Temas y personalización visual (Customizer)</h2>
+      </div>
+
+      <div class="objective-box">
+        <strong>Objetivo de aprendizaje</strong>
+        Seleccionar y personalizar un tema de WordPress aplicando principios de identidad visual: paleta cromática, tipografía y retícula.
+      </div>
+
+      <div class="problem-box">
+        <strong>Situación problema</strong>
+        <p>El tema instalado por defecto no refleja en absoluto la identidad visual de la galería: la paleta de color es genérica y la tipografía no coincide con el manual de marca del cliente.</p>
+      </div>
+
+      <h3 class="sub-title">Contenido y procedimiento</h3>
+
+      <details class="step" open>
+        <summary><span class="step-num">1</span>Instalación y activación de un tema</summary>
+        <div class="step-body">
+          <p>Desde <code>Apariencia &gt; Temas &gt; Añadir nuevo</code> se accede al repositorio oficial de temas. Filtrar por características (por ejemplo: "porfolio", "cuadrícula de imágenes") ayuda a acotar la búsqueda. Tras instalar, activar el tema para que tome efecto en el sitio público.</p>
+        </div>
+      </details>
+
+      <details class="step">
+        <summary><span class="step-num">2</span>El Personalizador (Customizer)</summary>
+        <div class="step-body">
+          <p>En <code>Apariencia &gt; Personalizar</code> (o el editor de sitio si el tema utiliza edición completa de sitio, FSE) se ajustan en tiempo real: colores, tipografía, logotipo, imagen de encabezado y disposición general, con vista previa inmediata.</p>
+        </div>
+      </details>
+
+      <details class="step">
+        <summary><span class="step-num">3</span>Aplicación de una guía de estilo propia</summary>
+        <div class="step-body">
+          <p>Antes de tocar el Personalizador, es indispensable definir en un documento breve: dos o tres colores principales (con su código hexadecimal), la tipografía de encabezados y la de cuerpo de texto, y el logotipo o wordmark del proyecto.</p>
+          <div class="example">
+            <span class="ex-label">Ejemplo aplicado</span>
+            Paleta: #16233B (texto), #B9803A (acento), #EEEAE0 (fondo). Tipografía de encabezado con carácter editorial; tipografía de cuerpo de alta legibilidad.
+          </div>
+        </div>
+      </details>
+
+      <div class="activity-block">
+        <div class="head-row">
+          <div><span class="piece-tag">Bitácora — Pieza 3 de 8</span><h4>Guía de estilo aplicada al tema</h4></div>
+          <label class="mark-done-label"><input type="checkbox" class="done-check" data-mod="2"> Marcar actividad como completada</label>
+        </div>
+        <p>Definir una guía de estilo breve (paleta y tipografía) para el sitio de práctica y aplicarla íntegramente mediante el Personalizador. Documentar el proceso con una captura de pantalla "antes" y una "después".</p>
+      </div>
+
+      <div class="two-col">
+        <div class="reflect-box">
+          <h4>Reflexión crítica individual</h4>
+          <p>¿Qué tensiones existen entre la flexibilidad que ofrece un tema prediseñado y la coherencia exigida por una identidad de marca?</p>
+          <textarea class="reflect-input" data-reflect="2" placeholder="Escriba aquí su respuesta. Se guarda automáticamente en este navegador."></textarea>
+          <span class="save-note" data-savenote="2"></span>
+        </div>
+        <div class="collab-box">
+          <h4>Construcción colaborativa</h4>
+          <p>Compartir en un panel grupal (físico o digital) las capturas de "antes y después" de todo el grupo. En conjunto, evaluar la consistencia visual de cada propuesta y señalar una fortaleza y una oportunidad de mejora por proyecto.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="module" id="modulo-3">
+      <div class="module-head">
+        <span class="module-badge">MÓDULO 3</span>
+        <h2>El editor de bloques (Gutenberg)</h2>
+      </div>
+
+      <div class="objective-box">
+        <strong>Objetivo de aprendizaje</strong>
+        Construir contenido combinando bloques (párrafo, imagen, columnas, botón, grupo) para resolver una jerarquía visual definida.
+      </div>
+
+      <div class="problem-box">
+        <strong>Situación problema</strong>
+        <p>El cliente solicita una página de inicio con jerarquía clara: un mensaje de bienvenida, un bloque de exposiciones destacadas y un llamado a la acción hacia la sección de contacto, sin recurrir a código.</p>
+      </div>
+
+      <h3 class="sub-title">Contenido y procedimiento</h3>
+
+      <details class="step" open>
+        <summary><span class="step-num">1</span>Insertar, mover y eliminar bloques</summary>
+        <div class="step-body">
+          <p>Cada elemento de contenido (párrafo, imagen, encabezado, botón) es un bloque independiente. Se inserta con el símbolo <code>+</code>, se reordena arrastrando el asa de movimiento y se elimina desde el menú de opciones del bloque (tres puntos).</p>
+        </div>
+      </details>
+
+      <details class="step">
+        <summary><span class="step-num">2</span>Bloques de estructura: columnas y grupo</summary>
+        <div class="step-body">
+          <p>El bloque <strong>Columnas</strong> permite distribuir contenido en franjas horizontales; el bloque <strong>Grupo</strong> permite envolver varios bloques y aplicarles un fondo o espaciado común. Ambos son la base para construir jerarquía visual sin escribir código.</p>
+        </div>
+      </details>
+
+      <details class="step">
+        <summary><span class="step-num">3</span>Patrones y bloques reutilizables</summary>
+        <div class="step-body">
+          <p>Un patrón es una composición de bloques predefinida (por ejemplo, una franja de "llamado a la acción" con título, texto y botón) que se puede insertar e personalizar. Un bloque reutilizable permite guardar una composición propia y repetirla en distintas páginas.</p>
+        </div>
+      </details>
+
+      <div class="activity-block">
+        <div class="head-row">
+          <div><span class="piece-tag">Bitácora — Pieza 4 de 8</span><h4>Página de inicio construida con bloques</h4></div>
+          <label class="mark-done-label"><input type="checkbox" class="done-check" data-mod="3"> Marcar actividad como completada</label>
+        </div>
+        <p>Construir la página de inicio del sitio de práctica utilizando al menos cinco tipos de bloques distintos (por ejemplo: encabezado, párrafo, imagen, columnas y botón), aplicando la jerarquía tipográfica definida en la pieza anterior.</p>
+      </div>
+
+      <div class="two-col">
+        <div class="reflect-box">
+          <h4>Reflexión crítica individual</h4>
+          <p>¿Cómo cambia el proceso de maquetación al pensar "en bloques" en lugar de "en lienzo libre", como se hace habitualmente en software de diseño gráfico?</p>
+          <textarea class="reflect-input" data-reflect="3" placeholder="Escriba aquí su respuesta. Se guarda automáticamente en este navegador."></textarea>
+          <span class="save-note" data-savenote="3"></span>
+        </div>
+        <div class="collab-box">
+          <h4>Construcción colaborativa</h4>
+          <p>Cada equipo guarda un patrón de bloques propio y lo comparte con otro equipo, quien debe integrarlo en su propia página de inicio y comentar qué ajustes fueron necesarios para que encajara con su identidad visual.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="module" id="modulo-4">
+      <div class="module-head">
+        <span class="module-badge">MÓDULO 4</span>
+        <h2>Arquitectura de la información: páginas, entradas y menús</h2>
+      </div>
+
+      <div class="objective-box">
+        <strong>Objetivo de aprendizaje</strong>
+        Diferenciar páginas y entradas, organizar contenido mediante categorías y etiquetas, y construir un menú de navegación coherente con la jerarquía del sitio.
+      </div>
+
+      <div class="problem-box">
+        <strong>Situación problema</strong>
+        <p>El cliente desea un blog de "artistas destacados" además de páginas fijas como Inicio, Exposiciones y Contacto. Todo el contenido se ha creado como un mismo tipo de elemento, sin distinción, y la navegación resulta confusa.</p>
+      </div>
+
+      <h3 class="sub-title">Contenido y procedimiento</h3>
+
+      <details class="step" open>
+        <summary><span class="step-num">1</span>Páginas frente a entradas</summary>
+        <div class="step-body">
+          <p>Las <strong>páginas</strong> alojan contenido estático y jerárquico (Inicio, Nosotros, Contacto); las <strong>entradas</strong> alojan contenido cronológico y clasificable (noticias, artículos de blog). Elegir el tipo correcto desde el inicio evita reestructurar el sitio más adelante.</p>
+        </div>
+      </details>
+
+      <details class="step">
+        <summary><span class="step-num">2</span>Categorías y etiquetas</summary>
+        <div class="step-body">
+          <p>Las categorías organizan las entradas en grandes grupos temáticos (por ejemplo: "Pintura", "Escultura", "Fotografía"); las etiquetas describen aspectos específicos y transversales (por ejemplo: "arte emergente", "muestra itinerante"). Se gestionan en <code>Entradas &gt; Categorías</code> y <code>Entradas &gt; Etiquetas</code>.</p>
+        </div>
+      </details>
+
+      <details class="step">
+        <summary><span class="step-num">3</span>Creación y asignación de menús</summary>
+        <div class="step-body">
+          <p>En <code>Apariencia &gt; Menús</code> se crea un menú, se le añaden páginas, entradas o enlaces personalizados, y se asigna a una ubicación definida por el tema (por ejemplo, "Menú principal"). El orden de los elementos en el menú debe reflejar la prioridad de navegación del usuario, no el orden de creación del contenido.</p>
+        </div>
+      </details>
+
+      <div class="activity-block">
+        <div class="head-row">
+          <div><span class="piece-tag">Bitácora — Pieza 5 de 8</span><h4>Mapa del sitio y menú principal</h4></div>
+          <label class="mark-done-label"><input type="checkbox" class="done-check" data-mod="4"> Marcar actividad como completada</label>
+        </div>
+        <p>Levantar el mapa del sitio de práctica con un mínimo de cuatro páginas y tres entradas clasificadas en al menos dos categorías. Construir el menú principal reflejando esta jerarquía y documentar el mapa en un esquema visual simple (a mano o digital).</p>
+      </div>
+
+      <div class="two-col">
+        <div class="reflect-box">
+          <h4>Reflexión crítica individual</h4>
+          <p>¿Qué criterios de usabilidad debe cumplir un menú de navegación para no sobrecargar cognitivamente a la persona que visita el sitio?</p>
+          <textarea class="reflect-input" data-reflect="4" placeholder="Escriba aquí su respuesta. Se guarda automáticamente en este navegador."></textarea>
+          <span class="save-note" data-savenote="4"></span>
+        </div>
+        <div class="collab-box">
+          <h4>Construcción colaborativa</h4>
+          <p>Prueba de navegación cruzada: un compañero navega el sitio del otro sin instrucciones previas y reporta por escrito cualquier fricción encontrada al intentar llegar a una sección específica.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="module" id="modulo-5">
+      <div class="module-head">
+        <span class="module-badge">MÓDULO 5</span>
+        <h2>Multimedia y optimización visual</h2>
+      </div>
+
+      <div class="objective-box">
+        <strong>Objetivo de aprendizaje</strong>
+        Gestionar la biblioteca de medios optimizando peso y formato de archivo, y redactar texto alternativo con criterio de diseño y accesibilidad.
+      </div>
+
+      <div class="problem-box">
+        <strong>Situación problema</strong>
+        <p>Las imágenes entregadas por el cliente pesan varios megabytes cada una y carecen de texto alternativo. El sitio, funcional en los módulos anteriores, ahora carga con lentitud perceptible.</p>
+      </div>
+
+      <h3 class="sub-title">Contenido y procedimiento</h3>
+
+      <details class="step" open>
+        <summary><span class="step-num">1</span>La biblioteca de medios</summary>
+        <div class="step-body">
+          <p>En <code>Medios &gt; Añadir nuevo</code> se cargan las imágenes que estarán disponibles para insertar en cualquier página o entrada. WordPress genera automáticamente varios tamaños de cada imagen para distintos usos (miniatura, mediano, grande).</p>
+        </div>
+      </details>
+
+      <details class="step">
+        <summary><span class="step-num">2</span>Optimización antes de subir</summary>
+        <div class="step-body">
+          <p>Reducir el peso del archivo antes de subirlo evita sobrecargar el sitio. Como referencia general, una imagen de ancho de pantalla no debería superar los 200-300 KB tras la compresión, salvo casos justificados. El formato WebP ofrece buena calidad con menor peso que JPG o PNG para fotografía.</p>
+        </div>
+      </details>
+
+      <details class="step">
+        <summary><span class="step-num">3</span>Texto alternativo (alt text)</summary>
+        <div class="step-body">
+          <p>El texto alternativo describe el contenido de una imagen para personas que utilizan lectores de pantalla, y se completa en el panel de detalles de cada archivo en la biblioteca de medios. Debe ser objetivo, breve y describir la información relevante, no repetir el título de la imagen.</p>
+          <div class="example">
+            <span class="ex-label">Ejemplo aplicado</span>
+            En lugar de "imagen1.jpg", un texto alternativo adecuado sería: "Escultura de bronce en sala principal de la galería, vista frontal".
+          </div>
+        </div>
+      </details>
+
+      <div class="activity-block">
+        <div class="head-row">
+          <div><span class="piece-tag">Bitácora — Pieza 6 de 8</span><h4>Banco de imágenes accesibles</h4></div>
+          <label class="mark-done-label"><input type="checkbox" class="done-check" data-mod="5"> Marcar actividad como completada</label>
+        </div>
+        <p>Optimizar y subir un banco de al menos seis imágenes propias, cada una con texto alternativo descriptivo, e integrarlas en las páginas y entradas creadas en el módulo anterior.</p>
+      </div>
+
+      <div class="two-col">
+        <div class="reflect-box">
+          <h4>Reflexión crítica individual</h4>
+          <p>¿Qué responsabilidad tiene el diseñador gráfico frente a la accesibilidad visual de un sitio (texto alternativo, contraste de color, tamaño de tipografía)?</p>
+          <textarea class="reflect-input" data-reflect="5" placeholder="Escriba aquí su respuesta. Se guarda automáticamente en este navegador."></textarea>
+          <span class="save-note" data-savenote="5"></span>
+        </div>
+        <div class="collab-box">
+          <h4>Construcción colaborativa</h4>
+          <p>Revisión por pares del texto alternativo redactado, utilizando dos criterios: claridad descriptiva y objetividad (ausencia de juicios de valor o adjetivos innecesarios). Proponer una mejora concreta a al menos dos descripciones del compañero.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="module" id="modulo-6">
+      <div class="module-head">
+        <span class="module-badge">MÓDULO 6</span>
+        <h2>Plugins esenciales y funcionalidad extendida</h2>
+      </div>
+
+      <div class="objective-box">
+        <strong>Objetivo de aprendizaje</strong>
+        Seleccionar e instalar plugins pertinentes (formulario de contacto, SEO básico) justificando la necesidad funcional frente al costo de rendimiento que implica cada instalación.
+      </div>
+
+      <div class="problem-box">
+        <strong>Situación problema</strong>
+        <p>El cliente pide un formulario de contacto funcional y desea que su sitio sea encontrado en buscadores. Ninguna de las dos necesidades tiene solución nativa dentro de WordPress.</p>
+      </div>
+
+      <h3 class="sub-title">Contenido y procedimiento</h3>
+
+      <details class="step" open>
+        <summary><span class="step-num">1</span>Instalación y activación de un plugin</summary>
+        <div class="step-body">
+          <p>Desde <code>Plugins &gt; Añadir nuevo</code> se busca, instala y activa un complemento del repositorio oficial. Antes de instalar cualquier plugin, revisar su número de instalaciones activas, la fecha de la última actualización y las valoraciones, como criterio de confiabilidad.</p>
+        </div>
+      </details>
+
+      <details class="step">
+        <summary><span class="step-num">2</span>Formulario de contacto</summary>
+        <div class="step-body">
+          <p>Tras instalar un plugin de formularios, se crea el formulario desde su panel de configuración y se inserta en la página deseada mediante un bloque específico o un código corto (shortcode) que el propio plugin proporciona.</p>
+        </div>
+      </details>
+
+      <details class="step">
+        <summary><span class="step-num">3</span>SEO básico</summary>
+        <div class="step-body">
+          <p>Un plugin de SEO permite definir, por cada página, un título optimizado para buscadores y una meta descripción (resumen breve que aparece bajo el título en los resultados de búsqueda). Ambos elementos deben describir con precisión el contenido de la página, sin exceder los límites de caracteres recomendados por la herramienta.</p>
+        </div>
+      </details>
+
+      <details class="step">
+        <summary><span class="step-num">4</span>Buenas prácticas de seguridad</summary>
+        <div class="step-body">
+          <ul>
+            <li>Mantener WordPress, el tema y los plugins actualizados a su última versión estable.</li>
+            <li>Utilizar contraseñas robustas y distintas para cada usuario.</li>
+            <li>Desinstalar (no solo desactivar) los plugins que no estén en uso.</li>
+          </ul>
+        </div>
+      </details>
+
+      <div class="activity-block">
+        <div class="head-row">
+          <div><span class="piece-tag">Bitácora — Pieza 7 de 8</span><h4>Formulario funcional y SEO básico</h4></div>
+          <label class="mark-done-label"><input type="checkbox" class="done-check" data-mod="6"> Marcar actividad como completada</label>
+        </div>
+        <p>Instalar un plugin de formularios y publicar un formulario de contacto funcional en la página correspondiente. Redactar el título y la meta descripción de al menos dos páginas clave del sitio de práctica utilizando un plugin de SEO.</p>
+      </div>
+
+      <div class="two-col">
+        <div class="reflect-box">
+          <h4>Reflexión crítica individual</h4>
+          <p>¿Con qué criterios se decide si un plugin aporta valor real al proyecto o representa un "peso muerto" que compromete el rendimiento del sitio?</p>
+          <textarea class="reflect-input" data-reflect="6" placeholder="Escriba aquí su respuesta. Se guarda automáticamente en este navegador."></textarea>
+          <span class="save-note" data-savenote="6"></span>
+        </div>
+        <div class="collab-box">
+          <h4>Construcción colaborativa</h4>
+          <p>Mesa de curaduría en grupo: cada equipo presenta brevemente un plugin distinto al elegido por los demás, y el grupo delibera y vota su pertinencia para el proyecto de la galería, argumentando la decisión.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="module" id="modulo-7">
+      <div class="module-head">
+        <span class="module-badge">MÓDULO 7</span>
+        <h2>CSS adicional y ajuste fino del diseño responsivo</h2>
+      </div>
+
+      <div class="objective-box">
+        <strong>Objetivo de aprendizaje</strong>
+        Aplicar reglas de CSS adicional para resolver un problema visual puntual y verificar el comportamiento responsivo del sitio en distintas resoluciones.
+      </div>
+
+      <div class="problem-box">
+        <strong>Situación problema</strong>
+        <p>Un elemento del tema (por ejemplo, el color de los enlaces del pie de página) no respeta la paleta definida en la guía de estilo del módulo 2, y el Personalizador del tema no ofrece una opción específica para modificarlo.</p>
+      </div>
+
+      <h3 class="sub-title">Contenido y procedimiento</h3>
+
+      <details class="step" open>
+        <summary><span class="step-num">1</span>Acceso a CSS adicional</summary>
+        <div class="step-body">
+          <p>En <code>Apariencia &gt; Personalizar &gt; CSS adicional</code> se abre un editor de código donde toda regla escrita se aplica de inmediato al sitio activo, sin necesidad de modificar los archivos del tema.</p>
+        </div>
+      </details>
+
+      <details class="step">
+        <summary><span class="step-num">2</span>Identificar el selector correcto</summary>
+        <div class="step-body">
+          <p>Mediante la herramienta de inspección del navegador (clic derecho sobre el elemento y "Inspeccionar"), se identifica la clase o el identificador CSS del elemento a modificar antes de escribir la regla.</p>
+          <div class="example">
+            <span class="ex-label">Ejemplo aplicado</span>
+            <code>footer a { color: #B9803A; }</code> cambia el color de todos los enlaces dentro del pie de página al tono de acento definido en la guía de estilo.
+          </div>
+        </div>
+      </details>
+
+      <details class="step">
+        <summary><span class="step-num">3</span>Verificación responsiva</summary>
+        <div class="step-body">
+          <p>El Personalizador incluye una vista previa por dispositivo (escritorio, tableta, móvil). Verificar en las tres vistas que los cambios de CSS adicional no rompan el diseño en ninguna de ellas antes de dar por finalizado el ajuste.</p>
+        </div>
+      </details>
+
+      <div class="activity-block">
+        <div class="head-row">
+          <div><span class="piece-tag">Bitácora — Pieza 8 de 8 · Cierre del ejercicio integral</span><h4>Ajustes de CSS y verificación responsiva</h4></div>
+          <label class="mark-done-label"><input type="checkbox" class="done-check" data-mod="7"> Marcar actividad como completada</label>
+        </div>
+        <p>Escribir al menos tres reglas de CSS adicional que resuelvan inconsistencias visuales detectadas en el sitio de práctica. Documentar, con capturas de pantalla, el comportamiento del sitio en las tres resoluciones (escritorio, tableta, móvil). Con esta pieza se completan las ocho piezas de la bitácora, que en conjunto conforman el ejercicio integral del curso.</p>
+      </div>
+
+      <div class="two-col">
+        <div class="reflect-box">
+          <h4>Reflexión crítica individual</h4>
+          <p>¿En qué momento conviene resolver un problema visual mediante CSS adicional y en qué momento conviene reconsiderar el tema elegido?</p>
+          <textarea class="reflect-input" data-reflect="7" placeholder="Escriba aquí su respuesta. Se guarda automáticamente en este navegador."></textarea>
+          <span class="save-note" data-savenote="7"></span>
+        </div>
+        <div class="collab-box">
+          <h4>Construcción colaborativa</h4>
+          <p>Foro de "errores comunes de CSS adicional": cada estudiante aporta, por escrito, un error que enfrentó y la solución que aplicó, generando un repositorio de conocimiento colectivo para el grupo.</p>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="wrap alt" id="proyecto-final">
+      <span class="section-kicker">Cierre del curso</span>
+      <h2 class="section-title">Proyecto integrador: un sitio propio, aplicable a su vida universitaria</h2>
+
+      <div class="problem-box" style="margin-top:20px;">
+        <strong>Encuadre del problema</strong>
+        <p>Cada estudiante, o equipo, elige un tema real vinculado a su propia formación universitaria y lo resuelve como si se tratara de un encargo profesional de diseño. Ejemplos de tema: un portafolio de una asignatura cursada, una revista digital de una línea de diseño de interés, el sitio de divulgación de un proyecto de aula, o una exposición virtual de trabajos propios. El sitio resultante debe ser un instrumento aplicable, no un ejercicio hipotético.</p>
+      </div>
+
+      <h3 class="sub-title">Fases del proyecto (retoman cada bitácora)</h3>
+      <table class="compare-table">
+        <tr><th>Fase</th><th>Retoma</th><th>Entregable de la fase</th></tr>
+        <tr><td>1. Definición técnica</td><td>Módulos 0 y 1</td><td>Ficha técnica y configuración base del sitio propio</td></tr>
+        <tr><td>2. Identidad visual</td><td>Módulo 2</td><td>Guía de estilo aplicada al tema elegido</td></tr>
+        <tr><td>3. Construcción de contenido</td><td>Módulo 3</td><td>Página de inicio construida con bloques</td></tr>
+        <tr><td>4. Arquitectura y navegación</td><td>Módulo 4</td><td>Mapa del sitio y menú principal propios</td></tr>
+        <tr><td>5. Multimedia accesible</td><td>Módulo 5</td><td>Banco de imágenes propio con texto alternativo</td></tr>
+        <tr><td>6. Funcionalidad</td><td>Módulo 6</td><td>Formulario funcional y SEO básico de dos páginas</td></tr>
+        <tr><td>7. Ajuste fino</td><td>Módulo 7</td><td>CSS adicional y verificación responsiva documentada</td></tr>
+      </table>
+
+      <h3 class="sub-title">Entregables finales</h3>
+      <ul style="font-size:14.5px; color:var(--ink-soft); max-width:70ch;">
+        <li>Sitio publicado o accesible mediante enlace, o bien un registro fotográfico completo de todas sus secciones si el sitio permanece en entorno local.</li>
+        <li>Bitácora completa, integrando las ocho piezas elaboradas a lo largo del curso.</li>
+        <li>Autoevaluación redactada con base en la rúbrica de la siguiente sección.</li>
+      </ul>
+
+      <h3 class="sub-title">Presentación pública</h3>
+      <div class="activity-block" style="border-color:var(--teal);">
+        <div class="head-row">
+          <div><h4 style="color:var(--teal);">Actividad de cierre grupal</h4></div>
+        </div>
+        <p>Cada estudiante presenta su sitio ante el grupo en un máximo de cinco minutos. Al finalizar cada presentación, el resto del grupo retroalimenta utilizando el protocolo <strong>"empieza por / deja de / continúa"</strong>: una acción concreta que el autor podría empezar a hacer, una que debería dejar de hacer, y una que debería continuar haciendo en futuros proyectos.</p>
+      </div>
+    </section>
+
+
+    <section class="wrap" id="evaluacion">
+      <span class="section-kicker">Instrumento de evaluación</span>
+      <h2 class="section-title">Rúbrica del proyecto integrador</h2>
+      <table class="rubric">
+        <tr>
+          <th>Criterio</th>
+          <th>Inicial</th>
+          <th>En desarrollo</th>
+          <th>Logrado</th>
+          <th>Destacado</th>
+        </tr>
+        <tr>
+          <td>Coherencia de identidad visual</td>
+          <td>Sin relación entre paleta, tipografía y contenido</td>
+          <td>Aplicación parcial de la guía de estilo definida</td>
+          <td>Guía de estilo aplicada de forma consistente</td>
+          <td>Identidad visual coherente y con criterio propio, defendible ante un cliente real</td>
+        </tr>
+        <tr>
+          <td>Arquitectura de la información</td>
+          <td>Contenido sin diferenciación de páginas y entradas</td>
+          <td>Estructura presente pero con jerarquía confusa</td>
+          <td>Mapa del sitio claro y menú funcional</td>
+          <td>Arquitectura que anticipa necesidades reales del usuario final</td>
+        </tr>
+        <tr>
+          <td>Accesibilidad</td>
+          <td>Imágenes sin texto alternativo</td>
+          <td>Texto alternativo incompleto o genérico</td>
+          <td>Texto alternativo descriptivo en todas las imágenes</td>
+          <td>Accesibilidad considerada también en contraste y jerarquía tipográfica</td>
+        </tr>
+        <tr>
+          <td>Funcionalidad</td>
+          <td>Formulario no funcional o ausente</td>
+          <td>Formulario funcional sin SEO básico</td>
+          <td>Formulario funcional y SEO aplicado</td>
+          <td>Funcionalidad justificada explícitamente frente al rendimiento del sitio</td>
+        </tr>
+        <tr>
+          <td>Documentación del proceso (bitácora)</td>
+          <td>Bitácora incompleta</td>
+          <td>Bitácora completa con documentación mínima</td>
+          <td>Bitácora completa y bien argumentada</td>
+          <td>Bitácora que evidencia decisiones de diseño progresivamente más complejas</td>
+        </tr>
+        <tr>
+          <td>Reflexión crítica</td>
+          <td>Respuestas ausentes o superficiales</td>
+          <td>Respuestas descriptivas sin postura propia</td>
+          <td>Respuestas argumentadas con postura propia</td>
+          <td>Reflexión que conecta el ejercicio con su formación profesional futura</td>
+        </tr>
+      </table>
+    </section>
+
+
+    <footer class="site-footer">
+      <div>
+        <div>Universidad UNE — Universidad de Especialidades · Licenciatura en Diseño Gráfico · Asignatura de Diseño Web</div>
+      </div>
+      <div id="local-note" style="font-family:var(--font-mono); font-size:11px;">Tu progreso y tus reflexiones se guardan únicamente en este navegador.</div>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  var STORAGE_KEY = "une_wp_guia_progreso_v1";
+  var REFLECT_KEY = "une_wp_guia_reflexiones_v1";
+  var MODULE_IDS = ["0","1","2","3","4","5","6","7","final"];
+
+  function loadProgress(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    }catch(e){ return {}; }
+  }
+  function saveProgress(data){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }catch(e){}
+  }
+  function loadReflections(){
+    try{
+      var raw = localStorage.getItem(REFLECT_KEY);
+      return raw ? JSON.parse(raw) : {};
+    }catch(e){ return {}; }
+  }
+  function saveReflections(data){
+    try{ localStorage.setItem(REFLECT_KEY, JSON.stringify(data)); }catch(e){}
+  }
+
+  var progress = loadProgress();
+  var reflections = loadReflections();
+
+  function updateProgressUI(){
+    var doneCount = 0;
+    MODULE_IDS.forEach(function(id){
+      var stamp = document.querySelector('.stamp[data-stamp="' + id + '"]');
+      var isDone = !!progress[id];
+      if(isDone) doneCount++;
+      if(stamp){
+        stamp.classList.toggle("done", isDone);
+        stamp.textContent = isDone ? "\u2713" : (id === "final" ? "P" : id);
+      }
+    });
+    var pct = Math.round((doneCount / MODULE_IDS.length) * 100);
+    var fill = document.getElementById("progress-fill");
+    var pctLabel = document.getElementById("progress-pct");
+    if(fill) fill.style.width = pct + "%";
+    if(pctLabel) pctLabel.textContent = pct + "%";
+  }
+
+  // Checkbox listeners
+  document.querySelectorAll(".done-check").forEach(function(box){
+    var modId = box.getAttribute("data-mod");
+    box.checked = !!progress[modId];
+    box.addEventListener("change", function(){
+      progress[modId] = box.checked;
+      saveProgress(progress);
+      updateProgressUI();
+    });
+  });
+
+  updateProgressUI();
+
+  // Reflection textareas
+  document.querySelectorAll(".reflect-input").forEach(function(area){
+    var key = area.getAttribute("data-reflect");
+    if(reflections[key]) area.value = reflections[key];
+    var noteEl = document.querySelector('.save-note[data-savenote="' + key + '"]');
+    var timeout;
+    area.addEventListener("input", function(){
+      reflections[key] = area.value;
+      saveReflections(reflections);
+      if(noteEl){
+        noteEl.textContent = "Guardado localmente.";
+        clearTimeout(timeout);
+        timeout = setTimeout(function(){ noteEl.textContent = ""; }, 2000);
+      }
+    });
+  });
+
+  // Mobile TOC toggle
+  var tocToggle = document.getElementById("toc-toggle");
+  var toc = document.getElementById("toc");
+  if(tocToggle && toc){
+    tocToggle.addEventListener("click", function(){
+      var isCollapsed = toc.classList.toggle("collapsed");
+      tocToggle.setAttribute("aria-expanded", (!isCollapsed).toString());
+    });
+  }
+
+  // Active link highlighting on scroll
+  var sections = Array.prototype.slice.call(document.querySelectorAll("main section[id]"));
+  var links = Array.prototype.slice.call(document.querySelectorAll("nav.toc a"));
+
+  function onScroll(){
+    var scrollPos = window.scrollY + 140;
+    var currentId = null;
+    sections.forEach(function(sec){
+      if(sec.offsetTop <= scrollPos){ currentId = sec.id; }
+    });
+    links.forEach(function(a){
+      var href = a.getAttribute("href").replace("#", "");
+      a.classList.toggle("active", href === currentId);
+    });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+
+</body>
+</html>
