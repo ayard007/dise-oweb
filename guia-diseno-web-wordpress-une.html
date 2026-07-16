@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diseño Web — Guía interactiva: Blog institucional en WordPress | Universidad UNE</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --navy:#0B1F5C;
+    --navy-deep:#081642;
+    --red:#D81F2A;
+    --paper:#F6F4EF;
+    --paper-2:#EFEBE1;
+    --ink:#1B1E2B;
+    --slate:#565C72;
+    --line:#D9D3C4;
+    --white:#FFFFFF;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:16px;
+    line-height:1.65;
+  }
+  h1,h2,h3,h4{
+    font-family:'Fraunces', serif;
+    color:var(--navy-deep);
+    margin:0 0 .5em 0;
+    line-height:1.15;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    font-size:.72rem;
+    color:var(--red);
+    font-weight:600;
+  }
+  a{color:var(--navy);}
+  p{margin:0 0 1em 0;}
+  ul, ol{margin:0 0 1em 0; padding-left:1.3em;}
+  li{margin-bottom:.4em;}
+
+  /* Swoosh signature element, redrawn from the UNE mark */
+  .swoosh{width:100%; display:block;}
+  .swoosh svg{width:100%; height:auto; display:block;}
+
+  /* Header */
+  header.hero{
+    background:var(--navy-deep);
+    color:var(--white);
+    padding:0 0 0 0;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-inner{
+    max-width:1180px;
+    margin:0 auto;
+    padding:2.2rem 2rem 3.2rem 2rem;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:2rem;
+    flex-wrap:wrap;
+  }
+  .hero-brand{
+    display:flex;
+    align-items:center;
+    gap:1rem;
+  }
+  .hero-brand img{
+    height:64px;
+    width:auto;
+    background:var(--white);
+    border-radius:8px;
+    padding:6px 10px;
+  }
+  .hero-brand .brandtext{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    letter-spacing:.08em;
+    color:#C9CEE8;
+    text-transform:uppercase;
+  }
+  .hero-title{
+    max-width:760px;
+    margin-top:1.6rem;
+  }
+  .hero-title h1{
+    color:var(--white);
+    font-size:2.5rem;
+    font-weight:600;
+  }
+  .hero-title p.lead{
+    color:#D7DAF0;
+    font-size:1.08rem;
+    max-width:640px;
+  }
+  .hero-meta{
+    display:flex;
+    gap:1.6rem;
+    margin-top:1.6rem;
+    flex-wrap:wrap;
+  }
+  .hero-meta div{
+    border-left:2px solid var(--red);
+    padding-left:.7rem;
+  }
+  .hero-meta .k{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.68rem;
+    text-transform:uppercase;
+    letter-spacing:.1em;
+    color:#9DA5D1;
+  }
+  .hero-meta .v{
+    font-size:.92rem;
+    color:var(--white);
+    font-weight:500;
+  }
+
+  /* Layout with side nav */
+  .layout{
+    max-width:1180px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:250px 1fr;
+    gap:2.4rem;
+    padding:2.4rem 2rem 6rem 2rem;
+    align-items:start;
+  }
+  nav.toc{
+    position:sticky;
+    top:1.4rem;
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:1.1rem 1.1rem;
+    max-height:calc(100vh - 3rem);
+    overflow-y:auto;
+  }
+  nav.toc .eyebrow{display:block; margin-bottom:.6rem;}
+  nav.toc ol{list-style:none; padding:0; margin:0; counter-reset:tocnum;}
+  nav.toc ol > li{
+    counter-increment:tocnum;
+    margin-bottom:.15rem;
+  }
+  nav.toc a{
+    display:flex;
+    gap:.55rem;
+    text-decoration:none;
+    color:var(--ink);
+    font-size:.86rem;
+    padding:.4rem .4rem;
+    border-radius:6px;
+  }
+  nav.toc a:hover{background:var(--paper-2);}
+  nav.toc a::before{
+    content:counter(tocnum, decimal-leading-zero);
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--red);
+    font-size:.78rem;
+    flex-shrink:0;
+  }
+  nav.toc .sub{
+    padding-left:1.7rem;
+    font-size:.8rem;
+    color:var(--slate);
+  }
+
+  main{min-width:0;}
+
+  section.block{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:2.2rem 2.4rem;
+    margin-bottom:1.6rem;
+    scroll-margin-top:1.4rem;
+  }
+  section.block.tinted{background:var(--paper-2);}
+  section.block h2{font-size:1.6rem;}
+  section.block .num{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--red);
+    font-size:.85rem;
+    display:block;
+    margin-bottom:.3rem;
+  }
+
+  .pill{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.68rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    padding:.25rem .6rem;
+    border-radius:999px;
+    background:var(--navy);
+    color:var(--white);
+    margin:0 .35rem .35rem 0;
+  }
+  .pill.red{background:var(--red);}
+  .pill.outline{background:transparent; border:1px solid var(--navy); color:var(--navy);}
+
+  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:1.4rem;}
+  .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem;}
+
+  .card{
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:1.2rem 1.3rem;
+    background:var(--white);
+  }
+  .card h4{font-size:1.02rem; margin-bottom:.4rem;}
+  .card .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.68rem;
+    color:var(--slate);
+    text-transform:uppercase;
+    letter-spacing:.06em;
+  }
+
+  /* Steps */
+  ol.steps{list-style:none; padding:0; margin:0; counter-reset:stepnum;}
+  ol.steps > li{
+    counter-increment:stepnum;
+    display:grid;
+    grid-template-columns:2.2rem 1fr;
+    gap:.9rem;
+    padding:.9rem 0;
+    border-top:1px solid var(--line);
+  }
+  ol.steps > li:first-child{border-top:none;}
+  ol.steps > li::before{
+    content:counter(stepnum, decimal-leading-zero);
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--white);
+    background:var(--navy);
+    width:2.2rem; height:2.2rem;
+    border-radius:6px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:.78rem;
+    align-self:start;
+  }
+  ol.steps > li p{margin:0 0 .3rem 0;}
+  ol.steps > li strong{color:var(--navy-deep);}
+
+  /* Accordion (activities) */
+  details.activity{
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:0;
+    margin-bottom:.9rem;
+    background:var(--white);
+    overflow:hidden;
+  }
+  details.activity[open]{border-color:var(--navy);}
+  details.activity summary{
+    cursor:pointer;
+    list-style:none;
+    padding:1rem 1.2rem;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+    background:var(--paper-2);
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:1.02rem;
+    color:var(--navy-deep);
+  }
+  details.activity summary::-webkit-details-marker{display:none;}
+  details.activity summary .arrow{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--red);
+    transition:transform .2s ease;
+    flex-shrink:0;
+  }
+  details.activity[open] summary .arrow{transform:rotate(90deg);}
+  .activity-body{padding:1.2rem 1.3rem 1.4rem 1.3rem;}
+  .activity-body .meta{
+    display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.9rem;
+  }
+
+  .check{
+    display:flex;
+    gap:.6rem;
+    align-items:flex-start;
+    padding:.35rem 0;
+  }
+  .check input{margin-top:.25rem;}
+  .check label{cursor:pointer; font-size:.94rem;}
+  .check input:checked + label{color:var(--slate); text-decoration:line-through;}
+
+  table{width:100%; border-collapse:collapse; margin:1rem 0;}
+  th,td{
+    border:1px solid var(--line);
+    padding:.6rem .7rem;
+    text-align:left;
+    font-size:.9rem;
+    vertical-align:top;
+  }
+  th{
+    background:var(--navy);
+    color:var(--white);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+  }
+  tr:nth-child(even) td{background:var(--paper-2);}
+
+  blockquote{
+    border-left:3px solid var(--red);
+    margin:1.2rem 0;
+    padding:.3rem 0 .3rem 1.1rem;
+    font-family:'Fraunces', serif;
+    font-size:1.05rem;
+    color:var(--navy-deep);
+  }
+
+  .example{
+    background:var(--paper);
+    border:1px dashed var(--slate);
+    border-radius:8px;
+    padding:1rem 1.2rem;
+    font-size:.92rem;
+    color:var(--slate);
+  }
+  .example strong{color:var(--ink);}
+
+  footer{
+    max-width:1180px;
+    margin:0 auto;
+    padding:2rem 2rem 3rem 2rem;
+    color:var(--slate);
+    font-size:.85rem;
+    border-top:1px solid var(--line);
+  }
+
+  .progress-tracker{
+    position:fixed;
+    bottom:1.2rem;
+    right:1.2rem;
+    background:var(--navy-deep);
+    color:var(--white);
+    padding:.6rem 1rem;
+    border-radius:999px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.76rem;
+    box-shadow:0 6px 18px rgba(0,0,0,.25);
+    z-index:50;
+  }
+
+  @media (max-width:880px){
+    .layout{grid-template-columns:1fr; padding:1.4rem 1.1rem 4rem 1.1rem;}
+    nav.toc{position:static; max-height:none;}
+    .grid-2, .grid-3{grid-template-columns:1fr;}
+    section.block{padding:1.5rem 1.3rem;}
+    .hero-title h1{font-size:1.9rem;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{transition:none !important;}
+  }
+
+  :focus-visible{
+    outline:3px solid var(--red);
+    outline-offset:2px;
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-brand">
+      <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/7QBEUGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAACgcAigAIkZCTUQzMDAwMDI0YjAyMDAwMDlhNGYwMDAwMjQ2MDAwMDAA/9sAxAAJCAgQCxAQDw8QFxESERcYGBQUGBgaFhgXGBYaGxwbHR0bHBscGh8gHxocHR8iIh8dICYmJiAmIyMmKiYqJSUeEQAIAAcABwAOAAoADgAMAA0ADQAMABMADQAPAA0AEwARABEADgAOABEAEQAUAA8AEAAPABAADwAUABYAEwASABMAEwASABMAFgAUABIAEQAPABEAEgAUABUAEwAWABYAEwAVABYAEQATABEAFgAVABYAFgAVACAAIwAgACAAIAEL/8IAEQgEOAQ4AwEiAAIRAQMRAf/EARYAAQABBQEBAAAAAAAAAAAAAAAHAwQFBggBAgEBAAIDAQEAAAAAAAAAAAAAAAMEAQIFBgcQAAECAgIIEAwEBgEDBQAAAAECAwAEBREGFjEyU3GS0RIgITA0QEFRUnKBkaGxweETFBUzQkNQYGFzstIiVGKCECNEosLwg2Sj4mNwgMDxEQABAwMCBwEBAQEBAAAAAAACAAEDBAUgExQGEBESFTBAUBagYCESAAECAQYKCAMGBgMBAAAAAAEAAhEDIDFBQkMQEiEwMnGBkaGxIkBQUWFywdEEE4IjM1JikuFEoKKywtIUYPDxEwABAgMFCQEBAQEAAwAAAAABABEhMVFBobHB8CAwYGFxgZHR8UBQEOFwgMD/2gAIAQEAAAAAnEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHgp0qfnx8KvtT7q/R6AAAAAAAAAAAAAAAAAPPnH47H2FlY2tra29Cj8gAq1q9zdXd5e32QyGSufQAAAAAAAAAAAAAAKWFwuHw+Kx1MAAAAAF3lMtmMzmsl6AAAAAAAAAAAAAKEYa/hqYAAAAAAALzPbBsewVgAAAAAAAAAAAAIxjoAAAAAAAAFbY9r23JAAAAAAAAAAAAD4hbWAAAAAAAAAHu+SlUAAAAAAAAAAAALKCscAAAAAAAAAbDMWQAAAAAAAAAAAANehGmAAD29yF/fXt3dXNxWq/f17UpPj4pULe2trSzsrGwsfgBfTDsgAAAAAAAAAAABoMVAAr5nM5fLZTJ1fQs8fYWdna29H4pfKt9Vri5u72/yN6+bDG4vFYnEYukqShv4AAAAAAAAAAABEOlAqZzYM/ncr9Hxh8HhMLh8TisZQAAAK2Ty2ZzWcz2wXnzicJhMFmJOrAAAAAAAAAAAAUIOwn3ntn2XP13mF1rXNd17BUQAAAAAe5TZNm2jacz8/FUAAAAAAAAAAABisDtF2w+qarq2s2QAAAAAAAMpt24blsf0AAAAAAAAAAAAi7StSxIAAAAAAAABkZclv0AAAAAAAAAAAEYwIAAAAAAAAABIc+XQAAAAAAAAAAAIEjEAAAAAAAAADYuic8AAAAAAAAAAAFDmTWAAAAAKtxWq+/XnnlKhQpAAAvZ/30AAAAAAAAAAAMJy/YgAAXOazOXy2TyWQvr27qgAp2dnZWGPxuMxWJxGJpgfUwzJ9AAAAAAAAAAADQ+dPkAF1smy7FsOeynoAHgAegHxiMHgsDr+vYnxvfQN6AAAAAAAAAAAIXh4D3Ydu23a8/8AQHnlnj7Gws7S0trehRo0/Pjz37+vutWuLi6vLy9yF/kqnoWOuazrFjNWxAAAAAAAAAAAHxzfpJmN33bc8iD5xuIxOKxeLx9IAAAAHt9lMrl8xmsj6KVUAAAAAAAAAAAY6ANv33Y/RRwuCweEw9AAAAAAABd5vPbBsF96AAAAAAAAAAAA8x+u67r+FpgAAAAAAAB7lNj2bZr8AAAAAAAAAAAx0b61i/AAAAAAAAAAPc5K2wAAAAAAAAAAAfMKayAAAAAAAAAAFWVN6AAAAAAAAAAAx8EWYAAAAAAAAAAN7lOqAAAAAAAAAADUoa8AAAAAAAAAABsExZEAAAAAAAAAAEV6AAAAD28yWQvr28urqvXqVKg+KdOlQt7W1tLKysLCy8ABfTBsoAAAAAAAAAAUoNwYAAfWWzWZy+Wylb0AAAA8p43G4rFYnEY3wH3KG/8AoAAAAAAAAAAw8F0AAXuxbDsGbr+gAAAAADyhh8JhMHhKJusr1wAAAAAAAAABo8SAK2ybRs+Y+gAAAAAAACnhtf17XbmY8oAAAAAAAAAAIf0wXe2bfs1cAAAAAAAAAPMdhdoqAAAAAAAAAAFtBNhtu6bTUAAAAAAAAAAAAAAAAAAAAAGPq3YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAxoA6DvgDm4AVejCINNANpmgAYiBQBIkmkE4QAAABu0tgAAAAA5PwwA62yYBxsAK/YRz3HQAnaUwDX+VgBL01nLmsgAAAJLn4AAAAAHJ+GAHW2TAONgBX7COe46AFTpTcQGv8AKwAl6azlvWgAAAElz8AAAAADk/DADrbJgHGwAr9hHPcdABkuoMuBr/KwAl6azlvWgAAAElz8AAAAADk/DADrbJgHGwAr9hHPcdAA2npmuDX+VgBL01nLetAAAAJLn4AAAAAHJ+GAHW2TAONgBX7COe46AAkmf/Q1/lYAS9NZy3rQAAACS5+AAAAAByfhgB1tkwDjYAV+wjnuOgAE4SyGv8rACXprOW9aAAAASXPwAAAAAOT8MAOtsmAcbACv2Ec9x0AAqdH7sNf5WAEvTWct60AAAAkufgAAAAAcn4YAdbZMA42AFfsI57joAAyHT2bNf5WAEvTWct60AAAAkufgAAAAAcn4YAdbZMA42AFfsI57joAAbL03ctf5WAEvTWct60AbP0QAALnIgAAAAA5PwwA62yYBxsAK/YRz3HQAASJ0J7r/ACsAJems5b1oA2zp0AAAAAAAAOT8MAOtsmAcbACv2Ec9x0AACapf1/lYAS9NZy3rQBtnToAAAAAAAAcn4YAdbZMA42AFfsI57joAAH10bmuVgBL01nLetAGR3oAA3/fwAAAAAOT8MAOtsmAcbACv2Ec9x0AABez/AM5gCXprOW9aAAAAmSZQAAAAAOT8MAOtsmAcbACv2Ec9x0AAAyGPAEvTWct60AAABMkygAAAAAcn4YAdbZMA42AFfsI57joAAAACXprOW9aAAAAmSZQAAAAAOT8MAOtsmAcbACv2Ec9x0AAAABL01nLetAAAATJMoAAAAAHJ+GAHW2TAONgBX7COe46AFxbgAAJems5b1oAAACZJlAAAAAA5RwgA6wzID445AF11+c9x0AOhOffkAACXprOW9aAAAAmSZQAAAAAOWdcAHTO4AMRyaAMn1sc9x0AOwohhsAACXprOW9aAAAAmSZQAAAAAOadMAEzTGAjnnwAbJ1Kc9x0AOwqvO2ggAAl6azlvWgDZehPQAF/kAAAAAAICjMAZPqm9B8cyaoAN/wCijnuOgB2FXtOYteAACXprOW9aANs6dAAAAAAAACJoPADc+hciLeCozACZZkOe46AHYVdgeYbIAAS9NZy3rQBtnToAAAAAAAAavy8AC7kDYvcHoOLAB0tuZz3HQA7Crmic5/IABL01nLetAGcmEAAXMhgAAAAA85Pw4AAAAyPWlQ57joAdhVxD8LAAEvTWct60AAAAzPWAAAAAAENw0AAAAJdmwc9x0AOwq4855j0ABL01nLetAAAAMz1gAAAAABYcp2IAAAC76syQ57joAdhVwteZNbAAl6azlvWgAAAGZ6wAAAAAARhAoAAACdZUDnuOgB2FXBg+YbAAEvTWct60AAAAzPWAAAAAADyBIyAAABJU/ehz3HQA7CrgaRzh8ABL01nLetAAAAMz1gAAAAAAU4FjQAAASVPdQHPcdADsKuAiSEQAl6azlvWgAAAGZ6wAAAAAAHkXQnaAAAu5slH0DnuOgB2FXAec/RwAJems5b1oAAABmesAAAAAAAY2JYxsAAGQk6WckAc9x0AOwq4Bb8y6wAS9NZy3rQAAADM9YAAAAAAAKOm6Vq2AxvyPrJ5/ad13KqAGg6+AJb+wBh45ANr3MjLHAAAALuUwAAAAAAAKdlQ9r3v2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH/2gAKAgIQAxEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGcbYyznDGdWAAAAA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" alt="Logo oficial de la Universidad UNE, Universidad de Especialidades">
+      <div class="brandtext">Universidad de Especialidades<br>Licenciatura en Diseño Gráfico</div>
+    </div>
+  </div>
+  <div class="hero-inner" style="padding-top:0;">
+    <div class="hero-title">
+      <span class="eyebrow" style="color:#FF6B72;">Materia · Diseño Web</span>
+      <h1>Construcción de un blog institucional en WordPress</h1>
+      <p class="lead">Guía interactiva de aprendizaje activo para el diseño, redacción y publicación de un blog profesional, desde la planeación editorial hasta el proyecto final de sitio web visual.</p>
+      <div class="hero-meta">
+        <div><div class="k">Metodología</div><div class="v">Constructivismo y ABP</div></div>
+        <div><div class="k">Modalidad</div><div class="v">Trabajo colaborativo en equipo</div></div>
+        <div><div class="k">Herramienta principal</div><div class="v">WordPress</div></div>
+        <div><div class="k">Entregable final</div><div class="v">Sitio web visual propio</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="swoosh" aria-hidden="true">
+    <svg viewBox="0 0 1200 90" preserveAspectRatio="none">
+      <path d="M0,10 C300,70 900,-10 1200,50 L1200,60 C900,0 300,80 0,20 Z" fill="#D81F2A" opacity="0.9"/>
+      <path d="M0,35 C300,90 900,10 1200,70 L1200,78 C900,20 300,100 0,45 Z" fill="#F6F4EF"/>
+    </svg>
+  </div>
+</header>
+
+<div class="layout">
+
+<nav class="toc" aria-label="Contenido del módulo">
+  <span class="eyebrow">Contenido</span>
+  <ol>
+    <li><a href="#marco">Marco pedagógico</a></li>
+    <li><a href="#ruta">Ruta de aprendizaje</a></li>
+    <li><a href="#tema1">Preparación de WordPress</a></li>
+    <li><a href="#tema2">Estructura del blog</a></li>
+    <li><a href="#tema3">Temas de actualidad</a></li>
+    <li><a href="#integradora">Actividad integradora</a></li>
+    <li><a href="#final">Proyecto final</a></li>
+    <li><a href="#rubrica">Rúbrica de evaluación</a></li>
+    <li><a href="#recursos">Recursos</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<!-- ================= MARCO PEDAGOGICO ================= -->
+<section class="block" id="marco">
+  <span class="num">01</span>
+  <h2>Marco pedagógico del módulo</h2>
+  <p>Este módulo se organiza a partir de tres principios que orientan cada actividad propuesta: el <strong>aprendizaje activo</strong>, el <strong>constructivismo</strong> y el <strong>aprendizaje basado en problemas (ABP)</strong>. Estos principios no son un discurso introductorio, sino la lógica de trabajo que se repite en cada tema: primero se plantea una situación auténtica, después se investiga y discute en equipo, y finalmente se produce un artefacto real —el blog y, más adelante, el sitio web final— que el estudiante puede mostrar como evidencia de su aprendizaje.</p>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="tag">Aprendizaje activo</div>
+      <h4>El estudiante produce, no solo recibe</h4>
+      <p>Cada sesión culmina en una acción concreta: escribir, publicar, comentar o evaluar el trabajo de un compañero. La lectura y la explicación del docente son un punto de partida, no el final del proceso.</p>
+    </div>
+    <div class="card">
+      <div class="tag">Constructivismo</div>
+      <h4>El conocimiento se construye en equipo</h4>
+      <p>Los contenidos del blog —la introducción, el desarrollo y las secciones complementarias— se redactan de manera colaborativa, incorporando retroalimentación entre pares antes de publicarse.</p>
+    </div>
+    <div class="card">
+      <div class="tag">Aprendizaje basado en problemas</div>
+      <h4>Un encargo real como punto de partida</h4>
+      <p>El equipo actúa como un estudio de comunicación digital contratado por la universidad para producir contenido de divulgación. Las decisiones de diseño y redacción responden a ese encargo.</p>
+    </div>
+  </div>
+
+  <blockquote>El reto que da sentido al módulo: la coordinación de Diseño Gráfico de UNE requiere un blog institucional que informe y genere discusión crítica en la comunidad universitaria sobre temas de actualidad. Su equipo es el estudio responsable de diseñarlo, redactarlo y publicarlo.</blockquote>
+</section>
+
+<!-- ================= RUTA DE APRENDIZAJE ================= -->
+<section class="block tinted" id="ruta">
+  <span class="num">02</span>
+  <h2>Ruta de aprendizaje</h2>
+  <p>La ruta avanza de manera progresiva: cada tema agrega un componente al mismo ejercicio integral, de modo que al llegar a la actividad integradora el equipo cuenta con un blog completo y funcional. El proyecto final reutiliza ese mismo proceso, aplicado a un tema y a un formato de sitio web elegidos libremente por el estudiante.</p>
+  <ol class="steps">
+    <li><p><strong>Preparación técnica.</strong> Instalación y configuración de WordPress, elección de tema visual y definición de roles del equipo.</p></li>
+    <li><p><strong>Redacción de la introducción</strong> (mínimo 500 palabras) sobre el tema de actualidad elegido por el equipo.</p></li>
+    <li><p><strong>Redacción del desarrollo</strong> (2000 palabras), con subtemas, argumentos, fuentes y recursos visuales.</p></li>
+    <li><p><strong>Sección "Acerca de los creadores"</strong>, con la presentación profesional del equipo autor.</p></li>
+    <li><p><strong>Sección complementaria: fuentes, referencias y espacio de comentarios moderados</strong>, para cerrar el ciclo de discusión crítica.</p></li>
+    <li><p><strong>Publicación y retroalimentación entre equipos</strong>, mediante intercambio cruzado de comentarios.</p></li>
+    <li><p><strong>Proyecto final:</strong> diseño de un sitio web visual propio sobre un tema aplicable a otra materia de la licenciatura.</p></li>
+  </ol>
+</section>
+
+<!-- ================= TEMA 1: WORDPRESS ================= -->
+<section class="block" id="tema1">
+  <span class="num">03</span>
+  <span class="eyebrow">Tema 1</span>
+  <h2>Preparación técnica del blog en WordPress</h2>
+  <p>Antes de redactar contenido, cada equipo debe dejar lista la infraestructura del blog. Esta fase se resuelve en una sola sesión de laboratorio y produce el primer entregable verificable: un sitio publicado, aunque esté vacío de contenido.</p>
+
+  <h3>Instrucciones paso a paso</h3>
+  <ol class="steps">
+    <li><p><strong>Crear la cuenta.</strong> Ingresar a WordPress.com (o instalar WordPress.org si el equipo cuenta con hospedaje propio) y registrar una cuenta con el correo institucional de un integrante designado como administrador.</p></li>
+    <li><p><strong>Nombrar el sitio.</strong> Definir un nombre de blog que identifique al equipo y anticipe el tema que se tratará, evitando nombres genéricos como "Mi blog" o "Blog 1".</p></li>
+    <li><p><strong>Elegir un tema visual (theme).</strong> Seleccionar una plantilla que priorice la lectura de texto largo (tipografía clara, buen contraste, ancho de columna cómodo), coherente con un blog de divulgación.</p></li>
+    <li><p><strong>Configurar la identidad del sitio.</strong> Cargar un logotipo o ícono de equipo, definir los colores de encabezado y escribir una descripción corta (tagline) que resuma el propósito del blog.</p></li>
+    <li><p><strong>Crear la estructura de páginas y categorías.</strong> Generar las páginas "Inicio", "Acerca de los creadores" y "Fuentes y comentarios", además de una categoría por cada entrada que se publicará.</p></li>
+    <li><p><strong>Definir roles del equipo.</strong> Asignar de manera explícita quién administra el sitio, quién investiga fuentes, quién redacta y quién revisa estilo y ortografía antes de publicar.</p></li>
+    <li><p><strong>Publicar una entrada de prueba.</strong> Verificar que el sitio es visible públicamente y compartir el enlace con el docente antes de avanzar al Tema 2.</p></li>
+  </ol>
+
+  <div class="example">
+    <strong>Ejemplo de nombre y descripción de sitio:</strong> "Contrapunto — un espacio de la Licenciatura en Diseño Gráfico de UNE para discutir, con evidencia y diseño, los temas que están definiendo a esta generación."
+  </div>
+
+  <details class="activity">
+    <summary>Actividad 1 · Configuración del blog en equipo <span class="arrow">→</span></summary>
+    <div class="activity-body">
+      <div class="meta"><span class="pill">Colaborativa</span><span class="pill outline">30–40 min</span><span class="pill red">Entregable verificable</span></div>
+      <p>En equipos de tres a cuatro integrantes, completen la configuración descrita arriba y respondan por escrito, en un documento compartido, las siguientes preguntas antes de publicar:</p>
+      <ul>
+        <li>¿Por qué eligieron ese tema visual y no otro? Relacionen la decisión con la legibilidad de un texto de 2000 palabras.</li>
+        <li>¿Qué rol desempeñará cada integrante durante las siguientes tres semanas?</li>
+        <li>¿Qué nombre le dieron al sitio y qué expectativa genera en un lector que apenas lo descubre?</li>
+      </ul>
+      <div class="check">
+        <input type="checkbox" id="c1-1"><label for="c1-1">Sitio creado y publicado con nombre definitivo</label>
+      </div>
+      <div class="check">
+        <input type="checkbox" id="c1-2"><label for="c1-2">Páginas "Acerca de los creadores" y "Fuentes y comentarios" creadas</label>
+      </div>
+      <div class="check">
+        <input type="checkbox" id="c1-3"><label for="c1-3">Roles del equipo documentados y compartidos con el docente</label>
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- ================= TEMA 2: ESTRUCTURA DEL BLOG ================= -->
+<section class="block" id="tema2">
+  <span class="num">04</span>
+  <span class="eyebrow">Tema 2</span>
+  <h2>Estructura editorial del blog</h2>
+  <p>El blog institucional debe contener cuatro secciones obligatorias. Cada una tiene una función editorial distinta y se redacta en un momento diferente del proceso, aunque todas responden al mismo tema de actualidad elegido por el equipo.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="tag">Sección A</div>
+      <h4>Introducción — mínimo 500 palabras</h4>
+      <p>Presenta el tema, explica por qué es relevante para la comunidad universitaria en el presente y plantea la pregunta o tensión que el desarrollo resolverá. No incluye conclusiones ni postura final: abre la discusión.</p>
+    </div>
+    <div class="card">
+      <div class="tag">Sección B</div>
+      <h4>Desarrollo — 2000 palabras</h4>
+      <p>Explica el tema con profundidad: contexto, distintas posturas o argumentos, datos verificables y ejemplos concretos. Se organiza en subtemas con subtítulos, y cada afirmación relevante se respalda con una fuente citada.</p>
+    </div>
+    <div class="card">
+      <div class="tag">Sección C</div>
+      <h4>Acerca de los creadores</h4>
+      <p>Presenta al equipo autor: nombre, rol dentro del proyecto y una línea sobre su interés particular en el tema. Refuerza la transparencia y la responsabilidad editorial del contenido publicado.</p>
+    </div>
+    <div class="card">
+      <div class="tag">Sección D — propuesta</div>
+      <h4>Fuentes, referencias y comentarios moderados</h4>
+      <p>Sección adicional sugerida para el módulo: lista de fuentes consultadas en formato consistente, más un espacio de comentarios con tres preguntas guía que inviten a otros equipos a opinar de forma argumentada.</p>
+    </div>
+  </div>
+
+  <h3>Instrucciones paso a paso para redactar cada sección en WordPress</h3>
+  <ol class="steps">
+    <li><p><strong>Redactar primero fuera de WordPress.</strong> Escribir el borrador de introducción y desarrollo en un documento colaborativo (control de versiones y comentarios) antes de pasar el texto al editor del blog.</p></li>
+    <li><p><strong>Aplicar jerarquía tipográfica.</strong> En el editor de bloques, usar Encabezado 2 para cada subtema del desarrollo y Encabezado 3 para subdivisiones, sin saltar niveles.</p></li>
+    <li><p><strong>Insertar imágenes con función editorial.</strong> Cada imagen debe ilustrar una idea del texto, incluir texto alternativo descriptivo y crédito de la fuente en el pie de imagen.</p></li>
+    <li><p><strong>Enlazar las fuentes en el propio texto.</strong> Convertir cada dato citado en un hipervínculo hacia la fuente original, además de incluirla en la lista final de referencias.</p></li>
+    <li><p><strong>Revisar el conteo de palabras.</strong> Verificar en el editor que la introducción supere las 500 palabras y el desarrollo las 2000, antes de programar la publicación.</p></li>
+    <li><p><strong>Programar la publicación y compartir el enlace</strong> con el resto del grupo para iniciar la retroalimentación entre pares.</p></li>
+  </ol>
+
+  <details class="activity">
+    <summary>Actividad 2 · Redacción colaborativa de la introducción <span class="arrow">→</span></summary>
+    <div class="activity-body">
+      <div class="meta"><span class="pill">Colaborativa</span><span class="pill outline">1 sesión</span><span class="pill red">Retroalimentación entre pares</span></div>
+      <p>Cada integrante redacta un párrafo de la introducción (entre 120 y 150 palabras) sobre el tema elegido por el equipo en el Tema 3 de esta guía. Al reunir los párrafos, el equipo revisa que exista una idea central compartida y edita el texto en conjunto hasta alcanzar el mínimo de 500 palabras.</p>
+      <p>Después, cada equipo intercambia su introducción con otro equipo, que responde por escrito a dos preguntas: ¿queda clara la relevancia del tema? ¿qué pregunta esperarían que resuelva el desarrollo?</p>
+      <div class="check"><input type="checkbox" id="c2-1"><label for="c2-1">Introducción redactada de forma colaborativa (500 palabras mínimo)</label></div>
+      <div class="check"><input type="checkbox" id="c2-2"><label for="c2-2">Retroalimentación de otro equipo recibida y documentada</label></div>
+    </div>
+  </details>
+
+  <details class="activity">
+    <summary>Actividad 3 · Construcción del desarrollo por subtemas <span class="arrow">→</span></summary>
+    <div class="activity-body">
+      <div class="meta"><span class="pill">Colaborativa</span><span class="pill outline">2 sesiones</span><span class="pill red">Fuentes verificables</span></div>
+      <p>El equipo divide el desarrollo en cuatro subtemas de aproximadamente 500 palabras cada uno (por ejemplo: contexto y antecedentes, posturas en discusión, evidencia y datos, implicaciones para la comunidad universitaria). Cada integrante investiga y redacta un subtema, citando al menos dos fuentes verificables.</p>
+      <p>En una sesión conjunta, el equipo lee los cuatro subtemas en voz alta y ajusta las transiciones para que el desarrollo se lea como un solo texto y no como cuatro fragmentos independientes.</p>
+      <div class="check"><input type="checkbox" id="c3-1"><label for="c3-1">Cuatro subtemas redactados y revisados en conjunto</label></div>
+      <div class="check"><input type="checkbox" id="c3-2"><label for="c3-2">Desarrollo alcanza las 2000 palabras con fuentes enlazadas</label></div>
+    </div>
+  </details>
+
+  <details class="activity">
+    <summary>Actividad 4 · Presentación del equipo autor <span class="arrow">→</span></summary>
+    <div class="activity-body">
+      <div class="meta"><span class="pill">Individual y grupal</span><span class="pill outline">20 min</span></div>
+      <p>Cada integrante redacta tres líneas sobre su rol en el proyecto y su interés particular en el tema elegido. El equipo integra los textos en la página "Acerca de los creadores" y agrega una fotografía o avatar por integrante.</p>
+      <div class="check"><input type="checkbox" id="c4-1"><label for="c4-1">Página "Acerca de los creadores" publicada con los cuatro perfiles</label></div>
+    </div>
+  </details>
+
+  <details class="activity">
+    <summary>Actividad 5 · Fuentes, referencias y preguntas para el debate <span class="arrow">→</span></summary>
+    <div class="activity-body">
+      <div class="meta"><span class="pill">Colaborativa</span><span class="pill outline">30 min</span><span class="pill red">Reflexión crítica</span></div>
+      <p>El equipo organiza en un formato consistente todas las fuentes citadas durante el desarrollo y redacta tres preguntas abiertas dirigidas a los lectores, pensadas para generar comentarios argumentados y no solo reacciones de acuerdo o desacuerdo.</p>
+      <div class="example"><strong>Ejemplo de pregunta guía:</strong> "Si su universidad tuviera que priorizar un solo cambio relacionado con este tema durante el próximo año, ¿cuál sería y por qué?"</div>
+      <div class="check"><input type="checkbox" id="c5-1"><label for="c5-1">Lista de fuentes publicada con formato consistente</label></div>
+      <div class="check"><input type="checkbox" id="c5-2"><label for="c5-2">Tres preguntas de discusión publicadas en la sección de comentarios</label></div>
+    </div>
+  </details>
+</section>
+
+<!-- ================= TEMA 3: TEMAS DE ACTUALIDAD ================= -->
+<section class="block tinted" id="tema3">
+  <span class="num">05</span>
+  <span class="eyebrow">Tema 3</span>
+  <h2>Selección del tema de actualidad</h2>
+  <p>Antes de redactar, cada equipo elige uno de los siguientes seis temas de interés actual como eje del blog. Los temas están pensados para admitir varias posturas legítimas y sostener una discusión informada, sin agotarse en una sola sesión de comentarios.</p>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="tag">Tema 1</div>
+      <h4>Los derechos de los animales como seres sintientes</h4>
+      <p>La discusión sobre el reconocimiento legal y ético de los animales como seres capaces de sentir dolor y bienestar, y sus implicaciones para el consumo, la investigación y la convivencia urbana.</p>
+    </div>
+    <div class="card">
+      <div class="tag">Tema 2</div>
+      <h4>Inteligencia artificial generativa y autoría en el diseño</h4>
+      <p>El debate sobre la autoría, la originalidad y el valor del trabajo creativo humano frente a herramientas de generación automática de imágenes y texto.</p>
+    </div>
+    <div class="card">
+      <div class="tag">Tema 3</div>
+      <h4>Sostenibilidad y consumo responsable</h4>
+      <p>La tensión entre el consumo acelerado propio de la moda, la tecnología y el diseño gráfico publicitario, y la urgencia de prácticas más sostenibles.</p>
+    </div>
+    <div class="card">
+      <div class="tag">Tema 4</div>
+      <h4>Salud mental y bienestar en la vida universitaria</h4>
+      <p>Las condiciones académicas y sociales que afectan el bienestar emocional de los estudiantes, y el papel de las instituciones educativas en atenderlas.</p>
+    </div>
+    <div class="card">
+      <div class="tag">Tema 5</div>
+      <h4>Equidad de género en espacios académicos y laborales</h4>
+      <p>Las oportunidades y barreras que enfrentan distintos grupos en el acceso y la permanencia en trayectorias educativas y profesionales creativas.</p>
+    </div>
+    <div class="card">
+      <div class="tag">Tema 6</div>
+      <h4>Redes sociales y construcción de identidad juvenil</h4>
+      <p>La manera en que las plataformas digitales inciden en la autoimagen, la atención y las relaciones sociales de las nuevas generaciones.</p>
+    </div>
+  </div>
+
+  <h3>Instrucciones para elegir el tema en equipo</h3>
+  <ol class="steps">
+    <li><p><strong>Lluvia de ideas individual.</strong> Cada integrante elige, sin discutir con el equipo, los dos temas que le parecen más relevantes y anota una razón breve.</p></li>
+    <li><p><strong>Puesta en común.</strong> El equipo comparte sus elecciones y busca coincidencias antes de decidir por votación si no hay consenso inmediato.</p></li>
+    <li><p><strong>Delimitación del enfoque.</strong> Una vez elegido el tema, el equipo redacta en una frase el ángulo específico que abordará (por ejemplo, no "salud mental" en general, sino "la presión académica durante los periodos de exámenes").</p></li>
+    <li><p><strong>Validación con el docente.</strong> El equipo presenta el tema y el enfoque elegido antes de comenzar la redacción, para confirmar que es abordable con evidencia disponible.</p></li>
+  </ol>
+
+  <details class="activity">
+    <summary>Actividad 6 · Selección argumentada del tema <span class="arrow">→</span></summary>
+    <div class="activity-body">
+      <div class="meta"><span class="pill">Colaborativa</span><span class="pill outline">20 min</span></div>
+      <p>Completen en equipo una tabla con tres columnas: el tema elegido, el enfoque específico y una fuente inicial que confirme que existe evidencia suficiente para desarrollarlo en 2000 palabras. Compartan la tabla con el docente antes de iniciar la Actividad 2.</p>
+      <div class="check"><input type="checkbox" id="c6-1"><label for="c6-1">Tema y enfoque específico definidos por consenso</label></div>
+      <div class="check"><input type="checkbox" id="c6-2"><label for="c6-2">Tabla de validación entregada al docente</label></div>
+    </div>
+  </details>
+</section>
+
+<!-- ================= ACTIVIDAD INTEGRADORA ================= -->
+<section class="block" id="integradora">
+  <span class="num">06</span>
+  <h2>Actividad integradora: publicación y retroalimentación cruzada</h2>
+  <p>Esta actividad reúne todos los componentes trabajados en los temas anteriores en un solo ejercicio evaluable. No introduce contenido nuevo: verifica que la introducción, el desarrollo, la sección de creadores y la sección complementaria funcionen como una publicación coherente.</p>
+
+  <ol class="steps">
+    <li><p><strong>Revisión editorial interna.</strong> El equipo lee el blog completo de principio a fin y corrige continuidad, ortografía y coherencia entre secciones.</p></li>
+    <li><p><strong>Publicación formal.</strong> Se publica la entrada completa, con todas las secciones enlazadas desde el menú principal del sitio.</p></li>
+    <li><p><strong>Intercambio entre equipos.</strong> Cada equipo recibe el enlace de otro equipo y dispone de 15 minutos para leer su blog completo.</p></li>
+    <li><p><strong>Comentario argumentado.</strong> Cada equipo deja un comentario que responde a una de las preguntas guía de la sección de fuentes y comentarios, aportando un argumento propio y no solo una opinión.</p></li>
+    <li><p><strong>Cierre plenario.</strong> En grupo completo, cada equipo comparte en una frase qué aprendió del blog de sus compañeros que no había considerado en el propio.</p></li>
+  </ol>
+
+  <div class="example">
+    <strong>Criterio de calidad para el comentario cruzado:</strong> un comentario adecuado cita un dato o afirmación específica del blog leído y añade una perspectiva, pregunta o matiz nuevo; un comentario insuficiente se limita a expresar acuerdo o desacuerdo general.
+  </div>
+</section>
+
+<!-- ================= PROYECTO FINAL ================= -->
+<section class="block tinted" id="final">
+  <span class="num">07</span>
+  <h2>Proyecto final: sitio web visual propio</h2>
+  <p>El proyecto final traslada el mismo proceso —planeación editorial, redacción colaborativa, diseño y publicación— a un producto de mayor alcance: un sitio web visual, diseñado individualmente o en equipo, sobre un tema elegido libremente por el estudiante y aplicable a otra materia que curse en la licenciatura.</p>
+
+  <h3>Instrucciones paso a paso</h3>
+  <ol class="steps">
+    <li><p><strong>Elegir el tema y su aplicación académica.</strong> El tema puede retomar uno de los seis propuestos en este módulo u otro distinto, siempre que el estudiante explique con qué materia de su plan de estudios se conecta y de qué manera el sitio le servirá como herramienta de estudio o divulgación.</p></li>
+    <li><p><strong>Definir la estructura de navegación.</strong> Antes de diseñar, esbozar en papel o en una herramienta digital el mapa de páginas del sitio: inicio, contenido principal, sección de autoría y una sección interactiva o de contacto.</p></li>
+    <li><p><strong>Diseñar el sistema visual.</strong> Definir una paleta de color, una pareja tipográfica y un estilo de imágenes coherente con el tema, aplicando los criterios de jerarquía y legibilidad trabajados en el Tema 2.</p></li>
+    <li><p><strong>Construir el sitio en WordPress u otra herramienta equivalente</strong> aprobada por el docente, reutilizando la estructura de introducción, desarrollo, autoría y fuentes trabajada durante el módulo.</p></li>
+    <li><p><strong>Someter el sitio a retroalimentación de un compañero</strong> antes de la entrega final, aplicando el mismo criterio de comentario argumentado usado en la actividad integradora.</p></li>
+    <li><p><strong>Presentar el sitio ante el grupo</strong>, explicando la decisión de tema, la estructura de navegación y cómo se aplicará en su otra materia.</p></li>
+  </ol>
+
+  <div class="grid-2">
+    <div class="card">
+      <h4>Entregables del proyecto final</h4>
+      <ul>
+        <li>Sitio web publicado y accesible mediante un enlace público.</li>
+        <li>Documento breve de planeación (tema, aplicación académica, mapa de navegación y sistema visual).</li>
+        <li>Registro escrito de la retroalimentación recibida de un compañero y los cambios realizados a partir de ella.</li>
+        <li>Presentación oral de cinco minutos ante el grupo.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Preguntas para orientar la reflexión final</h4>
+      <ul>
+        <li>¿Qué decisión de diseño o redacción cambiaría si tuviera que repetir el proyecto?</li>
+        <li>¿De qué manera este sitio podría usarse realmente en la materia con la que lo conectó?</li>
+        <li>¿Qué aprendió del proceso colaborativo del blog que aplicó de forma distinta en el trabajo individual?</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= RUBRICA ================= -->
+<section class="block" id="rubrica">
+  <span class="num">08</span>
+  <h2>Rúbrica de evaluación</h2>
+  <table>
+    <thead>
+      <tr><th>Criterio</th><th>Logrado</th><th>En proceso</th><th>No logrado</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Introducción (extensión y claridad del planteamiento)</td><td>Supera las 500 palabras y plantea con claridad la relevancia del tema</td><td>Cumple la extensión pero el planteamiento es confuso o genérico</td><td>No alcanza las 500 palabras o no plantea un problema claro</td></tr>
+      <tr><td>Desarrollo (profundidad y uso de fuentes)</td><td>Alcanza las 2000 palabras, con subtemas claros y fuentes verificables enlazadas</td><td>Cumple la extensión pero con fuentes insuficientes o poco variadas</td><td>No alcanza la extensión o carece de fuentes verificables</td></tr>
+      <tr><td>Acerca de los creadores</td><td>Presenta con claridad a cada integrante y su rol en el proyecto</td><td>Presenta al equipo de forma incompleta o genérica</td><td>Sección ausente o sin información real del equipo</td></tr>
+      <tr><td>Sección de fuentes y comentarios</td><td>Fuentes bien referenciadas y preguntas que generan discusión argumentada</td><td>Fuentes listadas sin formato consistente o preguntas cerradas</td><td>Sección ausente</td></tr>
+      <tr><td>Trabajo colaborativo</td><td>Roles claros, evidencia de retroalimentación entre pares aplicada</td><td>Colaboración desigual entre integrantes</td><td>Sin evidencia de trabajo en equipo</td></tr>
+      <tr><td>Proyecto final</td><td>Sitio coherente, aplicable a otra materia y sustentado en la presentación</td><td>Sitio funcional pero con conexión académica poco clara</td><td>Sitio incompleto o sin relación con una materia real</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= RECURSOS ================= -->
+<section class="block" id="recursos">
+  <span class="num">09</span>
+  <h2>Recursos y cierre</h2>
+  <p>Se recomienda a los equipos conservar un registro de las versiones del texto (documento colaborativo con historial de cambios), de manera que el proceso de redacción, y no solo el resultado final, pueda revisarse como parte de la evaluación. Esta guía puede alojarse en un repositorio de GitHub y publicarse mediante GitHub Pages para que cada equipo la consulte durante todo el módulo.</p>
+  <div style="margin-top:1.2rem;">
+    <span class="pill outline">WordPress.com / WordPress.org</span>
+    <span class="pill outline">Documento colaborativo con control de cambios</span>
+    <span class="pill outline">Gestor de citas y referencias</span>
+    <span class="pill outline">GitHub Pages</span>
+  </div>
+</section>
+
+</main>
+</div>
+
+<footer>
+  Universidad de Especialidades (UNE) — Licenciatura en Diseño Gráfico — Materia de Diseño Web. Guía de uso académico para fines didácticos.
+</footer>
+
+<div class="progress-tracker" id="progressTracker">0 / 0 actividades marcadas</div>
+
+<script>
+  const boxes = document.querySelectorAll('.check input[type="checkbox"]');
+  const tracker = document.getElementById('progressTracker');
+  function updateProgress(){
+    const total = boxes.length;
+    const done = Array.from(boxes).filter(b => b.checked).length;
+    tracker.textContent = done + ' / ' + total + ' actividades marcadas';
+  }
+  boxes.forEach(b => b.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+
+</body>
+</html>
