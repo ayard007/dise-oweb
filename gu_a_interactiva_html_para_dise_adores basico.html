@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fundamentos de HTML | Diseño Web UNE</title>
+    
+    <!-- Tailwind CSS para estilos rápidos y estéticos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fuentes de Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Iconos FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Space Mono', 'monospace'],
+                    },
+                    colors: {
+                        une: {
+                            blue: '#1e3a8a', // Azul oscuro similar al logo
+                            red: '#dc2626',  // Rojo similar al logo
+                            light: '#f8fafc',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilos personalizados para transiciones y elementos específicos */
+        .section-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .section-content.active {
+            display: block;
+            opacity: 1;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            position: relative;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+        }
+        .copy-btn:hover { background: rgba(255,255,255,0.2); }
+        
+        /* Estilos para el mini-editor */
+        .editor-container {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            height: 300px;
+        }
+        .editor-textarea {
+            flex: 1;
+            background: #0f172a;
+            color: #38bdf8;
+            font-family: 'Space Mono', monospace;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #334155;
+            resize: none;
+        }
+        .editor-preview {
+            flex: 1;
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased min-h-screen flex flex-col">
+
+    <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <!-- Se actualiza la ruta de la imagen al nombre de archivo exacto 'logoune_3.png' -->
+                <img src="logoune_3.png" alt="Logo Universidad de Especialidades UNE" class="h-12 w-auto object-contain">
+                <div>
+                    <h1 class="text-xl font-bold text-une-blue leading-tight">Diseño Web</h1>
+                    <p class="text-xs text-gray-500 font-semibold tracking-wider uppercase">Licenciatura en Diseño Gráfico</p>
+                </div>
+            </div>
+            <nav class="hidden md:flex space-x-1" id="nav-menu">
+                <!-- Los botones se generarán por JS -->
+            </nav>
+            <!-- Menú móvil -->
+            <button class="md:hidden text-gray-500 hover:text-une-blue focus:outline-none">
+                <i class="fa-solid fa-bars text-2xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- ========================================== -->
+        <!-- SECCIÓN 1: INTRODUCCIÓN -->
+        <!-- ========================================== -->
+        <section id="sec-intro" class="section-content active">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="h-48 bg-une-blue flex items-center justify-center relative overflow-hidden">
+                    <!-- Fondo decorativo -->
+                    <div class="absolute inset-0 opacity-10">
+                        <svg class="h-full w-full" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid-pattern" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M0 40L40 0H20L0 20M40 40V20L20 40" stroke="white" stroke-width="2" fill="none"/></pattern></defs><rect width="100%" height="100%" fill="url(#grid-pattern)"/></svg>
+                    </div>
+                    <div class="text-center relative z-10 p-6">
+                        <span class="bg-une-red text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide mb-4 inline-block">Módulo 1</span>
+                        <h2 class="text-4xl font-bold text-white mb-2">Fundamentos de HTML</h2>
+                        <p class="text-blue-100 text-lg">El esqueleto de la web para mentes visuales.</p>
+                    </div>
+                </div>
+                
+                <div class="p-8 md:p-12">
+                    <div class="prose max-w-none text-gray-600">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-une-red inline-block pb-1">¿Qué es HTML?</h3>
+                        <p class="mb-6 text-lg">
+                            HTML (<em>HyperText Markup Language</em>) no es un lenguaje de programación matemático; es un <strong>lenguaje de marcado</strong>. Como diseñador, piénsalo como estructurar un documento en InDesign: defines qué es un título, qué es un párrafo, dónde va una imagen y cómo se relacionan entre sí.
+                        </p>
+                        
+                        <div class="bg-blue-50 border-l-4 border-une-blue p-6 rounded-r-lg mb-8">
+                            <h4 class="flex items-center text-une-blue font-bold text-lg mb-2">
+                                <i class="fa-solid fa-brain mr-3"></i> Problema Base
+                            </h4>
+                            <p>Imagina que tienes un lienzo en blanco (el navegador). Tienes el texto de una noticia y una foto. Si solo los "arrojas" al lienzo, el navegador no sabe qué hacer. ¿Cómo le explicamos al navegador qué parte es el título principal y cuál es la foto?</p>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Anatomía de una Etiqueta</h3>
+                        <p class="mb-4">Para hablar con el navegador usamos <strong>etiquetas</strong> (tags). Casi todas funcionan como "contenedores" que envuelven el contenido.</p>
+                        
+                        <!-- Visualización de etiqueta -->
+                        <div class="flex flex-col md:flex-row items-center justify-center gap-4 bg-gray-50 p-6 rounded-lg border border-gray-200 font-mono text-xl mb-8 shadow-inner">
+                            <div class="text-center">
+                                <span class="text-blue-600 font-bold">&lt;h1&gt;</span>
+                                <p class="text-xs text-gray-500 font-sans mt-1">Apertura</p>
+                            </div>
+                            <div class="text-gray-800 font-bold px-4">
+                                Hola Mundo
+                                <p class="text-xs text-gray-500 font-sans mt-1 font-normal">Contenido</p>
+                            </div>
+                            <div class="text-center">
+                                <span class="text-blue-600 font-bold">&lt;/h1&gt;</span>
+                                <p class="text-xs text-gray-500 font-sans mt-1">Cierre (Nota la /)</p>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-10">
+                            <button onclick="navigate('sec-estructura')" class="bg-une-blue hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-lg transition duration-300 shadow-md hover:shadow-lg flex items-center mx-auto">
+                                Siguiente: Estructura del Documento <i class="fa-solid fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECCIÓN 2: ESTRUCTURA -->
+        <!-- ========================================== -->
+        <section id="sec-estructura" class="section-content">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-12">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-12 h-12 bg-une-red rounded-full flex items-center justify-center text-white text-xl font-bold shadow-md">2</div>
+                    <h2 class="text-3xl font-bold text-gray-900">El Esqueleto del Documento</h2>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div>
+                        <p class="text-gray-600 mb-4 text-lg">
+                            Todo archivo `.html` necesita una estructura básica. Es como el marco de un cuadro; sin él, el contenido se cae.
+                        </p>
+                        <ul class="space-y-4">
+                            <li class="flex">
+                                <span class="text-une-red mt-1 mr-3"><i class="fa-solid fa-code"></i></span>
+                                <div>
+                                    <strong class="font-mono text-gray-800">&lt;!DOCTYPE html&gt;</strong>
+                                    <p class="text-sm text-gray-500">Avisa que usamos HTML5 moderno.</p>
+                                </div>
+                            </li>
+                            <li class="flex">
+                                <span class="text-une-red mt-1 mr-3"><i class="fa-solid fa-code"></i></span>
+                                <div>
+                                    <strong class="font-mono text-gray-800">&lt;html&gt;</strong>
+                                    <p class="text-sm text-gray-500">La raíz que envuelve todo.</p>
+                                </div>
+                            </li>
+                            <li class="flex">
+                                <span class="text-une-red mt-1 mr-3"><i class="fa-solid fa-head-side-mask"></i></span>
+                                <div>
+                                    <strong class="font-mono text-gray-800">&lt;head&gt;</strong>
+                                    <p class="text-sm text-gray-500">El "cerebro". Configuraciones invisibles, como el título de la pestaña.</p>
+                                </div>
+                            </li>
+                            <li class="flex">
+                                <span class="text-une-red mt-1 mr-3"><i class="fa-solid fa-eye"></i></span>
+                                <div>
+                                    <strong class="font-mono text-gray-800">&lt;body&gt;</strong>
+                                    <p class="text-sm text-gray-500">El lienzo. Todo lo visual va aquí.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <div class="code-block h-full flex flex-col justify-center">
+                            <button class="copy-btn" onclick="copyCode('code-estructura')"><i class="fa-regular fa-copy"></i> Copiar</button>
+                            <pre id="code-estructura">
+<span class="text-pink-400">&lt;!DOCTYPE html&gt;</span>
+<span class="text-blue-400">&lt;html</span> <span class="text-green-400">lang</span>=<span class="text-yellow-300">"es"</span><span class="text-blue-400">&gt;</span>
+
+  <span class="text-blue-400">&lt;head&gt;</span>
+    <span class="text-blue-400">&lt;meta</span> <span class="text-green-400">charset</span>=<span class="text-yellow-300">"UTF-8"</span><span class="text-blue-400">&gt;</span>
+    <span class="text-blue-400">&lt;title&gt;</span>Mi Primer Lienzo<span class="text-blue-400">&lt;/title&gt;</span>
+  <span class="text-blue-400">&lt;/head&gt;</span>
+
+  <span class="text-blue-400">&lt;body&gt;</span>
+    <span class="text-gray-400">&lt;!-- Lo que se ve en pantalla va aquí --&gt;</span>
+  <span class="text-blue-400">&lt;/body&gt;</span>
+
+<span class="text-blue-400">&lt;/html&gt;</span></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 flex gap-4 items-start">
+                    <i class="fa-solid fa-lightbulb text-yellow-500 text-2xl mt-1"></i>
+                    <div>
+                        <h4 class="font-bold text-yellow-800">Práctica Activa:</h4>
+                        <p class="text-yellow-900 text-sm">Copia el código de arriba, pégalo en un Bloc de Notas, guárdalo como <code>index.html</code> (asegúrate de que en 'Tipo' diga 'Todos los archivos') y ábrelo dándole doble clic. Verás una página en blanco, ¡pero la pestaña tendrá tu título!</p>
+                    </div>
+                </div>
+
+                <div class="flex justify-between mt-10">
+                    <button onclick="navigate('sec-intro')" class="text-gray-500 hover:text-une-blue font-bold py-2 px-4 rounded transition duration-300">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Anterior
+                    </button>
+                    <button onclick="navigate('sec-etiquetas')" class="bg-une-blue hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-lg transition duration-300 shadow-md">
+                        Siguiente: Etiquetas Básicas <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECCIÓN 3: ETIQUETAS BÁSICAS -->
+        <!-- ========================================== -->
+        <section id="sec-etiquetas" class="section-content">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-12">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-12 h-12 bg-une-red rounded-full flex items-center justify-center text-white text-xl font-bold shadow-md">3</div>
+                    <h2 class="text-3xl font-bold text-gray-900">Pintando el Lienzo: Textos e Imágenes</h2>
+                </div>
+
+                <p class="text-gray-600 mb-8 text-lg">
+                    Ahora que tenemos el <code>&lt;body&gt;</code>, vamos a ponerle contenido. Piensa en estas etiquetas como tus herramientas de texto y marco de imagen en tu software de diseño.
+                </p>
+
+                <div class="space-y-12">
+                    <!-- Tipografía -->
+                    <div class="grid md:grid-cols-2 gap-6 items-center">
+                        <div>
+                            <h3 class="text-2xl font-bold text-une-blue mb-3 border-l-4 border-une-red pl-3">Jerarquía Tipográfica</h3>
+                            <p class="text-gray-600 mb-4">Usamos de <code>&lt;h1&gt;</code> (más importante) a <code>&lt;h6&gt;</code> (menos importante) para títulos, y <code>&lt;p&gt;</code> para párrafos.</p>
+                            <div class="code-block mb-4">
+                                <button class="copy-btn" onclick="copyCode('code-tipo')"><i class="fa-regular fa-copy"></i></button>
+<pre id="code-tipo">
+<span class="text-blue-400">&lt;h1&gt;</span>Título Principal<span class="text-blue-400">&lt;/h1&gt;</span>
+<span class="text-blue-400">&lt;h2&gt;</span>Subtítulo de Sección<span class="text-blue-400">&lt;/h2&gt;</span>
+<span class="text-blue-400">&lt;p&gt;</span>Este es un párrafo de texto normal que explica el tema de la sección con más detalle.<span class="text-blue-400">&lt;/p&gt;</span>
+</pre>
+                            </div>
+                        </div>
+                        <div class="bg-gray-100 p-6 rounded-lg border border-gray-300">
+                            <h4 class="text-xs uppercase text-gray-500 font-bold mb-4 tracking-widest">Resultado Visual</h4>
+                            <div class="bg-white p-4 rounded shadow-sm">
+                                <h1 class="text-3xl font-bold mb-2 text-black">Título Principal</h1>
+                                <h2 class="text-xl font-bold mb-2 text-gray-800">Subtítulo de Sección</h2>
+                                <p class="text-gray-600">Este es un párrafo de texto normal que explica el tema de la sección con más detalle.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="border-gray-200">
+
+                    <!-- Imágenes e Hipervínculos -->
+                    <div class="grid md:grid-cols-2 gap-6 items-center">
+                        <div class="md:order-2">
+                            <h3 class="text-2xl font-bold text-une-blue mb-3 border-l-4 border-une-red pl-3">Imágenes y Enlaces</h3>
+                            <p class="text-gray-600 mb-4">La etiqueta <code>&lt;img&gt;</code> no tiene cierre, usa el <strong>atributo</strong> <code>src</code> (source) para la ruta. Los enlaces usan <code>&lt;a&gt;</code> (anchor) y el atributo <code>href</code>.</p>
+                            <div class="code-block mb-4">
+                                <button class="copy-btn" onclick="copyCode('code-img')"><i class="fa-regular fa-copy"></i></button>
+<pre id="code-img">
+<span class="text-gray-400">&lt;!-- Imagen (Nota el atributo 'alt' para accesibilidad) --&gt;</span>
+<span class="text-blue-400">&lt;img</span> <span class="text-green-400">src</span>=<span class="text-yellow-300">"foto.jpg"</span> <span class="text-green-400">alt</span>=<span class="text-yellow-300">"Descripción visual"</span><span class="text-blue-400">&gt;</span>
+
+<span class="text-gray-400">&lt;!-- Enlace --&gt;</span>
+<span class="text-blue-400">&lt;a</span> <span class="text-green-400">href</span>=<span class="text-yellow-300">"https://une.edu.mx"</span><span class="text-blue-400">&gt;</span>Visita la UNE<span class="text-blue-400">&lt;/a&gt;</span>
+</pre>
+                            </div>
+                        </div>
+                        <div class="bg-gray-100 p-6 rounded-lg border border-gray-300 md:order-1 flex justify-center items-center flex-col gap-4">
+                            <img src="https://placehold.co/300x150/1e3a8a/ffffff?text=Imagen+de+Ejemplo" alt="Ejemplo visual" class="rounded shadow-md max-w-full h-auto">
+                            <a href="#" class="text-blue-600 hover:underline font-bold">Visita la UNE</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between mt-10">
+                    <button onclick="navigate('sec-estructura')" class="text-gray-500 hover:text-une-blue font-bold py-2 px-4 rounded transition duration-300">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Anterior
+                    </button>
+                    <button onclick="navigate('sec-organizacion')" class="bg-une-blue hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-lg transition duration-300 shadow-md">
+                        Siguiente: Listas y Tablas <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECCIÓN 4: LISTAS Y TABLAS -->
+        <!-- ========================================== -->
+        <section id="sec-organizacion" class="section-content">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-12">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-12 h-12 bg-une-red rounded-full flex items-center justify-center text-white text-xl font-bold shadow-md">4</div>
+                    <h2 class="text-3xl font-bold text-gray-900">Organizando Datos: Viñetas y Cuadrículas</h2>
+                </div>
+
+                <p class="text-gray-600 mb-8 text-lg">
+                    Como diseñadores, a menudo necesitamos organizar información que no es solo texto corrido. Para listas de herramientas o cuadrículas de precios, usamos etiquetas específicas.
+                </p>
+
+                <!-- Listas -->
+                <div class="mb-12">
+                    <h3 class="text-2xl font-bold text-une-blue mb-4 border-l-4 border-une-red pl-3">Viñetas (Listas)</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-600 mb-4">Usamos <code>&lt;ul&gt;</code> para listas desordenadas (puntos) y <code>&lt;ol&gt;</code> para listas ordenadas (números). Cada elemento de la lista va dentro de un <code>&lt;li&gt;</code>.</p>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyCode('code-listas')"><i class="fa-regular fa-copy"></i></button>
+<pre id="code-listas">
+<span class="text-blue-400">&lt;ul&gt;</span>
+  <span class="text-blue-400">&lt;li&gt;</span>Photoshop<span class="text-blue-400">&lt;/li&gt;</span>
+  <span class="text-blue-400">&lt;li&gt;</span>Illustrator<span class="text-blue-400">&lt;/li&gt;</span>
+<span class="text-blue-400">&lt;/ul&gt;</span>
+</pre>
+                            </div>
+                        </div>
+                        <div class="bg-gray-100 p-6 rounded-lg border border-gray-300 flex items-center justify-center">
+                            <div class="bg-white p-6 rounded shadow-sm w-full">
+                                <ul class="list-disc list-inside text-gray-800 text-lg">
+                                    <li>Photoshop</li>
+                                    <li>Illustrator</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="border-gray-200 mb-12">
+
+                <!-- Tablas -->
+                <div>
+                    <h3 class="text-2xl font-bold text-une-blue mb-4 border-l-4 border-une-red pl-3">Tablas (Cuadrículas)</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-600 mb-4">Las tablas son perfectas para alinear datos. Usamos:
+                                <br><code>&lt;table&gt;</code>: El contenedor principal.
+                                <br><code>&lt;tr&gt;</code>: Table Row (Fila).
+                                <br><code>&lt;th&gt;</code>: Table Header (Celda de encabezado).
+                                <br><code>&lt;td&gt;</code>: Table Data (Celda de datos normal).
+                            </p>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyCode('code-tablas')"><i class="fa-regular fa-copy"></i></button>
+<pre id="code-tablas">
+<span class="text-blue-400">&lt;table</span> <span class="text-green-400">border</span>=<span class="text-yellow-300">"1"</span><span class="text-blue-400">&gt;</span>
+  <span class="text-blue-400">&lt;tr&gt;</span>
+    <span class="text-blue-400">&lt;th&gt;</span>Servicio<span class="text-blue-400">&lt;/th&gt;</span>
+    <span class="text-blue-400">&lt;th&gt;</span>Costo<span class="text-blue-400">&lt;/th&gt;</span>
+  <span class="text-blue-400">&lt;/tr&gt;</span>
+  <span class="text-blue-400">&lt;tr&gt;</span>
+    <span class="text-blue-400">&lt;td&gt;</span>Logotipo<span class="text-blue-400">&lt;/td&gt;</span>
+    <span class="text-blue-400">&lt;td&gt;</span>$5,000<span class="text-blue-400">&lt;/td&gt;</span>
+  <span class="text-blue-400">&lt;/tr&gt;</span>
+<span class="text-blue-400">&lt;/table&gt;</span>
+</pre>
+                            </div>
+                        </div>
+                        <div class="bg-gray-100 p-6 rounded-lg border border-gray-300 flex items-center justify-center overflow-x-auto">
+                            <table class="bg-white rounded shadow-sm w-full border-collapse border border-gray-400">
+                                <thead>
+                                    <tr class="bg-gray-200">
+                                        <th class="border border-gray-400 px-4 py-2 font-bold text-gray-800">Servicio</th>
+                                        <th class="border border-gray-400 px-4 py-2 font-bold text-gray-800">Costo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border border-gray-400 px-4 py-2 text-gray-700">Logotipo</td>
+                                        <td class="border border-gray-400 px-4 py-2 text-gray-700">$5,000</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between mt-10">
+                    <button onclick="navigate('sec-etiquetas')" class="text-gray-500 hover:text-une-blue font-bold py-2 px-4 rounded transition duration-300">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Anterior
+                    </button>
+                    <button onclick="navigate('sec-estilos')" class="bg-une-blue hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-lg transition duration-300 shadow-md">
+                        Siguiente: Estilos Visuales <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECCIÓN 5: ESTILOS VISUALES -->
+        <!-- ========================================== -->
+        <section id="sec-estilos" class="section-content">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-12">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-12 h-12 bg-une-red rounded-full flex items-center justify-center text-white text-xl font-bold shadow-md">5</div>
+                    <h2 class="text-3xl font-bold text-gray-900">Diseño en línea: Color y Tipografía</h2>
+                </div>
+
+                <p class="text-gray-600 mb-8 text-lg">
+                    Aunque el diseño profundo se hace con CSS (lo veremos más adelante), podemos aplicar diseño rápido y directo a nuestras etiquetas HTML usando el atributo <code>style</code>. Esto se llama "Estilos en línea".
+                </p>
+
+                <div class="bg-blue-50 border-l-4 border-une-blue p-6 rounded-r-lg mb-8">
+                    <h4 class="flex items-center text-une-blue font-bold text-lg mb-2">
+                        <i class="fa-solid fa-palette mr-3"></i> La Sintaxis del Estilo
+                    </h4>
+                    <p class="font-mono text-sm text-gray-800 mt-2">
+                        &lt;etiqueta <span class="text-red-600 font-bold">style</span>="<span class="text-blue-600">propiedad</span>: <span class="text-green-600">valor</span>;"&gt;
+                    </p>
+                </div>
+
+                <div class="space-y-8">
+                    <!-- Color de Hoja (Fondo) -->
+                    <div class="grid md:grid-cols-2 gap-6 items-center">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Color de Fondo (Color de Hoja)</h3>
+                            <p class="text-gray-600 mb-4 text-sm">Para pintar todo el lienzo, aplicamos el estilo al <code>&lt;body&gt;</code> usando <code>background-color</code>.</p>
+                            <div class="code-block">
+<pre>
+<span class="text-blue-400">&lt;body</span> <span class="text-green-400">style</span>=<span class="text-yellow-300">"background-color: lightblue;"</span><span class="text-blue-400">&gt;</span>
+</pre>
+                            </div>
+                        </div>
+                        <div class="bg-blue-200 p-8 rounded border border-blue-300 text-center text-blue-900 font-bold">
+                            Esta "hoja" ahora es azul claro.
+                        </div>
+                    </div>
+
+                    <!-- Tipo y Color de Texto -->
+                    <div class="grid md:grid-cols-2 gap-6 items-center">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Tipo de Texto y Color</h3>
+                            <p class="text-gray-600 mb-4 text-sm">Podemos cambiar la tipografía con <code>font-family</code> y el color con <code>color</code>. ¡Se pueden combinar separándolos por punto y coma (;) !</p>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyCode('code-style-txt')"><i class="fa-regular fa-copy"></i></button>
+<pre id="code-style-txt">
+<span class="text-blue-400">&lt;h1</span> <span class="text-green-400">style</span>=<span class="text-yellow-300">"font-family: Arial; color: red;"</span><span class="text-blue-400">&gt;</span>
+  Impacto Visual
+<span class="text-blue-400">&lt;/h1&gt;</span>
+</pre>
+                            </div>
+                        </div>
+                        <div class="bg-gray-100 p-6 rounded border border-gray-300 flex items-center justify-center">
+                            <h1 style="font-family: Arial, sans-serif; color: red; font-size: 2rem; font-weight: bold; margin:0;">
+                                Impacto Visual
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between mt-10">
+                    <button onclick="navigate('sec-organizacion')" class="text-gray-500 hover:text-une-blue font-bold py-2 px-4 rounded transition duration-300">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Anterior
+                    </button>
+                    <button onclick="navigate('sec-interactivo')" class="bg-une-blue hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-lg transition duration-300 shadow-md">
+                        Siguiente: Laboratorio Integrador <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECCIÓN 6: ÁREA INTERACTIVA (LABORATORIO) -->
+        <!-- ========================================== -->
+        <section id="sec-interactivo" class="section-content">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-12">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-12 h-12 bg-une-red rounded-full flex items-center justify-center text-white text-xl font-bold shadow-md"><i class="fa-solid fa-keyboard"></i></div>
+                    <h2 class="text-3xl font-bold text-gray-900">Laboratorio: Integración Visual</h2>
+                </div>
+
+                <div class="bg-blue-50 border-l-4 border-une-blue p-6 rounded-r-lg mb-6">
+                    <h4 class="font-bold text-une-blue mb-2">Actividad Guiada: Perfil de Diseñador</h4>
+                    <p class="text-gray-700">En el editor de abajo tienes un código base. Modifícalo (sin romper las etiquetas) para cumplir estos objetivos y observa cómo cambia en tiempo real a la derecha:</p>
+                    <ol class="list-decimal list-inside mt-2 text-sm text-gray-800 font-medium space-y-1">
+                        <li>Cambia el color de fondo del <code>&lt;div&gt;</code> principal de <code>#f3f4f6</code> a un color que te guste (ej. <code>pink</code>, <code>lightblue</code>, <code>#ffe4e6</code>).</li>
+                        <li>Cambia la fuente (<code>font-family</code>) de Arial a <code>Courier New</code> en el título.</li>
+                        <li>Añade una tercera habilidad a la lista de viñetas (<code>&lt;ul&gt;</code>).</li>
+                        <li>¡Extra! Intenta cambiar el color (<code>color</code>) del párrafo a rojo (<code>red</code>).</li>
+                    </ol>
+                </div>
+
+                <div class="editor-container flex-col lg:flex-row h-[400px]">
+                    <!-- Editor de texto -->
+                    <div class="flex-1 flex flex-col h-full">
+                        <div class="bg-gray-800 text-gray-300 text-xs py-2 px-3 rounded-t-lg font-mono flex justify-between">
+                            <span>index.html (Escribe y modifica aquí)</span>
+                        </div>
+                        <textarea id="html-editor" class="editor-textarea rounded-t-none rounded-b-lg flex-grow outline-none focus:ring-2 focus:ring-une-blue focus:border-transparent text-sm" oninput="updatePreview()">
+<!-- Contenedor principal simulando una hoja -->
+<div style="background-color: #f3f4f6; padding: 20px;">
+    
+    <!-- Título con estilo -->
+    <h1 style="font-family: Arial; color: #1e3a8a;">Perfil Creativo</h1>
+    
+    <!-- Párrafo estándar -->
+    <p>Soy un estudiante de diseño probando el código HTML.</p>
+    
+    <!-- Imagen -->
+    <img src="https://placehold.co/150x150/1e3a8a/white?text=Mi+Foto" alt="Foto de perfil">
+    
+    <h3>Mis Habilidades Técnicas:</h3>
+    <!-- Lista de viñetas -->
+    <ul>
+        <li>Teoría del Color</li>
+        <li>Tipografía Básica</li>
+        <!-- Añade el punto 3 aquí abajo -->
+        
+    </ul>
+
+</div>
+                        </textarea>
+                    </div>
+                    
+                    <!-- Vista previa -->
+                    <div class="flex-1 flex flex-col h-full">
+                        <div class="bg-gray-200 text-gray-600 text-xs py-2 px-3 rounded-t-lg font-sans font-bold flex justify-between">
+                            <span>Vista del Navegador (Resultado)</span>
+                        </div>
+                        <div id="html-preview" class="editor-preview rounded-t-none rounded-b-lg flex-grow bg-white">
+                            <!-- El contenido se inyecta aquí -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between mt-10">
+                    <button onclick="navigate('sec-estilos')" class="text-gray-500 hover:text-une-blue font-bold py-2 px-4 rounded transition duration-300">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Anterior
+                    </button>
+                    <button onclick="navigate('sec-proyecto')" class="bg-une-red hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 shadow-md">
+                        Siguiente: Proyecto Final <i class="fa-solid fa-flag-checkered ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECCIÓN 7: PROYECTO FINAL INTEGRAL -->
+        <!-- ========================================== -->
+        <section id="sec-proyecto" class="section-content">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="h-32 bg-gray-900 flex items-center justify-center">
+                    <h2 class="text-3xl font-bold text-white"><i class="fa-solid fa-rocket text-une-red mr-3"></i> Reto Final: El Menú de la Cafetería</h2>
+                </div>
+                
+                <div class="p-8 md:p-12">
+                    <p class="text-lg text-gray-700 mb-8">
+                        Es hora de poner a prueba tus conocimientos. Este ejercicio lo realizarás <strong>fuera de esta guía</strong>, en tu propio entorno, para demostrar que dominas la creación de un archivo HTML desde cero integrando estructura, diseño, listas y tablas.
+                    </p>
+
+                    <div class="grid lg:grid-cols-2 gap-8">
+                        <!-- Instrucciones -->
+                        <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                            <h3 class="text-xl font-bold mb-4 text-une-blue"><i class="fa-solid fa-list-check mr-2"></i> Requisitos del Proyecto:</h3>
+                            <ol class="list-decimal list-inside space-y-4 text-gray-700">
+                                <li><strong>Prepara tu entorno:</strong> Abre el Bloc de notas o VS Code. Guarda un archivo nuevo como <code>menu-cafe.html</code>.</li>
+                                <li><strong>Estructura Base:</strong> Crea el esqueleto (<code>&lt;!DOCTYPE html&gt;</code>, <code>html</code>, <code>head</code>, <code>body</code>).</li>
+                                <li><strong>Estilo del Fondo:</strong> Aplica un estilo al <code>&lt;body&gt;</code> para que el fondo (background-color) sea <code>#fffbeb</code> (un tono crema suave).</li>
+                                <li><strong>Tipografía Global:</strong> Haz que todo el texto use <code>font-family: Arial</code>.</li>
+                                <li><strong>Encabezado:</strong> Añade un título <code>&lt;h1&gt;</code> centrado e inserta una imagen (puede ser un placeholder) que simule el logo de la cafetería.</li>
+                                <li><strong>La Tabla de Precios:</strong> Crea una <code>&lt;table&gt;</code> con bordes. Debe tener dos columnas ("Bebida" y "Precio") y al menos tres filas con opciones de café.</li>
+                                <li><strong>Los Ingredientes (Viñetas):</strong> Debajo de la tabla, añade un título <code>&lt;h3&gt;</code> ("Adicionales") y usa una lista desordenada (<code>&lt;ul&gt;</code>) para listar ingredientes extras (leche de avena, caramelo, etc.).</li>
+                            </ol>
+                        </div>
+
+                        <!-- Ayuda y Referencia -->
+                        <div>
+                            <div class="bg-yellow-50 p-6 rounded-lg border border-yellow-200 mb-6">
+                                <h4 class="font-bold text-yellow-800 mb-2"><i class="fa-solid fa-triangle-exclamation mr-2"></i> ¿Te atascaste? Aquí tienes un empujón:</h4>
+                                <p class="text-sm text-yellow-900 mb-4">Solo despliega este código si necesitas revisar cómo empezar la estructura o cómo unir los estilos en el body.</p>
+                                
+                                <details class="bg-white border border-yellow-300 rounded p-4 cursor-pointer">
+                                    <summary class="font-bold text-yellow-700 outline-none">Ver estructura sugerida de inicio</summary>
+                                    <div class="code-block text-sm mt-4 cursor-text">
+<pre>
+<span class="text-pink-400">&lt;!DOCTYPE html&gt;</span>
+<span class="text-blue-400">&lt;html&gt;</span>
+<span class="text-blue-400">&lt;head&gt;</span>
+    <span class="text-blue-400">&lt;title&gt;</span>Menú Café UNE<span class="text-blue-400">&lt;/title&gt;</span>
+<span class="text-blue-400">&lt;/head&gt;</span>
+<span class="text-gray-400">&lt;!-- Observa cómo se aplica fondo y tipografía al mismo tiempo --&gt;</span>
+<span class="text-blue-400">&lt;body</span> <span class="text-green-400">style</span>=<span class="text-yellow-300">"background-color: #fffbeb; font-family: Arial;"</span><span class="text-blue-400">&gt;</span>
+
+    <span class="text-gray-400">&lt;!-- Aquí va tu H1, Tabla e Imagen --&gt;</span>
+
+<span class="text-blue-400">&lt;/body&gt;</span>
+<span class="text-blue-400">&lt;/html&gt;</span>
+</pre>
+                                    </div>
+                                </details>
+                            </div>
+                            
+                            <div class="bg-white border-2 border-dashed border-une-blue p-6 rounded-lg text-center">
+                                <i class="fa-solid fa-upload text-3xl text-gray-400 mb-2"></i>
+                                <h4 class="font-bold text-gray-800 mb-2">Revisión en Aula</h4>
+                                <p class="text-sm text-gray-600">Una vez que termines, guarda tu archivo <code>.html</code> y ábrelo en el navegador. Compártelo con tu profesor para evaluar la estructura lógica y visual.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-12 text-center bg-gray-50 p-8 rounded-xl border border-gray-200">
+                        <i class="fa-solid fa-graduation-cap text-5xl text-une-blue mb-4"></i>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">¡Felicidades, Diseñador!</h3>
+                        <p class="text-gray-600 mb-6">Has comprendido que HTML no es matemáticas, es sobre <strong>estructura, significado y presentación de información visual</strong>. Estás listo para dominar el diseño web.</p>
+                        <button onclick="navigate('sec-intro')" class="text-une-blue hover:underline font-bold">Volver al inicio</button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-900 text-gray-400 py-6 text-center text-sm mt-auto">
+        <p>&copy; 2026 Universidad de Especialidades UNE. Material para Licenciatura en Diseño Gráfico.</p>
+        <p class="mt-1">Materia: Diseño Web | Pedagogía Activa.</p>
+    </footer>
+
+    <script>
+        // Configuración de la navegación
+        const sections = [
+            { id: 'sec-intro', title: '1. Introducción' },
+            { id: 'sec-estructura', title: '2. Estructura' },
+            { id: 'sec-etiquetas', title: '3. Etiquetas' },
+            { id: 'sec-organizacion', title: '4. Listas y Tablas' },
+            { id: 'sec-estilos', title: '5. Estilos' },
+            { id: 'sec-interactivo', title: '6. Laboratorio' },
+            { id: 'sec-proyecto', title: '7. Proyecto' }
+        ];
+
+        // Inicializar navegación
+        function initNav() {
+            const navMenu = document.getElementById('nav-menu');
+            sections.forEach(sec => {
+                const btn = document.createElement('button');
+                btn.className = `px-3 py-2 rounded-md text-sm font-medium transition-colors ${sec.id === 'sec-intro' ? 'text-une-blue bg-blue-50' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`;
+                btn.innerText = sec.title;
+                btn.onclick = () => navigate(sec.id);
+                btn.id = `nav-btn-${sec.id}`;
+                navMenu.appendChild(btn);
+            });
+            updatePreview(); // Inicializar editor
+        }
+
+        // Función de navegación principal
+        function navigate(targetId) {
+            // Ocultar todas
+            document.querySelectorAll('.section-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Actualizar botones nav
+            sections.forEach(sec => {
+                const btn = document.getElementById(`nav-btn-${sec.id}`);
+                if(btn) {
+                    if(sec.id === targetId) {
+                        btn.className = 'px-3 py-2 rounded-md text-sm font-medium transition-colors text-une-blue bg-blue-50';
+                    } else {
+                        btn.className = 'px-3 py-2 rounded-md text-sm font-medium transition-colors text-gray-500 hover:text-gray-900 hover:bg-gray-50';
+                    }
+                }
+            });
+
+            // Mostrar destino y scrollear arriba
+            const targetEl = document.getElementById(targetId);
+            if(targetEl) {
+                targetEl.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // Función para copiar código al portapapeles
+        function copyCode(elementId) {
+            const preElement = document.getElementById(elementId);
+            // Extraer solo el texto, ignorando las etiquetas span de colores
+            const textToCopy = preElement.innerText; 
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                // Feedback visual
+                const btn = preElement.previousElementSibling;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copiado';
+                btn.style.color = '#4ade80'; // verde tailwind
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.color = 'white';
+                }, 2000);
+            }).catch(err => {
+                console.error('Error al copiar: ', err);
+            });
+        }
+
+        // Función para el mini-editor en tiempo real
+        function updatePreview() {
+            const htmlContent = document.getElementById('html-editor').value;
+            const previewFrame = document.getElementById('html-preview');
+            // Nota de seguridad: En un entorno de producción real, el HTML inyectado debe ser sanitizado
+            // si proviene de usuarios externos para evitar XSS. Aquí es para fines educativos locales.
+            previewFrame.innerHTML = htmlContent;
+        }
+
+        // Iniciar app
+        window.onload = initNav;
+    </script>
+</body>
+</html>
