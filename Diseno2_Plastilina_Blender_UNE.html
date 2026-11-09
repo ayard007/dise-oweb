@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Del barro al vértice | Modelado en plastilina y Blender | Diseño II | UNE</title>
+<meta name="description" content="Guía interactiva de Diseño II: técnicas de modelado en plastilina y su equivalencia en Blender. Licenciatura en Diseño Gráfico, Universidad de Especialidades (UNE).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --azul:#1b3f8b; --azul-osc:#122a5e; --rojo:#c1272d;
+  --barro:#b8653a; --barro-cl:#f3dccb; --crema:#f8f3ea; --papel:#fffdf9;
+  --tinta:#1f2430; --gris:#5b6270; --linea:#e3d9cb;
+  --verde:#2f7d6d; --verde-cl:#dcefe9; --ambar:#c98a12; --ambar-cl:#fbefd2;
+  --sombra:0 6px 24px rgba(31,36,48,.08);
+  --radio:14px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:"Source Sans 3",system-ui,sans-serif;font-size:17px;line-height:1.65;color:var(--tinta);background:var(--crema)}
+h1,h2,h3,h4{font-family:"Fraunces",Georgia,serif;line-height:1.2;color:var(--azul-osc)}
+h2{font-size:2rem;margin:0 0 .4rem}
+h3{font-size:1.35rem;margin:1.8rem 0 .6rem}
+h4{font-size:1.08rem;margin:1.2rem 0 .4rem}
+a{color:var(--azul)}
+code,kbd,pre{font-family:"JetBrains Mono",monospace}
+kbd{background:#fff;border:1px solid #cfc6b8;border-bottom-width:3px;border-radius:6px;padding:1px 7px;font-size:.85em;white-space:nowrap}
+img{max-width:100%}
+
+/* Encabezado */
+.hero{background:linear-gradient(120deg,var(--azul-osc) 0%,var(--azul) 55%,#2c5bb8 100%);color:#fff;padding:28px 5vw 54px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-120px;bottom:-160px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#d98a5c,var(--barro) 55%,#7e3f1f);opacity:.9}
+.hero::before{content:"";position:absolute;right:220px;top:-60px;width:180px;height:180px;border:2px dashed rgba(255,255,255,.35);transform:rotate(18deg)}
+.hero-top{display:flex;align-items:center;gap:18px;position:relative;z-index:2}
+.logo-box{background:#fff;border-radius:12px;padding:8px 12px;display:flex;align-items:center;justify-content:center;min-width:120px;min-height:64px}
+.logo-box img{height:56px;width:auto;display:block}
+.logo-fallback{display:none;font-family:"Fraunces",serif;font-weight:800;color:var(--azul);font-size:1.6rem;letter-spacing:.06em}
+.logo-fallback span{color:var(--rojo)}
+.inst{font-size:.95rem;opacity:.92;line-height:1.35}
+.inst b{font-size:1.05rem}
+.hero h1{color:#fff;font-size:clamp(2rem,4.6vw,3.4rem);margin:34px 0 10px;max-width:780px;position:relative;z-index:2}
+.hero p.sub{max-width:700px;font-size:1.12rem;opacity:.95;position:relative;z-index:2;margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;position:relative;z-index:2}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);padding:4px 12px;border-radius:999px;font-size:.88rem}
+
+/* Distribución */
+.layout{display:grid;grid-template-columns:270px 1fr;gap:0;max-width:1320px;margin:0 auto}
+nav.side{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;padding:26px 14px 40px 22px;border-right:1px solid var(--linea);background:var(--papel)}
+nav.side .t{font-family:"Fraunces",serif;font-weight:700;color:var(--azul-osc);margin:0 0 10px;font-size:1.05rem}
+nav.side a{display:block;text-decoration:none;color:var(--tinta);padding:7px 10px;border-radius:8px;font-size:.95rem;border-left:3px solid transparent}
+nav.side a:hover{background:var(--barro-cl)}
+nav.side a.activo{background:var(--barro-cl);border-left-color:var(--barro);font-weight:600}
+nav.side a.sub{padding-left:22px;font-size:.88rem;color:var(--gris)}
+.progreso-global{margin:18px 4px 0;font-size:.85rem;color:var(--gris)}
+.barra{height:8px;background:var(--linea);border-radius:99px;overflow:hidden;margin-top:6px}
+.barra i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--barro),var(--rojo));transition:width .4s}
+main{padding:34px 5vw 80px 46px;min-width:0}
+section.tema{background:var(--papel);border:1px solid var(--linea);border-radius:20px;padding:34px 38px;margin-bottom:34px;box-shadow:var(--sombra);scroll-margin-top:16px}
+.eti{display:inline-block;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--barro);margin-bottom:6px}
+.lead{font-size:1.1rem;color:#333a48}
+
+/* Componentes */
+.caja{border-radius:var(--radio);padding:18px 22px;margin:18px 0;border:1px solid}
+.caja h4{margin-top:0}
+.caja.objetivo{background:#eef3fc;border-color:#c7d5f0}
+.caja.objetivo h4{color:var(--azul)}
+.caja.reflexion{background:var(--ambar-cl);border-color:#ecd49a}
+.caja.reflexion h4{color:#8a5c00}
+.caja.taller{background:var(--verde-cl);border-color:#b3dacd}
+.caja.taller h4{color:var(--verde)}
+.caja.alerta{background:#fdecec;border-color:#f2c1c3}
+.caja.alerta h4{color:var(--rojo)}
+.caja.barro{background:var(--barro-cl);border-color:#e6bfa5}
+.caja.barro h4{color:#8a4520}
+.fase{display:inline-block;background:var(--rojo);color:#fff;font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:6px;letter-spacing:.05em;margin-bottom:8px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.tarjeta{background:#fff;border:1px solid var(--linea);border-radius:var(--radio);padding:16px 18px}
+.tarjeta h4{margin-top:0;color:var(--barro)}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.95rem;background:#fff}
+th{background:var(--azul);color:#fff;text-align:left;padding:10px 12px;font-weight:600}
+td{border-bottom:1px solid var(--linea);padding:9px 12px;vertical-align:top}
+tr:nth-child(even) td{background:#fbf8f3}
+.tabla-wrap{overflow-x:auto}
+ol.pasos{counter-reset:p;list-style:none;padding-left:0}
+ol.pasos>li{counter-increment:p;position:relative;padding:4px 0 12px 46px}
+ol.pasos>li::before{content:counter(p);position:absolute;left:0;top:2px;width:32px;height:32px;border-radius:50%;background:var(--azul);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.9rem}
+.check-list{list-style:none;padding:0}
+.check-list li{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px dashed var(--linea)}
+.check-list input{margin-top:6px;transform:scale(1.25);accent-color:var(--verde)}
+.check-list li.hecho label{text-decoration:line-through;color:var(--gris)}
+
+/* Pestañas */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px;border-bottom:2px solid var(--linea)}
+.tabs button{border:0;background:transparent;padding:10px 16px;font:inherit;font-weight:600;color:var(--gris);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px}
+.tabs button.on{color:var(--azul);border-bottom-color:var(--rojo)}
+.panel{display:none;padding:16px 2px}
+.panel.on{display:block}
+
+/* Acordeón */
+details{background:#fff;border:1px solid var(--linea);border-radius:12px;margin:10px 0;padding:0 18px}
+details summary{cursor:pointer;padding:13px 0;font-weight:700;color:var(--azul-osc);list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"+";display:inline-block;width:22px;color:var(--barro);font-weight:800}
+details[open] summary::before{content:"\2212"}
+details>div{padding:0 0 14px}
+
+/* Equivalencias */
+.eq-wrap{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:10px}
+.eq-lista button{display:block;width:100%;text-align:left;margin:0 0 7px;padding:10px 14px;border:1px solid #e6bfa5;background:#fff;border-radius:10px;font:inherit;cursor:pointer}
+.eq-lista button:hover,.eq-lista button.on{background:var(--barro);color:#fff;border-color:var(--barro)}
+.eq-panel{background:linear-gradient(160deg,#16244a,#1b3f8b);color:#eaf0ff;border-radius:var(--radio);padding:22px;min-height:260px}
+.eq-panel h4{color:#fff;margin-top:0}
+.eq-panel .k{display:inline-block;background:rgba(255,255,255,.12);border-radius:6px;padding:2px 8px;font-family:"JetBrains Mono",monospace;font-size:.85rem;margin:2px 4px 2px 0}
+
+/* Subdivisión */
+.subdiv{display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:center;background:#fff;border:1px solid var(--linea);border-radius:var(--radio);padding:18px}
+.subdiv svg{background:#f4f6fb;border-radius:12px}
+input[type=range]{width:100%;accent-color:var(--rojo)}
+
+/* Tarjetas de atajos */
+.flash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.flash{perspective:800px;height:118px;cursor:pointer}
+.flash .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.flash.vuelta .in{transform:rotateY(180deg)}
+.flash .cara{position:absolute;inset:0;border-radius:12px;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px;backface-visibility:hidden;font-weight:600}
+.flash .fr{background:#fff;border:1px solid var(--linea)}
+.flash .at{background:var(--azul);color:#fff;transform:rotateY(180deg);font-size:.93rem}
+
+/* Formularios / planificadores */
+.planner label{display:block;font-weight:700;margin:14px 0 5px;color:var(--azul-osc)}
+.planner textarea,.planner input[type=text]{width:100%;border:1px solid #d6ccbd;border-radius:10px;padding:10px 12px;font:inherit;font-size:.97rem;background:#fff;resize:vertical}
+.planner textarea{min-height:88px}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.btn{border:0;border-radius:10px;padding:10px 18px;font:inherit;font-weight:700;cursor:pointer;background:var(--azul);color:#fff}
+.btn.sec{background:#fff;color:var(--azul);border:1px solid var(--azul)}
+.btn.rojo{background:var(--rojo)}
+.btn:hover{filter:brightness(1.08)}
+.estado{font-size:.88rem;color:var(--verde);margin-left:6px}
+
+/* Quiz */
+.preg{background:#fff;border:1px solid var(--linea);border-radius:var(--radio);padding:16px 20px;margin:14px 0}
+.preg p{margin:0 0 10px;font-weight:700}
+.opc{display:block;width:100%;text-align:left;margin:6px 0;padding:9px 14px;border:1px solid #d9d2c6;border-radius:9px;background:#fdfbf7;font:inherit;cursor:pointer}
+.opc:hover{border-color:var(--azul)}
+.opc.ok{background:#e1f3ea;border-color:#47a07a}
+.opc.mal{background:#fbe3e4;border-color:#d0656b}
+.fb{font-size:.93rem;margin-top:6px;color:#444}
+.marcador{font-family:"Fraunces",serif;font-size:1.3rem;color:var(--azul-osc);margin-top:12px}
+
+/* Línea de ruta */
+.ruta{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+.ruta div{background:#fff;border:1px solid var(--linea);border-top:5px solid var(--barro);border-radius:12px;padding:12px 14px;font-size:.93rem}
+.ruta div:nth-child(n+4){border-top-color:var(--azul)}
+.ruta div:last-child{border-top-color:var(--rojo)}
+.ruta b{display:block;font-family:"Fraunces",serif;color:var(--azul-osc)}
+pre.codigo{background:#141b2d;color:#e6ecff;padding:16px;border-radius:12px;overflow-x:auto;font-size:.82rem;line-height:1.5;position:relative}
+.copiar{position:absolute;top:8px;right:8px;background:#2b3a63;color:#fff;border:0;border-radius:7px;padding:5px 10px;cursor:pointer;font-size:.8rem}
+.figura{background:#fff;border:1px solid var(--linea);border-radius:var(--radio);padding:14px;margin:16px 0;text-align:center}
+.figura figcaption{font-size:.88rem;color:var(--gris);margin-top:6px}
+footer{text-align:center;color:var(--gris);font-size:.88rem;padding:30px 20px 50px}
+.menu-btn{display:none}
+
+@media (max-width:980px){
+  .layout{grid-template-columns:1fr}
+  nav.side{position:fixed;left:0;top:0;width:280px;z-index:50;transform:translateX(-100%);transition:transform .3s;box-shadow:var(--sombra)}
+  nav.side.abierto{transform:none}
+  .menu-btn{display:block;position:fixed;right:16px;bottom:16px;z-index:60;border-radius:999px;padding:12px 18px;background:var(--rojo);color:#fff;border:0;font-weight:700;box-shadow:var(--sombra)}
+  main{padding:24px 4vw 80px}
+  section.tema{padding:24px 20px}
+  .grid2,.grid3,.eq-wrap,.subdiv{grid-template-columns:1fr}
+  .ruta{grid-template-columns:1fr 1fr}
+}
+@media print{nav.side,.menu-btn,.btns{display:none}.layout{display:block}section.tema{box-shadow:none;break-inside:avoid-page}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-top">
+    <div class="logo-box">
+      <img src="logoune.png" alt="Logotipo de la Universidad de Especialidades (UNE)" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+      <div class="logo-fallback">U<span>N</span>E</div>
+    </div>
+    <div class="inst"><b>Universidad de Especialidades (UNE)</b><br>Licenciatura en Diseño Gráfico &middot; Diseño II</div>
+  </div>
+  <h1>Del barro al vértice: modelado en plastilina y su equivalente digital en Blender</h1>
+  <p class="sub">Guía interactiva de aprendizaje activo. Investigarás el modelado tradicional y el asistido por computadora, modelarás un personaje con tus manos y lo reconstruirás en tres dimensiones, comprendiendo cómo cada gesto del escultor tiene un equivalente digital.</p>
+  <div class="chips">
+    <span class="chip">Constructivismo</span><span class="chip">Aprendizaje basado en problemas</span><span class="chip">Actividad individual progresiva</span><span class="chip">Blender 4.x</span><span class="chip">Proyecto final web en GitHub Pages</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="side" id="nav">
+  <p class="t">Contenido</p>
+  <a href="#inicio">Presentación y ruta</a>
+  <a href="#tema1">1. Investigación inicial</a>
+  <a href="#tema2">2. Materiales y herramientas</a>
+  <a href="#tema3">3. Técnicas de modelado en plastilina</a>
+  <a href="#tema4">4. Del gesto al comando</a>
+  <a href="#tema5">5. Fundamentos de Blender</a>
+  <a href="#tema6">6. Materiales, luz y render</a>
+  <a href="#integradora">7. Actividad integradora</a>
+  <a class="sub" href="#faseA">Fase A. Investigación</a>
+  <a class="sub" href="#faseB">Fase B. Modelo en plastilina</a>
+  <a class="sub" href="#faseC">Fase C. Modelo 3D en Blender</a>
+  <a class="sub" href="#faseD">Fase D. Comparación y reflexión</a>
+  <a href="#colaborativas">8. Actividades en Classroom</a>
+  <a href="#evaluacion">9. Autoevaluación</a>
+  <a href="#proyecto">10. Proyecto final web</a>
+  <a href="#rubrica">11. Rúbrica y evidencias</a>
+  <div class="progreso-global">Progreso de la actividad integradora: <b id="pgTxt">0%</b>
+    <div class="barra"><i id="pgBar"></i></div>
+  </div>
+</nav>
+
+<main>
+
+<!-- ===================== PRESENTACIÓN ===================== -->
+<section class="tema" id="inicio">
+  <span class="eti">Presentación</span>
+  <h2>Cómo está organizada esta guía</h2>
+  <p class="lead">En Diseño II pasarás de la forma física a la forma digital. El modelado en plastilina entrena la mirada volumétrica, el tacto y la proporción; Blender traduce esas mismas decisiones a vértices, superficies y pinceles de escultura. Comprender la relación entre ambos mundos te permite diseñar con mayor intención, cualquiera que sea la herramienta.</p>
+
+  <div class="caja objetivo">
+    <h4>Propósito de aprendizaje</h4>
+    <p>Al concluir, serás capaz de <b>investigar, comparar y aplicar</b> técnicas de modelado tradicional y asistido por computadora, construyendo un mismo personaje primero en plastilina y después en Blender, y argumentando con criterio de diseño las similitudes y diferencias entre ambos procesos.</p>
+  </div>
+
+  <h3>Competencias que desarrollarás</h3>
+  <div class="grid3">
+    <div class="tarjeta"><h4>Investigación</h4><p>Consultar, contrastar y citar fuentes sobre el modelado tradicional y digital, distinguiendo información confiable.</p></div>
+    <div class="tarjeta"><h4>Pensamiento volumétrico</h4><p>Analizar una forma compleja como la suma de volúmenes simples: esferas, cilindros, conos y placas.</p></div>
+    <div class="tarjeta"><h4>Producción digital</h4><p>Modelar, esculpir, texturizar e iluminar un objeto en Blender con un flujo de trabajo ordenado.</p></div>
+  </div>
+
+  <h3>Ruta de la actividad integradora (individual)</h3>
+  <p>La actividad se construye <b>tema por tema</b>. Cada sección termina con una tarea que alimenta tu ejercicio integral. El orden es obligatorio: primero investigas, después modelas en plastilina y al final modelas en 3D.</p>
+  <div class="ruta">
+    <div><b>Paso 1</b>Tema 1. Investigación inicial: modelado tradicional y asistido por computadora (Fase A).</div>
+    <div><b>Paso 2</b>Temas 2 y 3. Materiales y técnicas; análisis volumétrico del personaje.</div>
+    <div><b>Paso 3</b>Fase B. Modelo en plastilina trabajado en el aula y registro fotográfico.</div>
+    <div><b>Paso 4</b>Temas 4 y 5. Equivalencias y fundamentos de Blender.</div>
+    <div><b>Paso 5</b>Fase C. Modelado por primitivas, modificadores y escultura digital.</div>
+    <div><b>Paso 6</b>Tema 6 y Fase D. Materiales, luz, render y comparación.</div>
+    <div><b>Paso 7</b>Proyecto final: sitio web visual de un tema elegido por ti.</div>
+    <div><b>Cierre</b>Galería crítica en el aula y publicación en GitHub Pages.</div>
+  </div>
+
+  <div class="caja alerta">
+    <h4>Nota sobre el personaje de práctica</h4>
+    <p>El personaje que modelaremos en el aula, Mike Wazowski de <i>Monsters, Inc.</i>, es propiedad de Disney y Pixar. Lo utilizamos exclusivamente como <b>ejercicio académico de estudio de forma</b>, sin fines comerciales. No vendas, distribuyas ni publiques el modelo como obra propia; en tu sitio del proyecto final indica la autoría original del personaje. Por esa razón, el proyecto final se realiza con <b>un tema y un diseño de tu autoría</b>.</p>
+  </div>
+</section>
+
+<!-- ===================== TEMA 1 ===================== -->
+<section class="tema" id="tema1">
+  <span class="eti">Tema 1 &middot; Fase A de la actividad</span>
+  <h2>Investigación inicial: modelado tradicional y modelado asistido por computadora</h2>
+  <p class="lead">Antes de tocar la plastilina o abrir Blender, necesitas comprender de dónde vienen ambas prácticas, qué problemas resuelven y qué herramientas utilizan. Esta investigación será la base teórica de todo tu proceso.</p>
+
+  <div class="caja objetivo">
+    <h4>Pregunta problematizadora</h4>
+    <p><i>Si un estudio puede modelar todo digitalmente, ¿por qué muchos diseñadores y animadores siguen esculpiendo a mano antes de abrir el software?</i> Formula una hipótesis personal por escrito antes de leer el resto de la sección; al final del tema la contrastarás con lo que investigaste.</p>
+  </div>
+
+  <div class="tabs" data-grupo="t1">
+    <button class="on" data-panel="t1a">Modelado tradicional</button>
+    <button data-panel="t1b">Modelado asistido por computadora</button>
+    <button data-panel="t1c">Comparación</button>
+  </div>
+
+  <div class="panel on" id="t1a">
+    <h4>Definición</h4>
+    <p>El <b>modelado tradicional</b> es la construcción de formas tridimensionales con materiales físicos maleables (arcilla, plastilina, cera, pastas) mediante las manos y herramientas simples. Es un proceso táctil: el volumen se percibe con la vista y con el tacto al mismo tiempo, y cada modificación es inmediata e irrepetible.</p>
+    <h4>Antecedentes</h4>
+    <ul>
+      <li>La arcilla es uno de los materiales escultóricos más antiguos de la humanidad; las culturas mesoamericanas, entre ellas la olmeca y la del Occidente de México, dejaron una amplia tradición de figuras modeladas en barro.</li>
+      <li>A finales del siglo XIX aparecen las pastas de modelar que no se secan: en Alemania, Franz Kolb desarrolló la <i>Plastilin</i> (1880) y en Inglaterra William Harbutt creó la <i>Plasticine</i> (1897), pensada para que sus estudiantes de arte practicaran sin que el material endureciera.</li>
+      <li>En la industria, la plastilina industrial (<i>clay</i>) se usa desde hace décadas en el diseño automotriz para modelos a escala real, y en la animación para maquetas de personajes y para la técnica de <i>stop motion</i> con plastilina (<i>claymation</i>), popularizada por estudios como Aardman.</li>
+      <li>Los estudios de animación por computadora también han documentado el uso de <b>maquetas físicas</b> en la etapa de diseño de personajes, para validar volumen y silueta antes de modelar en digital.</li>
+    </ul>
+    <h4>Técnicas principales</h4>
+    <p>Aditiva (agregar material), sustractiva (retirar material), modelado por presión o pellizco, rollos o churros, placas, armazón interno, alisado y texturizado. Las estudiarás a detalle en el Tema 3.</p>
+  </div>
+
+  <div class="panel" id="t1b">
+    <h4>Definición</h4>
+    <p>El <b>modelado asistido por computadora</b> (modelado 3D o CAD/CGI, según el ámbito) es la creación de representaciones tridimensionales mediante software. La forma se describe matemáticamente como una <b>malla</b> de vértices, aristas y caras, o mediante superficies paramétricas, y puede editarse, duplicarse, deshacerse y exportarse.</p>
+    <h4>Antecedentes</h4>
+    <ul>
+      <li>En 1963 Ivan Sutherland presentó <i>Sketchpad</i>, considerado el antecedente de los sistemas de diseño asistido por computadora y de las interfaces gráficas interactivas.</li>
+      <li>Durante las décadas de 1970 y 1980 la industria automotriz y aeronáutica impulsó el CAD; en paralelo, la investigación en gráficos por computadora desarrolló el sombreado, las superficies de subdivisión y el render.</li>
+      <li>Blender nació a mediados de los años noventa en el estudio neerlandés NeoGeo, por iniciativa de Ton Roosendaal; en 2002 se liberó como software libre gracias a una campaña de financiamiento comunitario y hoy lo desarrolla la Blender Foundation.</li>
+      <li>En 1999 apareció ZBrush, que popularizó la <b>escultura digital</b>: trabajar una malla de alta densidad como si fuera arcilla, con pinceles que agregan, retiran o alisan volumen.</li>
+    </ul>
+    <h4>Técnicas principales</h4>
+    <table>
+      <tr><th>Técnica</th><th>Descripción</th><th>Herramientas comunes</th></tr>
+      <tr><td>Modelado poligonal (box modeling)</td><td>Partir de una primitiva y modificar vértices, aristas y caras.</td><td>Blender, Maya, 3ds Max</td></tr>
+      <tr><td>Superficies de subdivisión</td><td>Suavizar una malla sencilla para obtener formas orgánicas.</td><td>Modificador Subdivision Surface</td></tr>
+      <tr><td>Escultura digital</td><td>Pinceles que deforman mallas densas como si fueran barro.</td><td>Blender (modo Sculpt), ZBrush, Nomad Sculpt</td></tr>
+      <tr><td>Modelado paramétrico / CAD</td><td>Formas definidas por medidas y restricciones, propio de la ingeniería.</td><td>Fusion 360, SolidWorks, FreeCAD</td></tr>
+      <tr><td>Modelado procedural</td><td>Formas generadas mediante nodos y reglas.</td><td>Geometry Nodes, Houdini</td></tr>
+      <tr><td>Fotogrametría y escaneo 3D</td><td>Digitalizar un objeto físico a partir de fotografías o sensores.</td><td>Aplicaciones de escaneo, Meshroom</td></tr>
+    </table>
+  </div>
+
+  <div class="panel" id="t1c">
+    <div class="tabla-wrap">
+    <table>
+      <tr><th>Criterio</th><th>Modelado tradicional</th><th>Modelado asistido por computadora</th></tr>
+      <tr><td>Percepción</td><td>Táctil y visual simultánea; escala real.</td><td>Visual a través de pantalla; escala virtual.</td></tr>
+      <tr><td>Corrección de errores</td><td>Limitada; se corrige agregando o retirando material.</td><td>Deshacer (<kbd>Ctrl</kbd>+<kbd>Z</kbd>), versiones, modificadores no destructivos.</td></tr>
+      <tr><td>Simetría</td><td>Depende del ojo y la medición manual.</td><td>Automática (modificador Mirror, simetría de escultura).</td></tr>
+      <tr><td>Reproducción</td><td>Requiere moldes o rehacer la pieza.</td><td>Copias ilimitadas, exportación, impresión 3D.</td></tr>
+      <tr><td>Color y material</td><td>Determinados por la pasta o la pintura.</td><td>Editables en cualquier momento (sombreadores).</td></tr>
+      <tr><td>Costo de entrada</td><td>Bajo: material y herramientas simples.</td><td>Equipo de cómputo; Blender es gratuito.</td></tr>
+      <tr><td>Fortaleza pedagógica</td><td>Comprensión intuitiva del volumen y la proporción.</td><td>Precisión, iteración rápida e integración con animación y web.</td></tr>
+    </table>
+    </div>
+  </div>
+
+  <div class="caja taller" id="faseA-t1">
+    <span class="fase">ACTIVIDAD &middot; FASE A</span>
+    <h4>Investigación documental guiada</h4>
+    <p>Realiza una investigación individual que responda las siguientes preguntas. Utiliza al menos <b>cinco fuentes</b> (libros, artículos académicos, documentación oficial de Blender, entrevistas o documentales de estudios de animación) y cítalas en formato APA 7.</p>
+    <ol class="pasos">
+      <li><b>Historia:</b> ¿Cuál es el origen del modelado en arcilla y plastilina, y cuál el del modelado por computadora? Elabora una línea de tiempo con al menos ocho hitos (cuatro de cada tipo).</li>
+      <li><b>Técnicas:</b> Describe al menos cinco técnicas de modelado tradicional y cinco de modelado digital.</li>
+      <li><b>Herramientas y materiales:</b> Elabora una tabla de herramientas físicas (estecas, vaciadores, armazones, tipos de plastilina) y de software (por lo menos tres programas, indicando licencia y uso principal).</li>
+      <li><b>Industria:</b> Identifica dos casos reales en que una maqueta física haya precedido o acompañado a un modelo digital (animación, diseño automotriz, juguetes, cine).</li>
+      <li><b>Posicionamiento:</b> Escribe un párrafo argumentativo de 150 a 200 palabras respondiendo la pregunta problematizadora y contrastándola con tu hipótesis inicial.</li>
+      <li><b>Evidencia personal:</b> Agrega una entrevista breve (tres preguntas) a un escultor, artesano, maquetista, diseñador industrial o artista 3D de tu entorno, con nombre, fecha y una fotografía de la conversación o del espacio de trabajo. Esta evidencia no puede generarse con herramientas automáticas y es obligatoria.</li>
+    </ol>
+    <p><b>Producto:</b> documento de investigación (3 a 5 cuartillas) que después integrarás como primera sección de tu sitio web.</p>
+  </div>
+
+  <div class="caja reflexion">
+    <h4>Bitácora del Tema 1</h4>
+    <div class="planner" data-clave="b1">
+      <label>Mi hipótesis inicial (antes de investigar)</label>
+      <textarea data-campo="hip"></textarea>
+      <label>Tres hallazgos que cambiaron mi forma de ver el modelado</label>
+      <textarea data-campo="hall"></textarea>
+      <label>Persona entrevistada, fecha y oficio</label>
+      <input type="text" data-campo="entrev">
+      <div class="btns"><button class="btn" data-guardar>Guardar en este navegador</button><button class="btn sec" data-exportar>Descargar como .txt</button><span class="estado"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TEMA 2 ===================== -->
+<section class="tema" id="tema2">
+  <span class="eti">Tema 2</span>
+  <h2>Materiales y herramientas del modelado en plastilina</h2>
+  <p class="lead">El material condiciona la técnica. Conocer cómo se comporta cada pasta te permitirá elegir la adecuada para tu modelo y anticipar problemas de peso, deformación y acabado.</p>
+
+  <h3>Tipos de pasta</h3>
+  <div class="grid3">
+    <div class="tarjeta">
+      <h4>Plastilina tradicional (base oleosa)</h4>
+      <p>Mezcla de ceras, aceites y cargas minerales. No se seca ni endurece, por lo que permite corregir indefinidamente.</p>
+      <p><b>Ventajas:</b> económica, reutilizable, ideal para bocetos volumétricos.<br><b>Limitaciones:</b> se deforma con el calor de las manos y no conserva detalles finos por mucho tiempo.</p>
+    </div>
+    <div class="tarjeta">
+      <h4>Plastilina epóxica</h4>
+      <p>Pasta de dos componentes (resina y endurecedor) que se mezclan en partes iguales. Tras el tiempo de trabajo, que suele ser de una a tres horas según la marca, endurece de forma permanente.</p>
+      <p><b>Ventajas:</b> pieza final rígida, lijable y pintable.<br><b>Limitaciones:</b> requiere guantes, ventilación y trabajar contra reloj.</p>
+    </div>
+    <div class="tarjeta">
+      <h4>Arcilla polimérica (plástica horneable)</h4>
+      <p>Pasta de PVC plastificado que permanece blanda hasta hornearse a la temperatura que indica el fabricante, comúnmente entre 110 y 130 °C.</p>
+      <p><b>Ventajas:</b> colores integrados y detalles muy finos.<br><b>Limitaciones:</b> el horneado debe hacerse con supervisión y en un horno que no se use para alimentos.</p>
+    </div>
+  </div>
+  <p style="font-size:.93rem;color:var(--gris)">Para el ejercicio en el aula se recomienda plastilina tradicional en los colores necesarios. Si deseas una pieza permanente, utiliza plastilina epóxica o arcilla polimérica siguiendo las indicaciones de seguridad del fabricante.</p>
+
+  <h3>Herramientas</h3>
+  <div class="tabla-wrap">
+  <table>
+    <tr><th>Herramienta</th><th>Función</th><th>Sustituto accesible</th></tr>
+    <tr><td>Estecas (espátulas de punta)</td><td>Alisar, cortar, marcar líneas y unir piezas.</td><td>Palitos de paleta lijados, cucharas desechables.</td></tr>
+    <tr><td>Vaciadores (de lazo metálico)</td><td>Retirar material y excavar cavidades.</td><td>Clip desdoblado con mango de madera.</td></tr>
+    <tr><td>Bolillos (punta esférica)</td><td>Hundir órbitas, suavizar curvas cóncavas.</td><td>Cabeza de alfiler grande, punta de bolígrafo sin tinta.</td></tr>
+    <tr><td>Armazón</td><td>Estructura interna de soporte.</td><td>Alambre galvanizado delgado y papel aluminio.</td></tr>
+    <tr><td>Rodillo y cúter</td><td>Hacer placas uniformes y cortes limpios.</td><td>Tubo de PVC o botella lisa.</td></tr>
+    <tr><td>Base y tornamesa</td><td>Girar la pieza para observarla desde todos los ángulos.</td><td>Tapa grande sobre un plato.</td></tr>
+    <tr><td>Alcohol isopropílico o aceite de bebé</td><td>Alisado final de superficies.</td><td>Pincel suave humedecido.</td></tr>
+  </table>
+  </div>
+
+  <div class="caja taller">
+    <span class="fase">ACTIVIDAD &middot; FASE B (preparación)</span>
+    <h4>Análisis volumétrico del personaje</h4>
+    <ol class="pasos">
+      <li>Reúne <b>imágenes de referencia</b> del personaje en vista frontal, lateral y posterior. Consulta fuentes oficiales y anota la procedencia de cada imagen; no las publiques en tu sitio.</li>
+      <li>En una hoja, dibuja el personaje reducido a <b>formas primitivas</b>: identifica qué partes son esferas, cuáles cilindros, cuáles conos y cuáles placas.</li>
+      <li>Establece una <b>proporción base</b>: si el cuerpo mide 6 cm de diámetro, calcula cuánto debe medir el ojo, la boca, los cuernos, los brazos y las piernas. Registra las medidas en una tabla.</li>
+      <li>Haz una lista de materiales y colores de plastilina necesarios y calcula aproximadamente la cantidad de cada uno.</li>
+    </ol>
+    <p><b>Producto:</b> hoja de análisis volumétrico con tabla de proporciones. Esta misma tabla la usarás en Blender en la Fase C.</p>
+  </div>
+
+  <div class="caja reflexion">
+    <h4>Bitácora del Tema 2</h4>
+    <div class="planner" data-clave="b2">
+      <label>Tipo de plastilina elegida y justificación</label>
+      <textarea data-campo="pasta"></textarea>
+      <label>Tabla de proporciones (parte: medida en cm)</label>
+      <textarea data-campo="prop" placeholder="Cuerpo: 6 cm de diámetro&#10;Ojo: ..."></textarea>
+      <div class="btns"><button class="btn" data-guardar>Guardar en este navegador</button><button class="btn sec" data-exportar>Descargar como .txt</button><span class="estado"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TEMA 3 ===================== -->
+<section class="tema" id="tema3">
+  <span class="eti">Tema 3</span>
+  <h2>Técnicas de modelado en plastilina</h2>
+  <p class="lead">Cada técnica responde a una necesidad formal distinta. Practícalas por separado antes de iniciar tu modelo; en el Tema 4 descubrirás que cada una tiene un equivalente en Blender.</p>
+
+  <details open><summary>Técnica aditiva</summary><div>
+    <p>Se construye la forma agregando pequeñas porciones de material sobre una base. Es la técnica más usada para formar volúmenes orgánicos.</p>
+    <ol class="pasos"><li>Forma una esfera base del tamaño del volumen principal.</li><li>Agrega porciones pequeñas donde necesites más volumen.</li><li>Une cada porción presionando y arrastrando sus bordes con la esteca hasta que la junta desaparezca.</li></ol>
+    <p><b>Ejemplo:</b> construir la redondez de unas mejillas agregando dos esferas aplanadas sobre el rostro.</p>
+  </div></details>
+
+  <details><summary>Técnica sustractiva</summary><div>
+    <p>Se retira material para definir cavidades, huecos o planos. Requiere planear, pues lo retirado no se recupera igual.</p>
+    <ol class="pasos"><li>Marca con la esteca el contorno del área que vas a retirar.</li><li>Con el vaciador, retira material en capas delgadas.</li><li>Alisa el interior de la cavidad con un bolillo.</li></ol>
+    <p><b>Ejemplo:</b> abrir una boca en una esfera.</p>
+  </div></details>
+
+  <details><summary>Modelado por presión y pellizco</summary><div>
+    <p>Se deforma el material con los dedos sin agregar ni retirar. Permite generar puntas, bordes y transiciones suaves.</p>
+    <ol class="pasos"><li>Sujeta la pieza con una mano.</li><li>Pellizca con el pulgar y el índice para estirar una punta o un borde.</li><li>Presiona con la yema para hundir zonas cóncavas.</li></ol>
+  </div></details>
+
+  <details><summary>Rollos o churros</summary><div>
+    <p>Cilindros de plastilina que sirven para extremidades, cejas, bordes y labios.</p>
+    <ol class="pasos"><li>Rueda una porción sobre la mesa con la palma abierta, aplicando presión uniforme.</li><li>Para un rollo cónico, presiona más en un extremo.</li><li>Curva el rollo antes de unirlo para lograr arcos naturales.</li></ol>
+  </div></details>
+
+  <details><summary>Placas</summary><div>
+    <p>Láminas de grosor uniforme, útiles para párpados, orejas, ropa o superficies planas.</p>
+    <ol class="pasos"><li>Coloca la plastilina entre dos guías de igual grosor (por ejemplo, dos palitos).</li><li>Pasa el rodillo apoyado sobre las guías.</li><li>Recorta la forma con el cúter y adapta la placa sobre el volumen.</li></ol>
+  </div></details>
+
+  <details><summary>Armazón interno</summary><div>
+    <p>Estructura de alambre y papel aluminio que da soporte, reduce peso y ahorra material.</p>
+    <ol class="pasos"><li>Dobla el alambre siguiendo la pose: un eje central y ramificaciones para extremidades.</li><li>Rellena el volumen principal con papel aluminio compactado.</li><li>Cubre con una capa de plastilina de 5 a 8 mm y continúa con la técnica aditiva.</li></ol>
+  </div></details>
+
+  <details><summary>Alisado, unión y texturizado</summary><div>
+    <p>Acabado de la superficie. El alisado elimina huellas; el texturizado agrega intencionalmente marcas (poros, telas, escamas).</p>
+    <ol class="pasos"><li>Alisa con la esteca en movimientos cortos y en una sola dirección.</li><li>Para un acabado fino, pasa un pincel ligeramente humedecido con alcohol isopropílico o aceite.</li><li>Para texturizar, presiona objetos con relieve (esponja, tela, cepillo dental).</li></ol>
+  </div></details>
+
+  <div class="caja taller">
+    <span class="fase">ACTIVIDAD &middot; PRÁCTICA DE TÉCNICAS</span>
+    <h4>Muestrario de siete técnicas</h4>
+    <p>Sobre una base de cartón de 20 x 20 cm, elabora una muestra pequeña de cada técnica (una esfera con cavidad, un rollo cónico curvado, una placa adaptada, un pellizco, un armazón mínimo, una superficie alisada y una texturizada). Fotografía el muestrario junto a una tarjeta con tu nombre y la fecha. Lo usarás en el Tema 4 para relacionar cada técnica con su equivalente digital.</p>
+  </div>
+
+  <div class="caja reflexion">
+    <h4>Reflexión crítica</h4>
+    <p>¿Qué técnica te resultó más difícil de controlar y por qué? ¿Qué dice esa dificultad sobre la relación entre la mano, el material y la forma?</p>
+    <div class="planner" data-clave="b3">
+      <textarea data-campo="refl"></textarea>
+      <div class="btns"><button class="btn" data-guardar>Guardar en este navegador</button><button class="btn sec" data-exportar>Descargar como .txt</button><span class="estado"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TEMA 4 ===================== -->
+<section class="tema" id="tema4">
+  <span class="eti">Tema 4</span>
+  <h2>Del gesto al comando: equivalencias entre plastilina y Blender</h2>
+  <p class="lead">Lo que tus manos hicieron con la plastilina tiene un equivalente en Blender. Selecciona una técnica de la izquierda para descubrir cómo se traduce al entorno digital.</p>
+
+  <div class="eq-wrap">
+    <div class="eq-lista" id="eqLista"></div>
+    <div class="eq-panel" id="eqPanel"><h4>Selecciona una técnica</h4><p>Aquí aparecerá su equivalente en Blender, el modo en el que se trabaja y los atajos principales.</p></div>
+  </div>
+
+  <h3>La gran diferencia: destructivo frente a no destructivo</h3>
+  <p>En la plastilina, cada acción transforma el material de manera definitiva. En Blender existen <b>modificadores</b>: operaciones que se aplican sobre la malla sin alterarla, que puedes activar, desactivar, reordenar o eliminar. Por ejemplo, el modificador <i>Subdivision Surface</i> suaviza la forma como lo haría el alisado con la esteca, pero la malla original sigue intacta debajo.</p>
+
+  <h3>Laboratorio: ¿cómo una forma simple se vuelve orgánica?</h3>
+  <div class="subdiv">
+    <svg id="subSvg" viewBox="0 0 300 300" width="300" height="300" aria-label="Demostración de subdivisión"></svg>
+    <div>
+      <p><b>Niveles de subdivisión: <span id="subNivel">0</span></b></p>
+      <input type="range" id="subRange" min="0" max="5" value="0">
+      <p>Este laboratorio aplica, en dos dimensiones, el mismo principio que el modificador <i>Subdivision Surface</i>: en cada nivel, cada segmento se divide y las esquinas se recortan hacia el interior. Observa cómo un cuadrado de cuatro vértices se convierte en una curva suave. Así un cubo se transforma en una forma redondeada, del mismo modo en que tus dedos redondean las aristas de un bloque de plastilina.</p>
+      <p style="font-size:.9rem;color:var(--gris)">Vértices actuales: <b id="subVert">4</b>. Más vértices implican más suavidad, pero también más peso para el equipo.</p>
+    </div>
+  </div>
+
+  <div class="caja taller">
+    <span class="fase">ACTIVIDAD &middot; PUENTE ENTRE FASES</span>
+    <h4>Tabla de traducción personal</h4>
+    <p>Con tu muestrario del Tema 3, elabora una tabla de tres columnas: <b>técnica en plastilina</b>, <b>herramienta o modificador en Blender</b> y <b>diferencia que observé</b>. En la tercera columna escribe una observación propia, no una definición. Esta tabla será parte de la sección comparativa de tu sitio web.</p>
+  </div>
+</section>
+
+<!-- ===================== TEMA 5 ===================== -->
+<section class="tema" id="tema5">
+  <span class="eti">Tema 5</span>
+  <h2>Fundamentos de Blender para modelar personajes</h2>
+  <p class="lead">Blender es un programa libre y gratuito que se descarga desde <a href="https://www.blender.org/download/" target="_blank" rel="noopener">blender.org</a>. Esta guía utiliza la serie 4.x; los nombres de menús pueden variar ligeramente entre versiones.</p>
+
+  <div class="tabs" data-grupo="t5">
+    <button class="on" data-panel="t5a">Interfaz</button>
+    <button data-panel="t5b">Navegación</button>
+    <button data-panel="t5c">Modos de trabajo</button>
+    <button data-panel="t5d">Modificadores clave</button>
+    <button data-panel="t5e">Escultura digital</button>
+  </div>
+
+  <div class="panel on" id="t5a">
+    <ol class="pasos">
+      <li><b>Viewport 3D:</b> área central donde ves y editas la escena.</li>
+      <li><b>Outliner:</b> esquina superior derecha; lista todos los objetos. Nombra cada pieza (por ejemplo, <i>cuerpo</i>, <i>ojo</i>, <i>cuerno_izq</i>) haciendo doble clic sobre su nombre.</li>
+      <li><b>Properties:</b> debajo del Outliner; incluye pestañas de objeto, modificadores (icono de llave inglesa), materiales y render.</li>
+      <li><b>Barra lateral:</b> se abre con <kbd>N</kbd>; muestra posición, rotación, escala y dimensiones exactas. Úsala para trasladar tu tabla de proporciones.</li>
+      <li><b>Barra de herramientas:</b> se abre con <kbd>T</kbd>; contiene herramientas de selección y transformación.</li>
+    </ol>
+    <div class="caja barro"><h4>Primer paso obligatorio</h4><p>Al abrir Blender, borra el cubo inicial solo si no lo usarás (<kbd>X</kbd> y confirmar), y guarda de inmediato el archivo con <kbd>Ctrl</kbd>+<kbd>S</kbd> usando el formato <code>Apellido_Nombre_Diseno2_v01.blend</code>. Guarda versiones sucesivas (v02, v03...) al terminar cada etapa: serán evidencia de tu proceso.</p></div>
+  </div>
+
+  <div class="panel" id="t5b">
+    <table>
+      <tr><th>Acción</th><th>Ratón / teclado</th><th>Equivalente en plastilina</th></tr>
+      <tr><td>Orbitar la vista</td><td>Botón central del ratón y arrastrar</td><td>Girar la tornamesa</td></tr>
+      <tr><td>Desplazar la vista</td><td><kbd>Shift</kbd> + botón central</td><td>Mover la cabeza a un lado</td></tr>
+      <tr><td>Acercar o alejar</td><td>Rueda del ratón</td><td>Acercarse a la pieza</td></tr>
+      <tr><td>Vista frontal, lateral, superior</td><td><kbd>1</kbd>, <kbd>3</kbd>, <kbd>7</kbd> del teclado numérico (con <kbd>Ctrl</kbd> la vista opuesta)</td><td>Revisar la pieza de frente y de perfil</td></tr>
+      <tr><td>Centrar objeto seleccionado</td><td><kbd>.</kbd> del teclado numérico</td><td>Tomar la pieza en la mano</td></tr>
+      <tr><td>Sin teclado numérico</td><td>Edit &gt; Preferences &gt; Input &gt; Emulate Numpad</td><td>&nbsp;</td></tr>
+    </table>
+  </div>
+
+  <div class="panel" id="t5c">
+    <p>Se cambia de modo con <kbd>Tab</kbd> (objeto / edición) o con el menú desplegable de la esquina superior izquierda del viewport.</p>
+    <div class="grid3">
+      <div class="tarjeta"><h4>Object Mode</h4><p>Mover, rotar y escalar piezas completas. Equivale a acomodar las piezas de plastilina antes de unirlas.</p><p><kbd>G</kbd> mover, <kbd>R</kbd> rotar, <kbd>S</kbd> escalar; seguido de <kbd>X</kbd>, <kbd>Y</kbd> o <kbd>Z</kbd> para restringir el eje.</p></div>
+      <div class="tarjeta"><h4>Edit Mode</h4><p>Editar vértices (<kbd>1</kbd>), aristas (<kbd>2</kbd>) y caras (<kbd>3</kbd>). Equivale a pellizcar y estirar puntos concretos.</p><p><kbd>E</kbd> extruir, <kbd>Ctrl</kbd>+<kbd>R</kbd> corte en bucle, <kbd>I</kbd> inserción de cara.</p></div>
+      <div class="tarjeta"><h4>Sculpt Mode</h4><p>Pinceles que agregan, retiran, alisan y pellizcan. Es el modo más parecido a trabajar plastilina.</p><p><kbd>F</kbd> tamaño del pincel, <kbd>Shift</kbd>+<kbd>F</kbd> intensidad, <kbd>Ctrl</kbd> invierte el efecto, <kbd>Shift</kbd> alisa.</p></div>
+    </div>
+  </div>
+
+  <div class="panel" id="t5d">
+    <p>Los modificadores se agregan en Properties &gt; pestaña de llave inglesa &gt; <b>Add Modifier</b>.</p>
+    <table>
+      <tr><th>Modificador</th><th>Para qué sirve</th><th>Uso en el personaje</th></tr>
+      <tr><td>Subdivision Surface</td><td>Suaviza la malla (atajo en Object Mode: <kbd>Ctrl</kbd>+<kbd>2</kbd>).</td><td>Cuerpo, extremidades.</td></tr>
+      <tr><td>Mirror</td><td>Refleja la geometría sobre un eje.</td><td>Cuernos, brazos y piernas simétricos.</td></tr>
+      <tr><td>Boolean (Difference)</td><td>Resta un objeto de otro.</td><td>Abrir la cavidad de la boca.</td></tr>
+      <tr><td>Solidify</td><td>Da grosor a una superficie.</td><td>Párpado a partir de media esfera.</td></tr>
+      <tr><td>Simple Deform (Bend)</td><td>Curva un objeto sobre un eje.</td><td>Curvatura de los cuernos.</td></tr>
+      <tr><td>Skin</td><td>Genera volumen alrededor de aristas, como un armazón con piel.</td><td>Alternativa para brazos y piernas.</td></tr>
+    </table>
+  </div>
+
+  <div class="panel" id="t5e">
+    <p>En el modo Sculpt la malla necesita suficiente densidad para que los pinceles tengan material con el cual trabajar. Usa <b>Remesh</b> (en la cabecera del modo Sculpt): ajusta <i>Voxel Size</i> y presiona <kbd>Ctrl</kbd>+<kbd>R</kbd>. Un valor más pequeño crea más detalle y más carga para el equipo; empieza con 0.05 y reduce poco a poco.</p>
+    <table>
+      <tr><th>Pincel</th><th>Efecto</th><th>Gesto equivalente</th></tr>
+      <tr><td>Draw</td><td>Eleva o hunde la superficie.</td><td>Presionar con la yema.</td></tr>
+      <tr><td>Clay Strips</td><td>Agrega material en franjas.</td><td>Técnica aditiva con tiras.</td></tr>
+      <tr><td>Smooth</td><td>Alisa irregularidades.</td><td>Alisado con esteca.</td></tr>
+      <tr><td>Grab</td><td>Arrastra una zona completa.</td><td>Empujar la masa con el pulgar.</td></tr>
+      <tr><td>Inflate</td><td>Infla o desinfla el volumen.</td><td>Agregar relleno desde dentro.</td></tr>
+      <tr><td>Crease</td><td>Marca pliegues afilados.</td><td>Línea con el filo de la esteca.</td></tr>
+      <tr><td>Pinch</td><td>Junta la superficie hacia el trazo.</td><td>Pellizco.</td></tr>
+      <tr><td>Scrape / Flatten</td><td>Rebaja y aplana.</td><td>Técnica sustractiva con vaciador.</td></tr>
+    </table>
+    <p>Activa la simetría en el eje X desde la cabecera del modo Sculpt (icono de mariposa) para que lo que hagas de un lado se repita del otro.</p>
+  </div>
+
+  <h3>Tarjetas de atajos</h3>
+  <p>Haz clic en una tarjeta para comprobar si recuerdas su función.</p>
+  <div class="flash-grid" id="flashGrid"></div>
+
+  <div class="caja taller">
+    <span class="fase">ACTIVIDAD &middot; CALENTAMIENTO EN BLENDER</span>
+    <h4>Muestrario digital</h4>
+    <p>Reproduce en Blender tres piezas de tu muestrario físico del Tema 3: una esfera con cavidad (Boolean), un rollo curvado (cilindro con Simple Deform) y una superficie texturizada (modo Sculpt). Toma una captura de pantalla de cada una en la que se vea el Outliner con los objetos nombrados por ti.</p>
+  </div>
+</section>
+
+<!-- ===================== TEMA 6 ===================== -->
+<section class="tema" id="tema6">
+  <span class="eti">Tema 6</span>
+  <h2>Materiales, iluminación y render</h2>
+  <p class="lead">En la plastilina el color está en la pasta; en Blender lo defines con materiales. La luz y la cámara determinan cómo se presentará tu modelo, igual que la fotografía del modelo físico.</p>
+
+  <h3>Materiales con Principled BSDF</h3>
+  <ol class="pasos">
+    <li>Selecciona el objeto y abre Properties &gt; pestaña <b>Material</b> (esfera roja). Pulsa <b>New</b>.</li>
+    <li>En <b>Base Color</b> elige el color. Usa el gotero o escribe un valor hexadecimal tomado de tu referencia.</li>
+    <li>Ajusta <b>Roughness</b>: valores cercanos a 1 dan un acabado mate como el de la plastilina; valores bajos dan brillo.</li>
+    <li>Para un aspecto de plastilina, agrega un poco de <b>Subsurface</b> (dispersión subsuperficial), que simula la luz que penetra ligeramente en el material.</li>
+    <li>Para ver los colores, cambia el sombreado del viewport a <b>Material Preview</b> (tercer círculo de la esquina superior derecha) o pulsa <kbd>Z</kbd>.</li>
+  </ol>
+
+  <h3>Iluminación de tres puntos</h3>
+  <div class="grid3">
+    <div class="tarjeta"><h4>Luz principal</h4><p>Área o Sun, a 45 grados del frente y por encima. Define el volumen.</p></div>
+    <div class="tarjeta"><h4>Luz de relleno</h4><p>Del lado opuesto, con menor intensidad. Suaviza las sombras.</p></div>
+    <div class="tarjeta"><h4>Contraluz</h4><p>Detrás del personaje. Separa la silueta del fondo.</p></div>
+  </div>
+  <p>Agrega luces con <kbd>Shift</kbd>+<kbd>A</kbd> &gt; Light. Ajusta su potencia en Properties &gt; pestaña de luz.</p>
+
+  <h3>Cámara y render</h3>
+  <ol class="pasos">
+    <li>Orbita hasta un encuadre agradable y presiona <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>0</kbd> (teclado numérico) para alinear la cámara a esa vista.</li>
+    <li>En Properties &gt; Render elige el motor: <b>EEVEE</b> (rápido, ideal para revisiones) o <b>Cycles</b> (más realista y más lento).</li>
+    <li>En Properties &gt; Output define la resolución: 1920 x 1080 para tu sitio web.</li>
+    <li>Presiona <kbd>F12</kbd> para renderizar y guarda la imagen con Image &gt; Save As en formato PNG.</li>
+  </ol>
+
+  <div class="caja reflexion">
+    <h4>Pregunta para la discusión en el aula</h4>
+    <p>Fotografiar una pieza de plastilina y renderizar un modelo 3D implican decisiones similares de luz y encuadre. ¿Qué aprendiste de la fotografía de tu modelo físico que puedas aplicar al render digital?</p>
+  </div>
+</section>
+
+<!-- ===================== ACTIVIDAD INTEGRADORA ===================== -->
+<section class="tema" id="integradora">
+  <span class="eti">Tema 7 &middot; Ejercicio integral</span>
+  <h2>Actividad integradora: un personaje, dos materias primas</h2>
+  <p class="lead">Esta actividad individual reúne todo lo anterior en cuatro fases consecutivas. Trabajarás en el aula el personaje Mike Wazowski de <i>Monsters, Inc.</i> como estudio de forma. Marca cada paso al completarlo: tu avance se guarda en este navegador y se refleja en la barra lateral.</p>
+
+  <div class="caja objetivo">
+    <h4>Escenario problema</h4>
+    <p>Un estudio de animación independiente te contrata como diseñador junior. Antes de aprobar cualquier modelo digital, la dirección de arte exige una <b>maqueta física</b> que valide volumen y proporción, y después un <b>modelo 3D fiel a la maqueta</b>. Debes entregar ambos, acompañados de un informe que justifique las decisiones tomadas en cada material. ¿Cómo garantizarás que la maqueta y el modelo digital comuniquen el mismo personaje?</p>
+  </div>
+
+  <!-- FASE A -->
+  <h3 id="faseA">Fase A. Investigación</h3>
+  <ul class="check-list" data-lista="A">
+    <li><input type="checkbox" id="a1"><label for="a1">Redacté mi hipótesis inicial en la bitácora del Tema 1.</label></li>
+    <li><input type="checkbox" id="a2"><label for="a2">Elaboré la línea de tiempo con al menos ocho hitos del modelado tradicional y digital.</label></li>
+    <li><input type="checkbox" id="a3"><label for="a3">Completé las tablas de técnicas, herramientas y software.</label></li>
+    <li><input type="checkbox" id="a4"><label for="a4">Documenté dos casos de la industria donde una maqueta física acompañó a un modelo digital.</label></li>
+    <li><input type="checkbox" id="a5"><label for="a5">Realicé y documenté la entrevista con fotografía, nombre y fecha.</label></li>
+    <li><input type="checkbox" id="a6"><label for="a6">Escribí el párrafo argumentativo y cité al menos cinco fuentes en APA 7.</label></li>
+  </ul>
+
+  <!-- FASE B -->
+  <h3 id="faseB">Fase B. Modelo en plastilina (en el aula)</h3>
+  <p>Trabaja con tus imágenes de referencia y tu tabla de proporciones del Tema 2. Coloca la pieza sobre una base que puedas girar.</p>
+  <ol class="pasos">
+    <li><b>Armazón.</b> Forma una bola compacta de papel aluminio un poco más pequeña que el cuerpo final. Inserta dos alambres para las piernas, que sobresalgan por la parte inferior y sirvan de anclaje a la base, y dos para los brazos a los costados.</li>
+    <li><b>Volumen principal (técnica aditiva).</b> Cubre el armazón con plastilina del color del cuerpo en una capa uniforme. Redondea con las palmas y verifica el diámetro con una regla según tu tabla.</li>
+    <li><b>Ojo (aditiva y placas).</b> Modela una esfera blanca para el globo ocular y hunde ligeramente el área del rostro con un bolillo para alojarla. Agrega el iris y la pupila como discos delgados. Construye el párpado con una placa del color del cuerpo adaptada sobre la parte superior del ojo.</li>
+    <li><b>Boca (sustractiva).</b> Marca el contorno con la esteca según tu referencia y retira material con el vaciador. Rellena el fondo de la cavidad con plastilina oscura y agrega los dientes como piezas pequeñas.</li>
+    <li><b>Cuernos (rollos cónicos).</b> Rueda dos rollos cónicos idénticos, cúrvalos ligeramente y únelos a la parte superior del cuerpo, comprobando la simetría desde el frente.</li>
+    <li><b>Extremidades (rollos sobre armazón).</b> Cubre los alambres con rollos delgados. Modela manos y pies como formas simplificadas, observando tu referencia.</li>
+    <li><b>Acabado.</b> Alisa las uniones con la esteca y un pincel humedecido. Revisa la pieza desde seis ángulos y corrige asimetrías.</li>
+    <li><b>Registro fotográfico.</b> Fotografía la pieza de frente, perfil izquierdo, perfil derecho, espalda, tres cuartos y vista superior, con fondo neutro y una tarjeta con tu nombre y la fecha. Agrega al menos tres fotografías del proceso (armazón, pieza a medio construir y pieza terminada).</li>
+  </ol>
+  <ul class="check-list" data-lista="B">
+    <li><input type="checkbox" id="b1"><label for="b1">Hoja de análisis volumétrico y tabla de proporciones terminadas.</label></li>
+    <li><input type="checkbox" id="b2"><label for="b2">Armazón y volumen principal construidos.</label></li>
+    <li><input type="checkbox" id="b3"><label for="b3">Ojo, boca, cuernos y extremidades terminados.</label></li>
+    <li><input type="checkbox" id="b4"><label for="b4">Acabado revisado desde seis ángulos.</label></li>
+    <li><input type="checkbox" id="b5"><label for="b5">Nueve fotografías como mínimo (seis vistas y tres de proceso) con tarjeta de identificación.</label></li>
+  </ul>
+
+  <!-- FASE C -->
+  <h3 id="faseC">Fase C. Modelo 3D en Blender</h3>
+  <p>Usa las fotografías <b>de tu propia maqueta</b> como referencia principal; así el modelo digital será una traducción de tu trabajo físico. Guarda una versión nueva del archivo al terminar cada etapa.</p>
+
+  <div class="tabs" data-grupo="fc">
+    <button class="on" data-panel="fc1">1. Preparación</button>
+    <button data-panel="fc2">2. Cuerpo y ojo</button>
+    <button data-panel="fc3">3. Boca y cuernos</button>
+    <button data-panel="fc4">4. Extremidades</button>
+    <button data-panel="fc5">5. Escultura</button>
+    <button data-panel="fc6">6. Material y render</button>
+  </div>
+
+  <div class="panel on" id="fc1">
+    <ol class="pasos">
+      <li>Abre Blender, elige <i>General</i> y guarda el archivo como <code>Apellido_Nombre_Diseno2_v01.blend</code>.</li>
+      <li>Coloca la vista frontal con <kbd>1</kbd> del teclado numérico.</li>
+      <li>Agrega la fotografía frontal de tu maqueta: <kbd>Shift</kbd>+<kbd>A</kbd> &gt; Image &gt; Reference y selecciona el archivo. Repite en vista lateral (<kbd>3</kbd>) con la foto de perfil.</li>
+      <li>Baja la opacidad de cada imagen en Properties &gt; pestaña de datos del objeto (Opacity en 0.5) y bloquéalas en el Outliner para no moverlas por accidente.</li>
+      <li>Abre la barra lateral (<kbd>N</kbd>): ahí trasladarás las medidas de tu tabla de proporciones, considerando 1 unidad de Blender = 1 cm de la maqueta.</li>
+    </ol>
+  </div>
+
+  <div class="panel" id="fc2">
+    <h4>Cuerpo</h4>
+    <ol class="pasos">
+      <li><kbd>Shift</kbd>+<kbd>A</kbd> &gt; Mesh &gt; UV Sphere. Nómbrala <i>cuerpo</i>.</li>
+      <li>Escálala con <kbd>S</kbd> hasta que coincida con la referencia. Si tu maqueta no es una esfera perfecta, ajusta un eje (por ejemplo, <kbd>S</kbd> <kbd>Z</kbd> 1.05).</li>
+      <li>Clic derecho &gt; <b>Shade Smooth</b> y agrega Subdivision Surface con <kbd>Ctrl</kbd>+<kbd>2</kbd>.</li>
+      <li>Aplica la escala con <kbd>Ctrl</kbd>+<kbd>A</kbd> &gt; Scale, para que los modificadores posteriores funcionen de forma correcta.</li>
+    </ol>
+    <h4>Ojo</h4>
+    <ol class="pasos">
+      <li>Agrega otra UV Sphere para el globo ocular (<i>ojo</i>) y colócala en el frente del cuerpo, ligeramente hundida, siguiendo la proporción de tu tabla.</li>
+      <li>Para el iris, duplica el ojo (<kbd>Shift</kbd>+<kbd>D</kbd>), redúcelo y adelántalo apenas en el eje Y; repite para la pupila. Más adelante cada pieza recibirá su propio material.</li>
+      <li><b>Párpado:</b> duplica el globo ocular, escálalo un 8 % más grande, entra en Edit Mode (<kbd>Tab</kbd>), selecciona la mitad inferior de vértices y elimínala (<kbd>X</kbd> &gt; Vertices). Sal del modo y agrega el modificador <b>Solidify</b> para darle grosor.</li>
+    </ol>
+    <div class="caja barro"><h4>Conexión con la plastilina</h4><p>El párpado digital se construye igual que la placa del Tema 3: una lámina con grosor adaptada sobre una esfera. En Blender, Solidify cumple la función del rodillo con guías.</p></div>
+  </div>
+
+  <div class="panel" id="fc3">
+    <h4>Boca con Boolean</h4>
+    <ol class="pasos">
+      <li>Agrega una UV Sphere o un cilindro, nómbralo <i>corte_boca</i> y dale la forma de la boca de tu maqueta (escálalo y aplánalo en Y).</li>
+      <li>Colócalo atravesando la superficie frontal del cuerpo.</li>
+      <li>Selecciona <i>cuerpo</i> &gt; Add Modifier &gt; Generate &gt; <b>Boolean</b>, operación <b>Difference</b>, objeto <i>corte_boca</i>.</li>
+      <li>Oculta <i>corte_boca</i> desde el Outliner (icono de ojo). La cavidad permanece.</li>
+      <li>Agrega dientes con cubos o conos pequeños, con Subdivision Surface nivel 1.</li>
+    </ol>
+    <h4>Cuernos con Mirror y Simple Deform</h4>
+    <ol class="pasos">
+      <li><kbd>Shift</kbd>+<kbd>A</kbd> &gt; Mesh &gt; Cone. Nómbralo <i>cuerno</i> y ajústalo al tamaño de tu tabla.</li>
+      <li>Agrega <b>Simple Deform</b> en modo <b>Bend</b> y ajusta el ángulo hasta lograr la curvatura de tu maqueta.</li>
+      <li>Colócalo sobre un lado de la parte superior del cuerpo.</li>
+      <li>Agrega <b>Mirror</b>, eje X, y en <i>Mirror Object</i> elige <i>cuerpo</i>: el segundo cuerno aparece reflejado de forma simétrica.</li>
+    </ol>
+    <div class="caja barro"><h4>Conexión con la plastilina</h4><p>En la Fase B tuviste que medir para que los dos cuernos fueran iguales. Aquí la simetría es exacta. Reflexiona: ¿la simetría perfecta hace al personaje más expresivo o más rígido?</p></div>
+  </div>
+
+  <div class="panel" id="fc4">
+    <h4>Opción 1: curvas con grosor (recomendada)</h4>
+    <ol class="pasos">
+      <li><kbd>Shift</kbd>+<kbd>A</kbd> &gt; Curve &gt; Bezier. En Edit Mode ubica sus puntos siguiendo la trayectoria del brazo en tu referencia.</li>
+      <li>En Properties &gt; pestaña de datos de curva &gt; Geometry &gt; Bevel, aumenta <b>Depth</b> hasta lograr el grosor del brazo. Activa <i>Fill Caps</i>.</li>
+      <li>Repite para una pierna. Usa Mirror (a través de un objeto vacío en el centro del cuerpo) o duplica y refleja con <kbd>Ctrl</kbd>+<kbd>M</kbd> &gt; <kbd>X</kbd>.</li>
+      <li>Convierte las curvas en malla: Object &gt; Convert &gt; Mesh.</li>
+    </ol>
+    <h4>Opción 2: modificador Skin (equivalente al armazón)</h4>
+    <ol class="pasos">
+      <li>Agrega un plano, entra en Edit Mode, fusiona sus vértices en uno (<kbd>M</kbd> &gt; At Center) y extruye (<kbd>E</kbd>) siguiendo la forma del brazo, como doblarías un alambre.</li>
+      <li>Agrega el modificador <b>Skin</b> y después Subdivision Surface. Ajusta el grosor por vértice con <kbd>Ctrl</kbd>+<kbd>A</kbd>.</li>
+    </ol>
+    <p><b>Manos y pies:</b> modélalos de forma simplificada con esferas escaladas o extrusiones cortas, observando tu maqueta.</p>
+  </div>
+
+  <div class="panel" id="fc5">
+    <ol class="pasos">
+      <li>Guarda una versión nueva antes de continuar (este paso es destructivo).</li>
+      <li>Aplica los modificadores de cuerpo y extremidades (menú de cada modificador &gt; Apply), excepto los de materiales separados como ojo e iris.</li>
+      <li>Selecciona cuerpo, cuernos y extremidades y únelos con <kbd>Ctrl</kbd>+<kbd>J</kbd>.</li>
+      <li>Cambia a <b>Sculpt Mode</b>, ajusta Voxel Size en 0.03 aproximadamente y aplica Remesh con <kbd>Ctrl</kbd>+<kbd>R</kbd>. Las piezas quedan fusionadas en una sola superficie, como las uniones alisadas de la plastilina.</li>
+      <li>Con el pincel <b>Smooth</b> suaviza las uniones entre cuerpo, cuernos y extremidades.</li>
+      <li>Con <b>Crease</b> define el borde de la boca; con <b>Inflate</b> o <b>Clay Strips</b> ajusta volúmenes para que coincidan con tu maqueta.</li>
+      <li>Compara constantemente con las fotografías de tu pieza física desde las mismas vistas.</li>
+    </ol>
+  </div>
+
+  <div class="panel" id="fc6">
+    <ol class="pasos">
+      <li>Crea un material distinto para cuerpo, globo ocular, iris, pupila, interior de la boca, dientes y cuernos, con colores tomados de las fotografías de tu maqueta.</li>
+      <li>Usa Roughness alto y un poco de Subsurface para que el modelo parezca de plastilina; prepara una segunda versión con acabado liso para comparar.</li>
+      <li>Agrega un plano como piso y monta iluminación de tres puntos.</li>
+      <li>Coloca la cámara en el mismo ángulo que tu fotografía de tres cuartos de la maqueta.</li>
+      <li>Renderiza con <kbd>F12</kbd> cuatro imágenes: frente, perfil, tres cuartos y una toma creativa. Guarda como PNG.</li>
+    </ol>
+  </div>
+
+  <ul class="check-list" data-lista="C">
+    <li><input type="checkbox" id="c1"><label for="c1">Referencias de mi propia maqueta colocadas y escala definida.</label></li>
+    <li><input type="checkbox" id="c2"><label for="c2">Cuerpo, ojo, iris y párpado modelados.</label></li>
+    <li><input type="checkbox" id="c3"><label for="c3">Boca con Boolean y cuernos con Mirror y Simple Deform.</label></li>
+    <li><input type="checkbox" id="c4"><label for="c4">Brazos, piernas, manos y pies terminados.</label></li>
+    <li><input type="checkbox" id="c5"><label for="c5">Uniones refinadas en Sculpt Mode.</label></li>
+    <li><input type="checkbox" id="c6"><label for="c6">Materiales, luces, cámara y cuatro renders en PNG.</label></li>
+    <li><input type="checkbox" id="c7"><label for="c7">Al menos cinco versiones del archivo .blend guardadas (v01 a v05).</label></li>
+  </ul>
+
+  <!-- FASE D -->
+  <h3 id="faseD">Fase D. Comparación y reflexión</h3>
+  <ol class="pasos">
+    <li>Elabora un <b>díptico comparativo</b>: la fotografía de tu maqueta y el render desde el mismo ángulo, lado a lado.</li>
+    <li>Completa la tabla de comparación del proceso que aparece abajo, con datos de tu experiencia.</li>
+    <li>Regresa a tu hipótesis inicial del Tema 1 y redacta una conclusión de 200 a 300 palabras.</li>
+    <li>Presenta tu díptico en la galería crítica del aula (ver sección 8).</li>
+  </ol>
+  <div class="caja reflexion">
+    <h4>Tabla de comparación del proceso</h4>
+    <div class="planner" data-clave="fd">
+      <label>Tiempo invertido en plastilina y en Blender (horas aproximadas de cada uno)</label>
+      <input type="text" data-campo="tiempo">
+      <label>Parte que fue más fácil en plastilina y por qué</label>
+      <textarea data-campo="facil_p"></textarea>
+      <label>Parte que fue más fácil en Blender y por qué</label>
+      <textarea data-campo="facil_b"></textarea>
+      <label>Diferencias de proporción entre la maqueta y el modelo 3D, y cómo las resolví</label>
+      <textarea data-campo="dif"></textarea>
+      <label>Conclusión: ¿se confirmó o se modificó mi hipótesis inicial?</label>
+      <textarea data-campo="concl"></textarea>
+      <div class="btns"><button class="btn" data-guardar>Guardar en este navegador</button><button class="btn sec" data-exportar>Descargar como .txt</button><span class="estado"></span></div>
+    </div>
+  </div>
+  <ul class="check-list" data-lista="D">
+    <li><input type="checkbox" id="d1"><label for="d1">Díptico comparativo terminado.</label></li>
+    <li><input type="checkbox" id="d2"><label for="d2">Tabla de comparación y conclusión redactadas.</label></li>
+    <li><input type="checkbox" id="d3"><label for="d3">Participé en la galería crítica y registré la retroalimentación recibida.</label></li>
+  </ul>
+</section>
+
+<!-- ===================== ACTIVIDADES CLASSROOM ===================== -->
+<section class="tema" id="colaborativas">
+  <span class="eti">Tema 8</span>
+  <h2>Actividades de construcción colaborativa (Google Classroom)</h2>
+  <p class="lead">Aunque el ejercicio integral es individual, el conocimiento se construye en diálogo. Estas actividades se publican en Classroom y se realizan en paralelo a las fases.</p>
+
+  <div class="grid2">
+    <div class="tarjeta">
+      <h4>1. Foro de mediación</h4>
+      <p><b>Consigna:</b> "¿La escultura digital sustituye o complementa al modelado tradicional?" Publica una postura de 120 a 180 palabras sustentada en tu investigación (Fase A), con al menos una cita.</p>
+      <p><b>Interacción:</b> responde a dos compañeros: a uno que coincida contigo, ampliando su argumento con un dato nuevo, y a uno que difiera, planteando una pregunta que lo obligue a precisar su postura.</p>
+    </div>
+    <div class="tarjeta">
+      <h4>2. Escenario ABP</h4>
+      <p><b>Problema:</b> una juguetería local quiere producir una figura de su mascota. Tiene presupuesto para una sola técnica de prototipado: maqueta en plastilina epóxica o modelo 3D para impresión.</p>
+      <p><b>Tarea:</b> en una tabla de criterios (costo, tiempo, fidelidad, posibilidad de corrección, escalabilidad) recomienda una opción y justifícala con lo que experimentaste en las Fases B y C.</p>
+    </div>
+    <div class="tarjeta">
+      <h4>3. Estudio de caso</h4>
+      <p><b>Caso:</b> un estudio de diseño de juguetes esculpe una maqueta en plastilina, la digitaliza con fotogrametría y la corrige en software antes de imprimirla.</p>
+      <p><b>Preguntas:</b> ¿qué se gana y qué se pierde en cada traducción? ¿En qué etapa intervendrías tú como diseñador gráfico? Investiga un ejemplo real de fotogrametría y descríbelo.</p>
+    </div>
+    <div class="tarjeta">
+      <h4>4. Galería crítica</h4>
+      <p><b>Dinámica en el aula:</b> cada estudiante exhibe su maqueta junto a su render. Los compañeros recorren la galería y dejan tres notas con el protocolo:</p>
+      <ul><li><b>Observo:</b> un acierto concreto de forma o proporción.</li><li><b>Me pregunto:</b> una duda sobre una decisión tomada.</li><li><b>Sugiero:</b> una mejora aplicable.</li></ul>
+      <p>Fotografía las notas recibidas e inclúyelas en tu sitio.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== AUTOEVALUACIÓN ===================== -->
+<section class="tema" id="evaluacion">
+  <span class="eti">Tema 9</span>
+  <h2>Autoevaluación</h2>
+  <p class="lead">Responde las ocho preguntas. Recibirás retroalimentación inmediata en cada una. Puedes reiniciar el cuestionario cuantas veces lo necesites.</p>
+  <div id="quiz"></div>
+  <div class="marcador" id="quizScore"></div>
+  <div class="btns"><button class="btn sec" id="quizReset">Reiniciar cuestionario</button></div>
+</section>
+
+<!-- ===================== PROYECTO FINAL ===================== -->
+<section class="tema" id="proyecto">
+  <span class="eti">Tema 10 &middot; Proyecto final</span>
+  <h2>Proyecto final: sitio web visual "Del barro al vértice"</h2>
+  <p class="lead">Ahora aplicarás el mismo proceso completo, de forma autónoma, a <b>un tema elegido por ti</b>, y lo publicarás como un sitio web visual en GitHub Pages que puedas usar como portafolio y como recurso en tus clases universitarias.</p>
+
+  <div class="caja objetivo">
+    <h4>Consigna</h4>
+    <p>Elige un tema relacionado con tu formación o tus intereses y diseña <b>un personaje u objeto original de tu autoría</b> que lo represente. Algunos ejemplos: la mascota de una campaña de diseño, un objeto icónico de tu ciudad convertido en personaje, un elemento tipográfico en volumen, una pieza de producto para una marca ficticia o una figura didáctica para explicar un concepto de otra materia. Repite el ciclo completo: investigación, maqueta en plastilina, modelo en Blender y comparación.</p>
+  </div>
+
+  <h3>Fases del proyecto</h3>
+  <div class="ruta">
+    <div><b>1. Investigación del tema</b>Contexto, referentes visuales y bocetos (mínimo seis) con análisis volumétrico.</div>
+    <div><b>2. Maqueta</b>Modelo en plastilina con registro fotográfico de proceso.</div>
+    <div><b>3. Modelo 3D</b>Blender con al menos tres modificadores y una etapa de escultura.</div>
+    <div><b>4. Sitio web</b>Publicación en GitHub Pages con todas las secciones requeridas.</div>
+  </div>
+
+  <h3>Secciones obligatorias del sitio</h3>
+  <div class="tabla-wrap">
+  <table>
+    <tr><th>Sección</th><th>Contenido</th></tr>
+    <tr><td>Portada</td><td>Nombre del proyecto, render principal, tu nombre, materia, institución y logotipo UNE.</td></tr>
+    <tr><td>Investigación</td><td>Síntesis de la Fase A (línea de tiempo y hallazgos) más la investigación del tema elegido.</td></tr>
+    <tr><td>Bocetos</td><td>Bocetos escaneados y análisis en formas primitivas.</td></tr>
+    <tr><td>Maqueta</td><td>Galería de fotografías del proceso y de la pieza terminada.</td></tr>
+    <tr><td>Modelo 3D</td><td>Capturas por etapa (con el Outliner visible) y renders finales.</td></tr>
+    <tr><td>Comparación</td><td>Dípticos maqueta y render, tabla de traducción técnica y reflexión.</td></tr>
+    <tr><td>Ejercicio de aula</td><td>Resumen del ejercicio integral con la nota de autoría del personaje de práctica.</td></tr>
+    <tr><td>Créditos</td><td>Fuentes en APA 7, herramientas utilizadas y créditos de imágenes de terceros.</td></tr>
+  </table>
+  </div>
+
+  <h3>Plantilla base del sitio</h3>
+  <p>Copia esta plantilla en un archivo llamado <code>index.html</code>. Modifícala libremente: cambia colores, tipografías y distribución para que exprese tu propia identidad visual. Las imágenes van en una carpeta <code>img/</code> dentro del repositorio.</p>
+  <pre class="codigo" id="plantilla"><button class="copiar" data-copiar="plantilla">Copiar</button>&lt;!DOCTYPE html&gt;
+&lt;html lang="es"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;Nombre de mi proyecto | Diseño II&lt;/title&gt;
+  &lt;style&gt;
+    :root { --principal:#1b3f8b; --acento:#b8653a; --fondo:#f8f3ea; }
+    body { margin:0; font-family:Georgia, serif; background:var(--fondo); color:#222; }
+    header { background:var(--principal); color:#fff; padding:40px 8vw; }
+    nav a { color:#fff; margin-right:16px; }
+    section { padding:40px 8vw; }
+    h2 { color:var(--acento); }
+    .galeria { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; }
+    .galeria img { width:100%; border-radius:10px; }
+    .diptico { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    footer { text-align:center; padding:30px; font-size:.9rem; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;header&gt;
+    &lt;img src="img/logoune.png" alt="Logotipo UNE" height="60"&gt;
+    &lt;h1&gt;Nombre de mi proyecto&lt;/h1&gt;
+    &lt;p&gt;Tu nombre · Diseño II · Licenciatura en Diseño Gráfico · UNE&lt;/p&gt;
+    &lt;nav&gt;
+      &lt;a href="#investigacion"&gt;Investigación&lt;/a&gt;
+      &lt;a href="#maqueta"&gt;Maqueta&lt;/a&gt;
+      &lt;a href="#modelo"&gt;Modelo 3D&lt;/a&gt;
+      &lt;a href="#comparacion"&gt;Comparación&lt;/a&gt;
+    &lt;/nav&gt;
+  &lt;/header&gt;
+
+  &lt;section id="investigacion"&gt;
+    &lt;h2&gt;Investigación&lt;/h2&gt;
+    &lt;p&gt;Síntesis de tu investigación...&lt;/p&gt;
+  &lt;/section&gt;
+
+  &lt;section id="maqueta"&gt;
+    &lt;h2&gt;Maqueta en plastilina&lt;/h2&gt;
+    &lt;div class="galeria"&gt;
+      &lt;img src="img/maqueta_01.jpg" alt="Armazón inicial"&gt;
+      &lt;img src="img/maqueta_02.jpg" alt="Volumen principal"&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;section id="modelo"&gt;
+    &lt;h2&gt;Modelo 3D en Blender&lt;/h2&gt;
+    &lt;div class="galeria"&gt;
+      &lt;img src="img/render_01.png" alt="Render frontal"&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;section id="comparacion"&gt;
+    &lt;h2&gt;Comparación&lt;/h2&gt;
+    &lt;div class="diptico"&gt;
+      &lt;img src="img/maqueta_34.jpg" alt="Maqueta en tres cuartos"&gt;
+      &lt;img src="img/render_34.png" alt="Render en tres cuartos"&gt;
+    &lt;/div&gt;
+    &lt;p&gt;Tu reflexión...&lt;/p&gt;
+  &lt;/section&gt;
+
+  &lt;footer&gt;Fuentes y créditos en formato APA 7.&lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+  <h3>Publicación en GitHub Pages paso a paso</h3>
+  <ol class="pasos">
+    <li>Crea una cuenta gratuita en <a href="https://github.com" target="_blank" rel="noopener">github.com</a> con tu correo institucional.</li>
+    <li>Pulsa <b>New repository</b>, nómbralo por ejemplo <code>diseno2-proyecto</code>, márcalo como <b>Public</b> y crea el repositorio.</li>
+    <li>Pulsa <b>Add file &gt; Upload files</b> y arrastra tu <code>index.html</code> y la carpeta <code>img</code>. Escribe un mensaje descriptivo y pulsa <b>Commit changes</b>.</li>
+    <li>Ve a <b>Settings &gt; Pages</b>. En <i>Source</i> elige <b>Deploy from a branch</b>, rama <b>main</b> y carpeta <b>/ (root)</b>. Guarda.</li>
+    <li>Espera uno o dos minutos y recarga la página: aparecerá la dirección pública, con la forma <code>https://tu-usuario.github.io/diseno2-proyecto/</code>.</li>
+    <li>Entrega esa dirección en Classroom. Cada actualización que subas se publicará automáticamente.</li>
+  </ol>
+  <div class="caja alerta">
+    <h4>Cuidado con los nombres de archivo</h4>
+    <p>GitHub Pages distingue mayúsculas y minúsculas. Si tu imagen se llama <code>Render.PNG</code> y en el código escribiste <code>render.png</code>, no se mostrará. Usa nombres en minúsculas, sin espacios ni acentos.</p>
+  </div>
+</section>
+
+<!-- ===================== RÚBRICA ===================== -->
+<section class="tema" id="rubrica">
+  <span class="eti">Tema 11</span>
+  <h2>Rúbrica, evidencias y criterios de autenticidad</h2>
+
+  <h3>Ejercicio integral (actividad de aula)</h3>
+  <div class="tabla-wrap">
+  <table>
+    <tr><th>Criterio</th><th>Excelente</th><th>Suficiente</th><th>Insuficiente</th><th>Puntos</th></tr>
+    <tr><td>Fase A. Investigación</td><td>Cinco o más fuentes confiables, línea de tiempo completa, entrevista documentada y argumento sólido.</td><td>Fuentes suficientes pero análisis descriptivo; entrevista incompleta.</td><td>Menos de tres fuentes o sin entrevista.</td><td>20</td></tr>
+    <tr><td>Fase B. Maqueta</td><td>Proporciones fieles a la tabla, uniones limpias, uso de al menos cinco técnicas y registro fotográfico completo.</td><td>Forma reconocible con asimetrías o uniones visibles; registro parcial.</td><td>Forma incompleta o sin registro.</td><td>25</td></tr>
+    <tr><td>Fase C. Modelo 3D</td><td>Uso correcto de Mirror, Boolean, Subdivision y Sculpt; objetos nombrados; cinco versiones guardadas; renders con iluminación de tres puntos.</td><td>Modelo completo con uso limitado de modificadores o sin versiones.</td><td>Modelo incompleto.</td><td>30</td></tr>
+    <tr><td>Fase D. Comparación</td><td>Díptico coherente, tabla con datos propios y conclusión que dialoga con la hipótesis.</td><td>Comparación general sin datos propios.</td><td>Sin comparación.</td><td>15</td></tr>
+    <tr><td>Participación colaborativa</td><td>Foro con réplicas de calidad y notas de galería atendidas.</td><td>Participación mínima.</td><td>Sin participación.</td><td>10</td></tr>
+  </table>
+  </div>
+
+  <h3>Proyecto final (sitio web)</h3>
+  <div class="tabla-wrap">
+  <table>
+    <tr><th>Criterio</th><th>Descripción del nivel esperado</th><th>Puntos</th></tr>
+    <tr><td>Originalidad del diseño</td><td>Personaje u objeto propio, coherente con el tema elegido, con bocetos que demuestran exploración.</td><td>20</td></tr>
+    <tr><td>Calidad de la maqueta</td><td>Dominio técnico de la plastilina y registro de proceso.</td><td>20</td></tr>
+    <tr><td>Calidad del modelo 3D</td><td>Fidelidad a la maqueta, limpieza de la malla, materiales y render.</td><td>25</td></tr>
+    <tr><td>Diseño del sitio web</td><td>Jerarquía visual, tipografía, legibilidad, navegación y adaptación a dispositivos móviles.</td><td>20</td></tr>
+    <tr><td>Reflexión y fuentes</td><td>Comparación crítica entre técnicas y fuentes citadas en APA 7.</td><td>15</td></tr>
+  </table>
+  </div>
+
+  <div class="caja alerta">
+    <h4>Criterios de autenticidad del proceso</h4>
+    <p>Para validar que el trabajo es tuyo, tus entregas deben incluir:</p>
+    <ul>
+      <li>Fotografías de la maqueta con una tarjeta que muestre tu nombre y la fecha, tomadas en distintas etapas.</li>
+      <li>Al menos cinco versiones sucesivas del archivo .blend, entregadas en una carpeta compartida.</li>
+      <li>Capturas de pantalla de Blender por etapa, con el Outliner visible y objetos nombrados por ti.</li>
+      <li>La entrevista de la Fase A, con nombre de la persona, fecha y fotografía.</li>
+      <li>Una explicación breve, en el aula, de cómo resolviste una dificultad técnica concreta.</li>
+    </ul>
+    <p>Las imágenes generadas con herramientas automáticas no sustituyen la maqueta ni el modelo. Si utilizas inteligencia artificial para apoyar tu investigación, decláralo e indica para qué la usaste.</p>
+  </div>
+</section>
+
+</main>
+</div>
+
+<button class="menu-btn" id="menuBtn">Contenido</button>
+<footer>
+  Universidad de Especialidades (UNE) &middot; Licenciatura en Diseño Gráfico &middot; Diseño II<br>
+  Guía de aprendizaje: Del barro al vértice. Modelado en plastilina y Blender.<br>
+  Mike Wazowski y <i>Monsters, Inc.</i> son propiedad de Disney/Pixar; se mencionan con fines exclusivamente educativos.
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  function $(s,c){return (c||document).querySelector(s);}
+  function $$(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s));}
+  function guardarLS(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+  function leerLS(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+  var PRE="une_d2_barro_";
+
+  /* Pestañas */
+  $$(".tabs").forEach(function(t){
+    $$("button",t).forEach(function(b){
+      b.addEventListener("click",function(){
+        $$("button",t).forEach(function(x){x.classList.remove("on");});
+        b.classList.add("on");
+        var panel=document.getElementById(b.getAttribute("data-panel"));
+        var hermanos=[];var n=t.nextElementSibling;
+        while(n&&n.classList.contains("panel")){hermanos.push(n);n=n.nextElementSibling;}
+        hermanos.forEach(function(p){p.classList.remove("on");});
+        if(panel){panel.classList.add("on");}
+      });
+    });
+  });
+
+  /* Planificadores */
+  $$(".planner").forEach(function(pl){
+    var clave=PRE+"plan_"+pl.getAttribute("data-clave");
+    var campos=$$("[data-campo]",pl);
+    var datos={};
+    try{datos=JSON.parse(leerLS(clave)||"{}");}catch(e){datos={};}
+    campos.forEach(function(c){if(datos[c.getAttribute("data-campo")]){c.value=datos[c.getAttribute("data-campo")];}});
+    var estado=$(".estado",pl);
+    $("[data-guardar]",pl).addEventListener("click",function(){
+      var d={};campos.forEach(function(c){d[c.getAttribute("data-campo")]=c.value;});
+      guardarLS(clave,JSON.stringify(d));
+      estado.textContent="Guardado.";
+      setTimeout(function(){estado.textContent="";},2200);
+    });
+    $("[data-exportar]",pl).addEventListener("click",function(){
+      var sec=pl.closest("section");
+      var titulo=sec?$("h2",sec).textContent:"Bitacora";
+      var txt="Diseño II - UNE\n"+titulo+"\nFecha: "+new Date().toLocaleString("es-MX")+"\n\n";
+      campos.forEach(function(c){
+        var lab=c.previousElementSibling&&c.previousElementSibling.tagName==="LABEL"?c.previousElementSibling.textContent:"Respuesta";
+        txt+=lab+"\n"+c.value+"\n\n";
+      });
+      var blob=new Blob([txt],{type:"text/plain;charset=utf-8"});
+      var a=document.createElement("a");
+      a.href=URL.createObjectURL(blob);
+      a.download="bitacora_"+pl.getAttribute("data-clave")+".txt";
+      document.body.appendChild(a);a.click();a.remove();
+    });
+  });
+
+  /* Listas de verificación y progreso */
+  var checks=$$(".check-list input[type=checkbox]");
+  function actualizarProgreso(){
+    var h=0;checks.forEach(function(c){if(c.checked){h++;}});
+    var p=checks.length?Math.round(h*100/checks.length):0;
+    $("#pgTxt").textContent=p+"%";
+    $("#pgBar").style.width=p+"%";
+  }
+  checks.forEach(function(c){
+    if(leerLS(PRE+"chk_"+c.id)==="1"){c.checked=true;c.parentNode.classList.add("hecho");}
+    c.addEventListener("change",function(){
+      guardarLS(PRE+"chk_"+c.id,c.checked?"1":"0");
+      c.parentNode.classList.toggle("hecho",c.checked);
+      actualizarProgreso();
+    });
+  });
+  actualizarProgreso();
+
+  /* Equivalencias */
+  var EQ=[
+    {t:"Esfera base de plastilina",b:"Primitiva UV Sphere",m:"Object Mode",d:"Toda forma comienza con un volumen simple. En Blender, las primitivas (esfera, cubo, cilindro, cono) cumplen la función de la bola inicial de plastilina.",k:["Shift+A","Mesh > UV Sphere","S (escalar)"]},
+    {t:"Técnica aditiva",b:"Pinceles Clay Strips, Draw e Inflate; extrusión",m:"Sculpt Mode / Edit Mode",d:"Agregar material equivale a elevar la superficie con pinceles de escultura o a extruir caras en el modo de edición.",k:["E (extruir)","Clay Strips","Inflate"]},
+    {t:"Técnica sustractiva",b:"Modificador Boolean (Difference); pinceles Scrape y Draw invertido",m:"Object Mode / Sculpt Mode",d:"Retirar material se logra restando un objeto de otro con Boolean, o rebajando la superficie con pinceles invertidos.",k:["Boolean > Difference","Ctrl (invertir pincel)","Scrape"]},
+    {t:"Pellizco y presión",b:"Pinceles Pinch, Grab y Snake Hook; mover vértices",m:"Sculpt Mode / Edit Mode",d:"Pellizcar y estirar equivale a desplazar zonas de la malla con Grab o a juntar la superficie con Pinch.",k:["G (mover)","Pinch","Grab"]},
+    {t:"Rollos o churros",b:"Cilindros, curvas Bezier con Bevel",m:"Object Mode",d:"Un rollo de plastilina se representa con un cilindro o con una curva a la que se le da grosor mediante Bevel.",k:["Shift+A > Curve","Bevel > Depth","Simple Deform"]},
+    {t:"Placas",b:"Plano o media esfera con modificador Solidify",m:"Edit Mode + modificador",d:"Una lámina de grosor uniforme es una superficie a la que Solidify le da espesor, como el rodillo con guías.",k:["Solidify","Thickness"]},
+    {t:"Armazón interno",b:"Modificador Skin; esqueleto (Armature) para animar",m:"Edit Mode + modificador",d:"El alambre que define la pose se traduce en aristas con Skin, que crea volumen a su alrededor. Para animación se usa un esqueleto o Armature.",k:["E (extruir vértice)","Skin","Ctrl+A (grosor)"]},
+    {t:"Alisado",b:"Modificador Subdivision Surface; pincel Smooth; Shade Smooth",m:"Object Mode / Sculpt Mode",d:"Alisar con la esteca equivale a subdividir la malla y suavizar la superficie con el pincel Smooth.",k:["Ctrl+2","Shift (alisar en Sculpt)","Shade Smooth"]},
+    {t:"Unir piezas",b:"Unir objetos y Remesh por voxeles",m:"Object Mode / Sculpt Mode",d:"Unir y borrar la junta entre dos piezas de plastilina equivale a unir objetos y fusionarlos en una sola superficie con Remesh.",k:["Ctrl+J","Ctrl+R (Remesh en Sculpt)"]},
+    {t:"Simetría medida a ojo",b:"Modificador Mirror; simetría de escultura",m:"Object Mode / Sculpt Mode",d:"Lo que en plastilina exige medir y comparar, en Blender se resuelve reflejando la geometría sobre un eje.",k:["Mirror","Simetría X en Sculpt"]},
+    {t:"Texturizado",b:"Pinceles con textura, Layer y Crease; mapas de relieve",m:"Sculpt Mode / Materiales",d:"Las marcas hechas con esponja o tela se reproducen con pinceles texturizados o con mapas de relieve en el material.",k:["Crease","Layer","Bump"]},
+    {t:"Color de la pasta",b:"Materiales con Principled BSDF",m:"Properties > Material",d:"El color deja de estar en el material físico y se define en un sombreador editable en cualquier momento.",k:["Base Color","Roughness","Subsurface"]},
+    {t:"Fotografiar la maqueta",b:"Luces, cámara y render",m:"Layout",d:"La fotografía con luz controlada equivale a montar iluminación de tres puntos y renderizar desde la cámara.",k:["Ctrl+Alt+Numpad 0","F12"]}
+  ];
+  var lista=$("#eqLista"),panel=$("#eqPanel");
+  EQ.forEach(function(e,i){
+    var b=document.createElement("button");
+    b.textContent=e.t;
+    b.addEventListener("click",function(){
+      $$("button",lista).forEach(function(x){x.classList.remove("on");});
+      b.classList.add("on");
+      var ks="";
+      e.k.forEach(function(k){ks+="<span class='k'>"+k+"</span>";});
+      panel.innerHTML="<h4>"+e.t+" &rarr; "+e.b+"</h4><p><b>Modo de trabajo:</b> "+e.m+"</p><p>"+e.d+"</p><p><b>Comandos y herramientas:</b><br>"+ks+"</p>";
+    });
+    lista.appendChild(b);
+  });
+
+  /* Laboratorio de subdivisión (Chaikin) */
+  var svg=$("#subSvg"),rango=$("#subRange");
+  function chaikin(pts){
+    var r=[];
+    for(var i=0;i<pts.length;i++){
+      var a=pts[i],b=pts[(i+1)%pts.length];
+      r.push([a[0]*0.75+b[0]*0.25,a[1]*0.75+b[1]*0.25]);
+      r.push([a[0]*0.25+b[0]*0.75,a[1]*0.25+b[1]*0.75]);
+    }
+    return r;
+  }
+  function dibujarSub(){
+    var n=parseInt(rango.value,10);
+    var base=[[60,60],[240,60],[240,240],[60,240]];
+    var pts=base;
+    for(var i=0;i<n;i++){pts=chaikin(pts);}
+    var d="";
+    pts.forEach(function(p,j){d+=(j===0?"M":"L")+p[0].toFixed(1)+" "+p[1].toFixed(1)+" ";});
+    d+="Z";
+    var html="<path d='M60 60 L240 60 L240 240 L60 240 Z' fill='none' stroke='#b9c3d8' stroke-dasharray='5 5'/>";
+    html+="<path d='"+d+"' fill='rgba(184,101,58,.25)' stroke='#b8653a' stroke-width='2.5'/>";
+    if(pts.length<=64){
+      pts.forEach(function(p){html+="<circle cx='"+p[0].toFixed(1)+"' cy='"+p[1].toFixed(1)+"' r='3.5' fill='#1b3f8b'/>";});
+    }
+    svg.innerHTML=html;
+    $("#subNivel").textContent=n;
+    $("#subVert").textContent=pts.length;
+  }
+  rango.addEventListener("input",dibujarSub);
+  dibujarSub();
+
+  /* Tarjetas de atajos */
+  var FL=[
+    ["Tab","Alternar entre Object Mode y Edit Mode"],
+    ["Shift + A","Agregar objeto (malla, curva, luz, cámara)"],
+    ["G / R / S","Mover, rotar y escalar"],
+    ["E","Extruir en Edit Mode"],
+    ["Ctrl + R","Corte en bucle (Edit) / Remesh (Sculpt)"],
+    ["Ctrl + 2","Agregar Subdivision Surface nivel 2"],
+    ["Ctrl + J","Unir objetos seleccionados"],
+    ["Shift + D","Duplicar"],
+    ["F","Tamaño del pincel en Sculpt"],
+    ["N","Mostrar barra lateral con medidas"],
+    ["Z","Menú de tipos de sombreado"],
+    ["F12","Renderizar imagen"]
+  ];
+  var fg=$("#flashGrid");
+  FL.forEach(function(f){
+    var d=document.createElement("div");
+    d.className="flash";
+    d.innerHTML="<div class='in'><div class='cara fr'><kbd>"+f[0]+"</kbd></div><div class='cara at'>"+f[1]+"</div></div>";
+    d.addEventListener("click",function(){d.classList.toggle("vuelta");});
+    fg.appendChild(d);
+  });
+
+  /* Cuestionario */
+  var Q=[
+    {p:"¿Quién creó la Plasticine en Inglaterra a finales del siglo XIX para que sus estudiantes practicaran con un material que no endureciera?",o:["Ivan Sutherland","William Harbutt","Ton Roosendaal","Franz Kolb"],c:1,f:"William Harbutt creó la Plasticine en 1897. Franz Kolb desarrolló en Alemania la Plastilin; Sutherland y Roosendaal pertenecen a la historia del modelado digital."},
+    {p:"¿Qué sistema de 1963 se considera antecedente del diseño asistido por computadora?",o:["ZBrush","Blender","Sketchpad","Maya"],c:2,f:"Sketchpad, presentado por Ivan Sutherland en 1963, introdujo el dibujo interactivo en pantalla."},
+    {p:"En plastilina retiras material con un vaciador para abrir la boca. ¿Qué herramienta de Blender cumple esa función de forma no destructiva?",o:["Modificador Mirror","Modificador Boolean en modo Difference","Modificador Solidify","Pincel Inflate"],c:1,f:"Boolean en modo Difference resta un objeto de otro, lo que equivale a la técnica sustractiva."},
+    {p:"¿Qué ventaja ofrece la plastilina epóxica frente a la plastilina tradicional?",o:["Nunca endurece","Puede reutilizarse indefinidamente","Endurece de forma permanente y puede lijarse y pintarse","No requiere mezclar componentes"],c:2,f:"La plastilina epóxica se compone de resina y endurecedor; tras curar, la pieza es rígida, lijable y pintable."},
+    {p:"Un estudiante modela un cuerno y necesita otro idéntico del lado opuesto. ¿Qué es lo más eficiente en Blender?",o:["Modelar el segundo a mano","Usar el modificador Mirror con el cuerpo como objeto de reflejo","Aplicar Remesh","Usar el pincel Smooth"],c:1,f:"Mirror refleja la geometría con simetría exacta; lo que en plastilina exige medir, aquí se resuelve automáticamente."},
+    {p:"¿Para qué sirve aplicar Remesh por voxeles en el modo Sculpt tras unir piezas?",o:["Para cambiar el color","Para fusionar las piezas en una sola superficie con densidad uniforme","Para crear una cámara","Para eliminar el objeto"],c:1,f:"Remesh reconstruye la malla como una superficie continua, igual que al borrar las juntas entre piezas de plastilina."},
+    {p:"¿Qué parámetro del material Principled BSDF da un acabado mate semejante a la plastilina?",o:["Roughness con valor alto","Metallic en 1","Alpha en 0","Roughness en 0"],c:0,f:"Un Roughness alto dispersa los reflejos y produce un acabado mate; Subsurface ayuda a simular la luz que penetra el material."},
+    {p:"¿Por qué se pide usar las fotografías de tu propia maqueta como referencia principal en Blender?",o:["Porque Blender no acepta otras imágenes","Para que el modelo digital traduzca y valide tus decisiones físicas de volumen y proporción","Porque así el render es más rápido","No tiene ninguna finalidad"],c:1,f:"El objetivo es que la maqueta valide la forma y el modelo 3D la traduzca, como ocurre en los flujos profesionales."}
+  ];
+  var qz=$("#quiz"),puntos=0,respondidas=0;
+  function pintarQuiz(){
+    qz.innerHTML="";puntos=0;respondidas=0;
+    $("#quizScore").textContent="";
+    Q.forEach(function(q,i){
+      var d=document.createElement("div");d.className="preg";
+      var h="<p>"+(i+1)+". "+q.p+"</p>";
+      q.o.forEach(function(o,j){h+="<button class='opc' data-q='"+i+"' data-o='"+j+"'>"+String.fromCharCode(65+j)+") "+o+"</button>";});
+      h+="<div class='fb'></div>";
+      d.innerHTML=h;qz.appendChild(d);
+    });
+    reattach();
+  }
+  function reattach(){
+    $$(".opc",qz).forEach(function(b){
+      b.onclick=function(){
+        var i=parseInt(b.getAttribute("data-q"),10),j=parseInt(b.getAttribute("data-o"),10);
+        var cont=b.parentNode;
+        if(cont.getAttribute("data-r")){return;}
+        cont.setAttribute("data-r","1");respondidas++;
+        var q=Q[i];
+        $$(".opc",cont).forEach(function(x,k){if(k===q.c){x.classList.add("ok");}});
+        if(j===q.c){puntos++;$(".fb",cont).innerHTML="<b>Correcto.</b> "+q.f;}
+        else{b.classList.add("mal");$(".fb",cont).innerHTML="<b>Revisa este punto.</b> "+q.f;}
+        if(respondidas===Q.length){
+          var msg="Resultado: "+puntos+" de "+Q.length+" aciertos. ";
+          msg+=puntos>=7?"Dominas los conceptos clave.":(puntos>=5?"Buen avance; repasa los temas donde fallaste.":"Te conviene repasar los Temas 1, 4 y 5 antes de continuar.");
+          $("#quizScore").textContent=msg;
+        }
+      };
+    });
+  }
+  $("#quizReset").addEventListener("click",pintarQuiz);
+  pintarQuiz();
+
+  /* Copiar plantilla */
+  $$("[data-copiar]").forEach(function(b){
+    b.addEventListener("click",function(){
+      var pre=document.getElementById(b.getAttribute("data-copiar"));
+      var txt=pre.textContent.replace(/^Copiar/,"").replace(/^Copiado/,"");
+      function hecho(){b.textContent="Copiado";setTimeout(function(){b.textContent="Copiar";},2000);}
+      if(navigator.clipboard){navigator.clipboard.writeText(txt).then(hecho,function(){});}
+      else{var t=document.createElement("textarea");t.value=txt;document.body.appendChild(t);t.select();try{document.execCommand("copy");hecho();}catch(e){}t.remove();}
+    });
+  });
+
+  /* Navegación activa y menú móvil */
+  var links=$$("nav.side a");
+  var secciones=links.map(function(a){return document.querySelector(a.getAttribute("href"));});
+  function marcar(){
+    var y=window.scrollY+120,act=0;
+    secciones.forEach(function(s,i){if(s&&s.getBoundingClientRect().top+window.scrollY<=y){act=i;}});
+    links.forEach(function(a,i){a.classList.toggle("activo",i===act);});
+  }
+  window.addEventListener("scroll",marcar,{passive:true});marcar();
+  var nav=$("#nav");
+  $("#menuBtn").addEventListener("click",function(){nav.classList.toggle("abierto");});
+  links.forEach(function(a){a.addEventListener("click",function(){nav.classList.remove("abierto");});});
+})();
+</script>
+</body>
+</html>
